@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Nowa zagadka</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    Tworzenie nowej zagadki
+    <br>
+    <form action="/places" method="GET">
+        <div>
+            <label for="title">Nazwa zagadki</label>
+            <input name="title" id="title"/>
+        </div>
+        <div>
+            <label for="position">pozycja gps</label>
+            <input name="position" id="position"/>
+        </div>
+        <div>
+            <label for="radius">Promien pokazywania zdjęcia do zrobienia</label>
+            <input name="radius" id="radius"/>
+        </div>
+        <div>
+            <label for="photolink">Link do zdjęcia</label>
+            <input name="photolink" id="photolink"/>
+        </div>
+        <div>
+            <label for="photoposition">Pozycja gpr do zrobienia zdjęcia</label>
+            <input name="photoposition" id="photoposition"/>
+        </div>
+        <div>
+            <label for="telorientation">Orientacja telefonu do zrobienia zdjęcia</label>
+            <input name="telorientation" id="telorientation"/>
+        </div>
+        <div>
+            <label for="succespage">Strona gdy odnajdziemy</label>
+            <input name="succespage" id="succespage"/>
+        </div>
+        <div>
+            <button>Dodaj</button>
+        </div>
+    </form>
+</body>
+</html>

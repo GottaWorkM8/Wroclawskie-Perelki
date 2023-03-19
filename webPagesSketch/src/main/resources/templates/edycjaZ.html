@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edycja zagadki</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p th:text="'Edycja zagadki o numerze:'+ ${id}" />
+    <br>
+    //todo edycja zagadki
+    <br>
+    <iframe th:src="'/places?q='+${id}" width="100%" height="100%" frameborder="1" title="Miejsca dla tej zagadki"></iframe>
+</body>
+</html>

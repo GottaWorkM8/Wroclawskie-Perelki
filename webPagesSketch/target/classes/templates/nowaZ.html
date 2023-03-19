@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Nowa zagadka</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    Tworzenie nowej zagadki
+    <br>
+    <form action="/" method="POST">
+        <div>
+            <label for="title">Nazwa zagadki</label>
+            <input name="title" id="title"/>
+        </div>
+        <div>
+            <label for="category">Kategoria</label>
+            <input name="category" id="category" value="//todo rozwijana lista"/>
+        </div>
+        <div>
+            <label for="description">Opis zagadki</label>
+            <input name="description" id="description"/>
+        </div>
+        <div>
+            <label for="congratulations">Gratulacje po znalezieniu wszystkich</label>
+            <input name="congratulations" id="congratulations"/>
+        </div>
+        <div>
+            <button>Dodaj</button>
+        </div>
+    </form>
+</body>
+</html>
