@@ -1,13 +1,17 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head> 
-    <title>Nowa zagadka</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    Tworzenie nowej zagadki
+	<head> 
+		<meta http-equiv="Content-Language" content="pl">
+		<meta charset="UTF-8">
+		<meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+		<title>Nowa zagadka</title>
+		<link href = "style.css" rel = "stylesheet">
+		<link href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel = "stylesheet">  
+	</head>
+	<body>
+		Tworzenie nowej zagadki
     <br>
-    <form action="/zagadki" method="GET">
+		<form action="/zagadki" method="GET">
         <div>
             <label for="title">Nazwa zagadki</label>
             <input name="title" id="title"/>
@@ -27,6 +31,6 @@
         <div>
             <button>Dodaj</button>
         </div>
-    </form>
-</body>
+		</form>
+	</body>
 </html>

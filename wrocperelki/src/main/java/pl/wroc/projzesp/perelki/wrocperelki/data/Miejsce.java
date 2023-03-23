@@ -9,6 +9,7 @@ public class Miejsce {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
+    private String name;
     private String trackingPosition;
     private String radius;
     private String photoLink;
@@ -20,14 +21,18 @@ public class Miejsce {
     @JoinColumn(name = "miejsca")
     private Zagadka zagadka;
 
-    public Miejsce(String trackingPosition, String radius, String photoLink, String photoGps, String telephonePosition, String correctFoundLink, Zagadka zagadka) {
+    public Miejsce(String name, String trackingPosition, String radius, String photoLink, String photoGps, String telephonePosition, String correctFoundLink, Zagadka zagadka) {
         this.trackingPosition = trackingPosition;
         this.radius = radius;
+        this.name = name;
         this.photoLink = photoLink;
         this.photoGps = photoGps;
         this.telephonePosition = telephonePosition;
         this.correctFoundLink = correctFoundLink;
         this.zagadka = zagadka;
+    }
+
+    public Miejsce() {
     }
 
     public Long getId() {
@@ -36,6 +41,13 @@ public class Miejsce {
 
     public void setId(Long id) {
         Id = id;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getTrackingPosition() {

@@ -16,24 +16,37 @@ public class ZagadkaController {
     ZagadkaController(ZagadkaRepository repository) {
         this.repository = repository;
     }
+
+
+    //pobieranie wszystkich zagadek
     @GetMapping("/api/zagadka")
     List<Zagadka> all() {
         return repository.findAll();
     }
+
+    //wkładanie nowej zagadki
     @PostMapping("/api/zagadka")
-    Zagadka newEmployee(@RequestBody Zagadka newEmployee) {
+    Zagadka newZagadka(@RequestBody Zagadka newEmployee) {
         return repository.save(newEmployee);
     }
+
+    //pobieranie ile jest zagadek
     @GetMapping("/api/zagadka/getCount")
     int countZagadka() {
         return repository.findAll().size();
     }
+
+
+    //pobieranie jednej zagadki
     @GetMapping("/api/zagadka/{id}")
     Zagadka one(@PathVariable Long id) throws ZagadkaNotFoundException {
 
         return repository.findById(id)
                 .orElseThrow(() -> new ZagadkaNotFoundException(id));
     }
+
+
+    //edycja zagadki
     @PutMapping("/api/zagadka/{id}")
     Zagadka replaceEmployee(@RequestBody Zagadka newEmployee, @PathVariable Long id) {
 
@@ -50,8 +63,10 @@ public class ZagadkaController {
                     return repository.save(newEmployee);
                 });
     }
-    @DeleteMapping("/api/zagadka/{id}")
-    void deleteEmployee(@PathVariable Long id) {
-        repository.deleteById(id);
-    }
+
+    //Usówanie raczej nie, lepiej zmienić widoczność
+    //@DeleteMapping("/api/zagadka/{id}")
+    //void deleteEmployee(@PathVariable Long id) {
+    //    repository.deleteById(id);
+    //}
 }
