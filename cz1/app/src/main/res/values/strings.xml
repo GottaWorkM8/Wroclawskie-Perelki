@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- strona_g__wna strings -->
+
+    	<string name="app_name">test</string>
+    	<string name="ek_img_content">ExportKit Image</string>
+
+
+	<string name="_3_8_string">3/8</string>
+	<string name="naj_trasa">Najkrtsza trasa:</string>
+	<string name="ilo___obiekt_w__5_string">Ilość obiektów: 5</string>
+	<string name="status__uko_czona_string">Status: ukończona</string>
+	<string name="kampus_pwr_string">Kampus PWR</string>
+	<string name="ilo___obiekt_w__8_string">Ilość obiektw: 8</string>
+	<string name="status__uko_czona_ek1_string">Status: ukończona</string>
+	<string name="magiczny_ostr_w_tumski_string">Magiczny Ostrów Tumski</string>
+	<string name="ilo___obiekt_w__10_string">Ilość obiektów: 10</string>
+	<string name="status__uko_czona_ek2_string">Status: ukończona</string>
+	<string name="wie_e_ci_nie__string">Wieże ciśnień</string>
+	<string name="srednie_string">Średnie</string>
+	<string name="trudne_string">Trudne</string>
+	<string name="latwe_string">Łatwe</string>
+	<string name="nierozwi_zane_string">Nierozwiązane</string>
+	<string name="rozwi_zane_string">Rozwiązane</string>
+	<string name="lista_zagadek_string">Lista zagadek</string>
+	<string name="murale_string">Murale</string>
+	<string name="muraleI_string">Ilość obiektów: 5</string>
+	<string name="muraleN_string">Najkrtsza trasa:</string>
+	<string name="muraleS_string">Status: znaleziono 2 obiekty</string>
+	<string name="Nieodblokowane_string">Nieodblokowane</string>
+	<string name="NieodblokowaneI1_string">Ilość obiektów: 7</string>
+	<string name="NieodblokowaneI2_string">Ilość obiektów: 9</string>
+	<string name="NieodblokowaneS_string">Status: nierozpoczęto</string>
+
+</resources>
