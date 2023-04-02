@@ -22,9 +22,9 @@ public class Pieces {
     private Long points  ;
 
 
-    @OneToMany(mappedBy = "piece_id ")
+    @OneToMany
     private Set<Riddle_Pieces> riddle_Pieces ;
-    @OneToMany(mappedBy = "piece_id")
+    @OneToMany
     private Set<Found_Pieces> found_Pieces ;
 
     public Pieces(Long piece_id, String name, String latitude, String longitude, String azimuth, String pitch, String roll, String verify_photo, String photo, String website, Long points) {

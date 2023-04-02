@@ -17,9 +17,9 @@ public class Riddles {
     private String congrats;
     private Long points;
 
-    @OneToMany(mappedBy = "riddle_id")
+    @OneToMany
     private Set<Riddle_Pieces> riddle_Pieces ;
-    @OneToMany(mappedBy = "riddle_id")
+    @OneToMany
     private Set<Completed_Riddles> completed_Riddles ;
 
     @Override

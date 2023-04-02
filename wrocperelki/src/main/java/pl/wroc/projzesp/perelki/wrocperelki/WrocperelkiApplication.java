@@ -20,7 +20,7 @@ public class WrocperelkiApplication {
 				.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
 		Map<RequestMappingInfo, HandlerMethod> map = requestMappingHandlerMapping
 				.getHandlerMethods();
-		map.forEach((key, value) -> System.out.println(""+ key+""+ value));
+		map.forEach((key, value) -> System.out.println("	"+ key));
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(WrocperelkiApplication.class, args);
