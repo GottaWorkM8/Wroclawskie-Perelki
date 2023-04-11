@@ -26,13 +26,15 @@ public class ZagadkaController {
     //wkładanie nowej zagadki
     @PostMapping("/api/zagadka")
     Riddles newZagadka(@RequestBody Riddles newEmployee) {
+        //todo identification
+        //todo add user as author of this
         return repository.save(newEmployee);
     }
 
     //pobieranie ile jest zagadek
     @GetMapping("/api/zagadka/getCount")
-    int countZagadka() {
-        return repository.findAll().size();
+    long countZagadka() {
+        return repository.count();
     }
 
 
@@ -55,6 +57,8 @@ public class ZagadkaController {
     private String congrats;
     private Long points;
  */
+        //todo identification
+        //todo check if user is autor of this
         return repository.findById(id)
                 .map(zagadka -> {
                     zagadka.setName(zagadka.getName());
@@ -71,8 +75,10 @@ public class ZagadkaController {
     }
 
     //Usówanie raczej nie, lepiej zmienić widoczność
-    //@DeleteMapping("/api/zagadka/{id}")
-    //void deleteEmployee(@PathVariable Long id) {
-    //    repository.deleteById(id);
-    //}
+    @DeleteMapping("/api/zagadka/{id}")
+    void deleteEmployee(@PathVariable Long id) {
+        //todo identification
+        //todo check if user is admin
+        repository.deleteById(id);
+    }
 }

@@ -21,6 +21,8 @@ public class PiecesController {
     //wkładanie nowego miejsca
     @PostMapping("/api/miejsca")
     Pieces newMiejsce(@RequestBody Pieces newPieces) {
+        //todo identification
+        //todo add user as author of this
         return miejsca.save(newPieces);
     }
 
@@ -34,12 +36,14 @@ public class PiecesController {
     //pobieranie ile jest miejsc
     @GetMapping("/api/miejsca/getCount")
     int countMiejsce() {
+        //todo not count invisible
         return miejsca.findAll().size();
     }
 
     //pobieranie ile jest miejsc należących do danej zagadki
     @GetMapping(value={"/api/miejsca/getCount/{id}", "/api/zagadka/{id}/getCount"})
     long countMiejsceZagadki(@PathVariable Long id) {
+        //todo not count invisible
         return miejsca.getReferenceById(id).getRiddle_Pieces().size();
     }
 
@@ -58,6 +62,8 @@ public class PiecesController {
         this.website = website;
         this.points = points;
  */
+        //todo identification
+        //todo check if user is autor of this
         return miejsca.findById(id)
                 .map(miejsce -> {
                     miejsce.setName(newPieces.getName());
@@ -78,5 +84,13 @@ public class PiecesController {
                 });
     }
 
+
+    //Usówanie raczej nie, lepiej zmienić widoczność
+    @DeleteMapping("/api/zagadka/{id}")
+    void deleteEmployee(@PathVariable Long id) {
+        //todo identification
+        //todo check if user is admin
+        miejsca.deleteById(id);
+    }
 
 }
