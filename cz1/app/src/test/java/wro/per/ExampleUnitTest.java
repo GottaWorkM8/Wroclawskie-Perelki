@@ -1,4 +1,4 @@
-package com.example.cz1;
+package wro.per;
 
 import org.junit.Test;
 

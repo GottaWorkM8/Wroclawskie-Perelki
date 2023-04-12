@@ -4,8 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mapa2"
     android:orientation="vertical">
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tilesource="Mapnik"
+        />
+
 
 
     <RelativeLayout
@@ -33,8 +39,8 @@
             android:background="@drawable/basic_shape_menu"
             android:contentDescription="Profile"
             android:scaleType="centerInside"
-            android:src="@drawable/ikonaporfilu"
-            tools:src="@drawable/ikonaporfilu" />
+            android:src="@drawable/ikona_porfilu"
+            tools:src="@drawable/ikona_porfilu" />
 
         <ImageButton
             android:id="@+id/homeButton"
@@ -43,9 +49,9 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/home_shape"
             android:contentDescription="Home"
-            android:src="@drawable/ikonadomu"
+            android:src="@drawable/ikona_domu"
             android:visibility="visible"
-            tools:src="@drawable/ikonadomu" />
+            tools:src="@drawable/ikona_domu" />
 
         <ImageButton
             android:id="@+id/listButton"
@@ -56,8 +62,8 @@
             android:layout_toStartOf="@id/homeButton"
             android:background="@drawable/basic_shape_menu"
             android:contentDescription="List"
-            android:src="@drawable/ikonalistyzada_"
-            tools:src="@drawable/ikonalistyzada_" />
+            android:src="@drawable/ikona_listy_zadan"
+            tools:src="@drawable/ikona_listy_zadan" />
 
         <ImageButton
             android:id="@+id/favouriteButton"
@@ -81,9 +87,9 @@
             android:layout_toEndOf="@id/favouriteButton"
             android:background="@drawable/basic_shape_menu"
             android:contentDescription="Settings"
-            android:src="@drawable/ikona_ustawie_"
-            app:srcCompat="@drawable/ikona_ustawie_"
-            tools:src="@drawable/ikona_ustawie_" />
+            android:src="@drawable/ikona_ustawien"
+            app:srcCompat="@drawable/ikona_ustawien"
+            tools:src="@drawable/ikona_ustawien" />
 
     </RelativeLayout>
 
@@ -114,11 +120,11 @@
             tools:layout_editor_absoluteY="10dp" />
 
         <Button
-            android:id="@+id/unfinishedButton"
+            android:id="@+id/doneButton2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="74dp"
-            android:background="@drawable/t_o_niewybrane_shape"
+            android:background="@color/linia_wybrane_color"
             android:text="@string/nierozwi_zane_string"
             android:textAllCaps="false"
             android:textColor="@android:color/background_light"
@@ -133,12 +139,12 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="74dp"
-            android:background="@drawable/linia_wybrane_shape"
+            android:background="@color/czerwonemenu_color"
             android:text="@string/rozwi_zane_string"
             android:textAllCaps="false"
             android:textColor="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/unfinishedButton"
+            app:layout_constraintEnd_toStartOf="@+id/doneButton2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="0.5" />
@@ -234,11 +240,13 @@
                         android:layout_height="156dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/quest_complite_shape"
+                        android:background="@drawable/quest_unfinished_shape"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.493"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
                         android:id="@+id/najkr_tsza_trasa__ek2"
@@ -246,7 +254,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
-                        android:text="@string/naj_trasa"
+                        android:text="@string/muraleN_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest1"
@@ -255,16 +263,16 @@
                     <TextView
                         android:id="@+id/wie_e_ci_nie_"
 
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="104dp"
                         android:gravity="center"
-                        android:text="@string/wie_e_ci_nie__string"
+                        android:text="@string/murale_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/quest1"
+                        app:layout_constraintStart_toStartOf="@+id/quest1"
                         app:layout_constraintTop_toTopOf="@+id/quest1" />
 
                     <TextView
@@ -286,7 +294,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
-                        android:text="@string/status__uko_czona_ek2_string"
+                        android:text="@string/muraleS_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest1"
@@ -308,27 +316,30 @@
                         android:layout_height="156dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/quest_complite_shape"
+                        android:background="@drawable/quest_unfinished_shape"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.493"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintVertical_bias="1.0" />
 
                     <TextView
                         android:id="@+id/magiczny_ostr_w_tumski"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center"
+                        android:layout_marginStart="64dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="52dp"
+                        android:layout_marginEnd="64dp"
                         android:gravity="center"
-                        android:text="@string/magiczny_ostr_w_tumski_string"
+                        android:text="@string/Nieodblokowane_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/quest2"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/quest2"
                         app:layout_constraintTop_toTopOf="@+id/quest2" />
 
                     <TextView
@@ -350,7 +361,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="52dp"
-                        android:text="@string/ilo___obiekt_w__8_string"
+                        android:text="@string/NieodblokowaneI1_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest2"
@@ -362,7 +373,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="@string/status__uko_czona_ek1_string"
+                        android:text="@string/NieodblokowaneS_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest2"
@@ -383,7 +394,7 @@
                         android:id="@+id/quest3"
                         android:layout_width="336dp"
                         android:layout_height="156dp"
-                        android:background="@drawable/quest_complite_shape"
+                        android:background="@drawable/quest_unfinished_shape"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -394,14 +405,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal|center"
+                        android:layout_marginStart="92dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="104dp"
+                        android:layout_marginEnd="92dp"
                         android:gravity="center"
-                        android:text="@string/kampus_pwr_string"
+                        android:text="@string/Nieodblokowane_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/quest3"
+                        app:layout_constraintStart_toStartOf="@+id/quest3"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
@@ -411,7 +424,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="52dp"
-                        android:text="@string/ilo___obiekt_w__5_string"
+                        android:text="@string/NieodblokowaneI2_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest3"
@@ -435,7 +448,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="@string/status__uko_czona_string"
+                        android:text="@string/NieodblokowaneS_string"
                         android:textColor="@color/najkr_tsza_trasa__color"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/quest3"
@@ -446,21 +459,25 @@
                     android:id="@+id/koniec"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/object3">
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:gravity="center|center_horizontal"
-                        android:text="3/8"
+                        android:text="5/8"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
