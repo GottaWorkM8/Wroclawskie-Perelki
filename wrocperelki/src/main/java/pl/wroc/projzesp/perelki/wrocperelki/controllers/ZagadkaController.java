@@ -2,10 +2,13 @@ package pl.wroc.projzesp.perelki.wrocperelki.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.wroc.projzesp.perelki.wrocperelki.data.Pieces;
+import pl.wroc.projzesp.perelki.wrocperelki.data.Riddle_Pieces;
 import pl.wroc.projzesp.perelki.wrocperelki.data.Riddles;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.RiddlesRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ZagadkaController {
@@ -45,11 +48,15 @@ public class ZagadkaController {
         return repository.findById(id)
                 .orElseThrow(() -> new Exception(String.valueOf(id)));
     }
-
+    @GetMapping(value={"/api/zagadka/{id}/getMiejsca"})
+    List<Pieces> countMiejsceZagadki(@PathVariable Long id) {
+        //todo not count invisible
+        return repository.getReferenceById(id).getRiddle_Pieces().stream().map(Riddle_Pieces::getPiece_id).collect(Collectors.toList());
+    }
 
     //edycja zagadki
     @PutMapping("/api/zagadka/{id}")
-    Riddles replaceEmployee(@RequestBody Riddles newEmployee, @PathVariable Long id) {
+    Riddles replaceEmployee(@RequestBody Riddles newZagadka, @PathVariable Long id) {
 /*
     private String name;
     private String category;
@@ -61,16 +68,16 @@ public class ZagadkaController {
         //todo check if user is autor of this
         return repository.findById(id)
                 .map(zagadka -> {
-                    zagadka.setName(zagadka.getName());
-                    zagadka.setCategory(zagadka.getCategory());
-                    zagadka.setInfo(zagadka.getInfo());
-                    zagadka.setCongrats(zagadka.getCongrats());
-                    zagadka.setPoints(zagadka.getPoints());
-                    return repository.save(zagadka);
+                    zagadka.setName(newZagadka.getName());
+                    zagadka.setCategory(newZagadka.getCategory());
+                    zagadka.setInfo(newZagadka.getInfo());
+                    zagadka.setCongrats(newZagadka.getCongrats());
+                    zagadka.setPoints(newZagadka.getPoints());
+                    return repository.save(newZagadka);
                 })
                 .orElseGet(() -> {
-                    newEmployee.setRiddle_id(id);
-                    return repository.save(newEmployee);
+                    newZagadka.setRiddle_id(id);
+                    return repository.save(newZagadka);
                 });
     }
 

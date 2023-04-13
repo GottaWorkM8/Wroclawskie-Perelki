@@ -1,6 +1,7 @@
 package pl.wroc.projzesp.perelki.wrocperelki.data;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 import java.util.Set;
@@ -17,17 +18,24 @@ public class Pieces {
     private String pitch ;
     private String roll ;
     private String verify_photo ;
+    private String photoLatitude ;
+    private String photoLongitude ;
     private String photo  ;
     private String website  ;
     private Long points  ;
 
 
+    @JsonIgnore
     @OneToMany
     private Set<Riddle_Pieces> riddle_Pieces ;
+    @JsonIgnore
     @OneToMany
     private Set<Found_Pieces> found_Pieces ;
 
-    public Pieces(Long piece_id, String name, String latitude, String longitude, String azimuth, String pitch, String roll, String verify_photo, String photo, String website, Long points) {
+    public Pieces(){
+    }
+
+    public Pieces(Long piece_id, String name, String latitude, String longitude, String azimuth, String pitch, String roll, String verify_photo, String photoLatitude, String photoLongitude, String photo, String website, Long points, Set<Riddle_Pieces> riddle_Pieces, Set<Found_Pieces> found_Pieces) {
         this.piece_id = piece_id;
         this.name = name;
         this.latitude = latitude;
@@ -36,9 +44,29 @@ public class Pieces {
         this.pitch = pitch;
         this.roll = roll;
         this.verify_photo = verify_photo;
+        this.photoLatitude = photoLatitude;
+        this.photoLongitude = photoLongitude;
         this.photo = photo;
         this.website = website;
         this.points = points;
+        this.riddle_Pieces = riddle_Pieces;
+        this.found_Pieces = found_Pieces;
+    }
+
+    public String getPhotoLatitude() {
+        return photoLatitude;
+    }
+
+    public void setPhotoLatitude(String photoLatitude) {
+        this.photoLatitude = photoLatitude;
+    }
+
+    public String getPhotoLongitude() {
+        return photoLongitude;
+    }
+
+    public void setPhotoLongitude(String photoLongitude) {
+        this.photoLongitude = photoLongitude;
     }
 
     public Long getPiece_id() {
@@ -129,6 +157,7 @@ public class Pieces {
         this.points = points;
     }
 
+    @JsonIgnore
     public Set<Riddle_Pieces> getRiddle_Pieces() {
         return riddle_Pieces;
     }
@@ -137,6 +166,7 @@ public class Pieces {
         this.riddle_Pieces = riddle_Pieces;
     }
 
+    @JsonIgnore
     public Set<Found_Pieces> getFound_Pieces() {
         return found_Pieces;
     }

@@ -86,7 +86,7 @@ public class PiecesController {
 
 
     //Usówanie raczej nie, lepiej zmienić widoczność
-    @DeleteMapping("/api/zagadka/{id}")
+    @DeleteMapping("/api/miejsca/{id}")
     void deleteEmployee(@PathVariable Long id) {
         //todo identification
         //todo check if user is admin
