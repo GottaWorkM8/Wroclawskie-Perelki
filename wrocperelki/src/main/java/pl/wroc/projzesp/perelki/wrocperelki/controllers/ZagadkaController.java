@@ -2,33 +2,42 @@ package pl.wroc.projzesp.perelki.wrocperelki.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Pieces;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Riddle_Pieces;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Riddles;
-import pl.wroc.projzesp.perelki.wrocperelki.interfaces.RiddlesRepository;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Obiekt;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Riddle;
+import pl.wroc.projzesp.perelki.wrocperelki.interfaces.RiddleRepository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
 public class ZagadkaController {
     @Autowired
-    private RiddlesRepository repository;
+    private RiddleRepository repository;
+    /*
+    private Long id;
+    private String difficulty;
+    private String name;
+    private int objectCount;
+    private String infolink;
+    private String author;
+    private int points;
+     */
 
-    ZagadkaController(RiddlesRepository repository) {
+    ZagadkaController(RiddleRepository repository) {
         this.repository = repository;
     }
 
 
     //pobieranie wszystkich zagadek
     @GetMapping("/api/zagadka")
-    List<Riddles> all() {
+    List<Riddle> all() {
         return repository.findAll();
     }
 
     //wkładanie nowej zagadki
     @PostMapping("/api/zagadka")
-    Riddles newZagadka(@RequestBody Riddles newEmployee) {
+    Riddle newZagadka(@RequestBody Riddle newEmployee) {
         //todo identification
         //todo add user as author of this
         return repository.save(newEmployee);
@@ -43,40 +52,34 @@ public class ZagadkaController {
 
     //pobieranie jednej zagadki
     @GetMapping("/api/zagadka/{id}")
-    Riddles one(@PathVariable Long id) throws Exception {
+    Riddle one(@PathVariable Long id) throws Exception {
 
         return repository.findById(id)
                 .orElseThrow(() -> new Exception(String.valueOf(id)));
     }
     @GetMapping(value={"/api/zagadka/{id}/getMiejsca"})
-    List<Pieces> countMiejsceZagadki(@PathVariable Long id) {
-        //todo not count invisible
-        return repository.getReferenceById(id).getRiddle_Pieces().stream().map(Riddle_Pieces::getPiece_id).collect(Collectors.toList());
+    List<Obiekt> countMiejsceZagadki(@PathVariable Long id) {
+        return repository.getReferenceById(id).getObiekty().stream().filter(Obiekt::isVisible).collect(Collectors.toList());
     }
 
     //edycja zagadki
     @PutMapping("/api/zagadka/{id}")
-    Riddles replaceEmployee(@RequestBody Riddles newZagadka, @PathVariable Long id) {
-/*
-    private String name;
-    private String category;
-    private String info;
-    private String congrats;
-    private Long points;
- */
+    Riddle replaceEmployee(@RequestBody Riddle newZagadka, @PathVariable Long id) {
         //todo identification
-        //todo check if user is autor of this
+        //todo check if user is autor of this, or admin
         return repository.findById(id)
                 .map(zagadka -> {
+                    zagadka.setId(id);
+                    zagadka.setDifficulty(newZagadka.getDifficulty());
                     zagadka.setName(newZagadka.getName());
-                    zagadka.setCategory(newZagadka.getCategory());
-                    zagadka.setInfo(newZagadka.getInfo());
-                    zagadka.setCongrats(newZagadka.getCongrats());
+                    zagadka.setObjectCount(countMiejsceZagadki(id).size());
+                    zagadka.setInfolink(newZagadka.getInfolink());
+                    zagadka.setAuthor(newZagadka.getAuthor());
                     zagadka.setPoints(newZagadka.getPoints());
-                    return repository.save(newZagadka);
+                    return repository.save(zagadka);
                 })
                 .orElseGet(() -> {
-                    newZagadka.setRiddle_id(id);
+                    newZagadka.setId(id);
                     return repository.save(newZagadka);
                 });
     }
@@ -87,5 +90,33 @@ public class ZagadkaController {
         //todo identification
         //todo check if user is admin
         repository.deleteById(id);
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getPoints"})
+    int getPoints(@PathVariable Long id) {
+        return repository.getReferenceById(id).getPoints();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getAuthor"})
+    String getAuthor(@PathVariable Long id) {
+        return repository.getReferenceById(id).getAuthor();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getDifficulty"})
+    String getDifficulty(@PathVariable Long id) {
+        return repository.getReferenceById(id).getDifficulty();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getName"})
+    String getName(@PathVariable Long id) {
+        return repository.getReferenceById(id).getName();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getObjectCount"})
+    int getObjectCount(@PathVariable Long id) {
+        return repository.getReferenceById(id).getObjectCount();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getInfolink"})
+    String getInfoLink(@PathVariable Long id) {
+        return repository.getReferenceById(id).getInfolink();
+    }
+    @GetMapping(value={"/api/zagadka/{id}/getObiekty"})
+    Set<Obiekt> getObiekty(@PathVariable Long id) {
+        return repository.getReferenceById(id).getObiekty();
     }
 }

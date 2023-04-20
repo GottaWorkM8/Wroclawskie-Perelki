@@ -4,8 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Pieces;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Riddles;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Pieces;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Riddles;
 
 import java.io.InputStream;
 import java.nio.file.Files;

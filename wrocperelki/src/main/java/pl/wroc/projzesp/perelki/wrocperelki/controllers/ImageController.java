@@ -22,6 +22,6 @@ public class ImageController {
     @PostMapping("/upload/imageinfo")
     public void uplaodImageInfo(Map<String,String> data)
             throws IOException {
-
     }
+
 }

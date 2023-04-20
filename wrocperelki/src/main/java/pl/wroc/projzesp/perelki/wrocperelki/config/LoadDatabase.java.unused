@@ -3,8 +3,8 @@ package pl.wroc.projzesp.perelki.wrocperelki.config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Pieces;
-import pl.wroc.projzesp.perelki.wrocperelki.data.Riddles;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Pieces;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Riddles;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.PiecesRepository;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.RiddlesRepository;
 
