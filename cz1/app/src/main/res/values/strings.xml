@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Wrocławskie Perełki</string>
 
+    <string name="kalibracja_string">Kalibracja</string>
+    <string name="uloz_telefon_string">Ułóż telefon w pozycji pokazanej na ekranie</string>
+    <string name="dalej_string">Dalej</string>
+
     <string name="lista_zagadek_string">Lista zagadek</string>
     <string name="ulubione_string">Ulubione</string>
     <string name="dodawanie_string">Dodawanie</string>

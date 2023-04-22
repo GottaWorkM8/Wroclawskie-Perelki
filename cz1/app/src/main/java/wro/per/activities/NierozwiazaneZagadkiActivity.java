@@ -60,14 +60,17 @@ public class NierozwiazaneZagadkiActivity extends AppCompatActivity {
     public void openActivityHome(){
         Intent intent = new Intent(this, StronaGlownaActivity.class);
         startActivity(intent);
+        finish();
     }
     public void openActivityUn(){
         Intent intent = new Intent(this, RozwiazaneZagadkiActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openActivityWTrakcie(){
         Intent intent = new Intent(this, WTrakcieZagadkiActivity.class);
         startActivity(intent);
+        finish();
     }
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/red_1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/odczytTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/yellow"
+        android:textSize="40sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/kalibracja_string"
+        android:textColor="@color/yellow"
+        android:textSize="40sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="@color/yellow"
+        android:text="@string/uloz_telefon_string" />
+
+    <TextView
+        android:id="@+id/pozycjaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="na plecach"
+        android:textColor="@color/yellow"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/nastepnyPomiarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:text="@string/dalej_string"
+        android:textColor="@color/red_1" />
+
+    <TextView
+        android:id="@+id/driftyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/yellow"
+        android:textSize="20sp" />
+
+</LinearLayout>

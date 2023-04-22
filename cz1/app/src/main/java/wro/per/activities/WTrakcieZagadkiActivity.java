@@ -53,15 +53,18 @@ public class WTrakcieZagadkiActivity extends Activity {
     public void openActivityHome() {
         Intent intent = new Intent(this, StronaGlownaActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openActivityUn() {
         Intent intent = new Intent(this, NierozwiazaneZagadkiActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void openActivityFi(){
         Intent intent = new Intent(this, RozwiazaneZagadkiActivity.class);
         startActivity(intent);
+        finish();
     }
 }

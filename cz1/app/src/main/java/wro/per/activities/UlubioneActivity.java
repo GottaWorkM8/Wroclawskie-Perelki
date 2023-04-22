@@ -105,6 +105,7 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
     public void openActivityHome() {
         Intent intent = new Intent(this, StronaGlownaActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

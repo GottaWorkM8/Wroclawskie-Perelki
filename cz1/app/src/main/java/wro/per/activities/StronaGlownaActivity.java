@@ -46,35 +46,22 @@ public class StronaGlownaActivity extends AppCompatActivity {
         final ImageButton otworzMenuZadaniaButton;
 
         otworzMenuZadaniaButton = (ImageButton) findViewById(R.id.listButton);
-        otworzMenuZadaniaButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("działa");
-                otworzRozwiazaneActivity();
-            }
-        });
+        otworzMenuZadaniaButton.setOnClickListener(view -> otworzRozwiazaneActivity());
 
         final ImageButton otworzMenuUlubioneButton;
 
         otworzMenuUlubioneButton = (ImageButton) findViewById(R.id.favouriteButton);
-        otworzMenuUlubioneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("działa");
-                otworzUlubioneActivity();
-            }
-        });
+        otworzMenuUlubioneButton.setOnClickListener(view -> otworzUlubioneActivity());
 
         final ImageButton otworzMenuProfilButton;
 
         otworzMenuProfilButton = (ImageButton) findViewById(R.id.profileButton);
-        otworzMenuProfilButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("działa");
-                otworzProfilActivity();
-            }
-        });
+        otworzMenuProfilButton.setOnClickListener(view -> otworzProfilActivity());
+
+        final ImageButton otworzMenuInfoButton;
+
+        otworzMenuInfoButton = (ImageButton) findViewById(R.id.settingsButton);
+        otworzMenuInfoButton.setOnClickListener(view -> otworzKalibracjaActivity());
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
@@ -120,16 +107,25 @@ public class StronaGlownaActivity extends AppCompatActivity {
     public void otworzRozwiazaneActivity() {
         Intent intent = new Intent(this, RozwiazaneZagadkiActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void otworzUlubioneActivity() {
         Intent intent = new Intent(this, UlubioneActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void otworzProfilActivity() {
         Intent intent = new Intent(this, ProfilActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    public void otworzKalibracjaActivity() {
+        Intent intent = new Intent(this, KalibracjaActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
 

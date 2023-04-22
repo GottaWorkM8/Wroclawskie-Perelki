@@ -24,7 +24,11 @@
         <activity
             android:name="wro.per.activities.RozwiazaneZagadkiActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="wro.per.activities.StronaGlownaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="wro.per.activities.WTrakcieZagadkiActivity"
             android:exported="false"
@@ -42,7 +46,7 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="wro.per.activities.StronaGlownaActivity"
+            android:name="wro.per.activities.KalibracjaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:label="@string/app_name"
