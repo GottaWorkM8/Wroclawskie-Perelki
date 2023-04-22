@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="exportkit.figma">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
 
     <supports-screens
         android:largeScreens="true"
@@ -19,33 +16,44 @@
         android:xlargeScreens="true" />
 
     <application
-        android:screenOrientation="portrait"
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:label="wro.per.wrocławskie.perełki"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
-            android:name="wro.per.strona_zagadek"
+            android:name="wro.per.activities.RozwiazaneZagadkiActivity"
             android:exported="false"
-            tools:ignore="MissingClass" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
-            android:name="wro.per.NierozwiazaneZagadkiActivity"
+            android:name="wro.per.activities.WTrakcieZagadkiActivity"
             android:exported="false"
-            tools:ignore="MissingClass" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
-            android:name="wro.per.Strona_glowna_Activity"
+            android:name="wro.per.activities.UlubioneActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="wro.per.activities.NierozwiazaneZagadkiActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="wro.per.activities.ProfilActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="wro.per.activities.StronaGlownaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <service android:name="wro.per.LocationService" />
+        <service android:name="wro.per.others.LocationService" />
 
         <meta-data
             android:name="preloaded_fonts"

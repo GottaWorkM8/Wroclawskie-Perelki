@@ -1,35 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- strona_g__wna strings -->
+    <string name="app_name">Wrocławskie Perełki</string>
 
-    	<string name="app_name">test</string>
-    	<string name="ek_img_content">ExportKit Image</string>
+    <string name="lista_zagadek_string">Lista zagadek</string>
+    <string name="ulubione_string">Ulubione</string>
+    <string name="dodawanie_string">Dodawanie</string>
 
+    <string name="rozwiazane_string">Rozwiązane</string>
+    <string name="w_trakcie_string">W trakcie</string>
+    <string name="nierozwiazane_string">Nierozwiązane</string>
 
-	<string name="_3_8_string">3/8</string>
-	<string name="naj_trasa">Najkrtsza trasa:</string>
-	<string name="ilo___obiekt_w__5_string">Ilość obiektów: 5</string>
-	<string name="status__uko_czona_string">Status: ukończona</string>
-	<string name="kampus_pwr_string">Kampus PWR</string>
-	<string name="ilo___obiekt_w__8_string">Ilość obiektw: 8</string>
-	<string name="status__uko_czona_ek1_string">Status: ukończona</string>
-	<string name="magiczny_ostr_w_tumski_string">Magiczny Ostrów Tumski</string>
-	<string name="ilo___obiekt_w__10_string">Ilość obiektów: 10</string>
-	<string name="status__uko_czona_ek2_string">Status: ukończona</string>
-	<string name="wie_e_ci_nie__string">Wieże ciśnień</string>
-	<string name="srednie_string">Średnie</string>
-	<string name="trudne_string">Trudne</string>
-	<string name="latwe_string">Łatwe</string>
-	<string name="nierozwi_zane_string">Nierozwiązane</string>
-	<string name="rozwi_zane_string">Rozwiązane</string>
-	<string name="lista_zagadek_string">Lista zagadek</string>
-	<string name="murale_string">Murale</string>
-	<string name="muraleI_string">Ilość obiektów: 5</string>
-	<string name="muraleN_string">Najkrtsza trasa:</string>
-	<string name="muraleS_string">Status: znaleziono 2 obiekty</string>
-	<string name="Nieodblokowane_string">Nieodblokowane</string>
-	<string name="NieodblokowaneI1_string">Ilość obiektów: 7</string>
-	<string name="NieodblokowaneI2_string">Ilość obiektów: 9</string>
-	<string name="NieodblokowaneS_string">Status: nierozpoczęto</string>
+    <string name="latwe_string">Łatwe</string>
+    <string name="srednie_string">Średnie</string>
+    <string name="trudne_string">Trudne</string>
+
+    <string name="Nieodblokowane_string">Nieodblokowane</string>
+    <string name="tytul_murale_string">Murale</string>
+    <string name="tytul_kampus_string">Kampus PWR</string>
+    <string name="tytul_ostrow_string">Magiczny Ostrów Tumski</string>
+    <string name="tytul_wieze_string">Wieże ciśnień</string>
+
+    <string name="ilosc_obiektow_string">Ilość obiektów:&#160;</string>
+    <string name="ilosc_5_string"> 5</string>
+    <string name="ilosc_7_string"> 7</string>
+    <string name="ilosc_8_string"> 8</string>
+    <string name="ilosc_10_string"> 10</string>
+
+    <string name="status_string">Status:&#160;</string>
+    <string name="status_nierozpoczeto_string"> nierozpoczeto</string>
+    <string name="status_2_obiekty_string"> znaleziono 2 obiekty</string>
+    <string name="status_ukonczono_string"> ukończono</string>
+
+    <string name="ile_rozwiazanych_string">3/8</string>
+    <string name="ile_nierozwiazanych_string">5/8</string>
+    <string name="title_activity_dodawanie_zagadki">DodawanieZagadkiActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
