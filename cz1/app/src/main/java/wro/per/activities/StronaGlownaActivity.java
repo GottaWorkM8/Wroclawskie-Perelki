@@ -107,7 +107,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
     public void otworzRozwiazaneActivity() {
         Intent intent = new Intent(this, RozwiazaneZagadkiActivity.class);
         startActivity(intent);
-        finish();
+        
     }
 
     public void otworzUlubioneActivity() {
