@@ -100,6 +100,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
                 System.out.println(lat + "    " + lon);
 
                 osm.setPoint(new GeoPoint(lat, lon));
+                osm.draw(context, mapView, new GeoPoint(lat - 0.0005, lon - 0.0005), new GeoPoint(lat + 0.0005, lon + 0.0005));
             }
         }
     }
