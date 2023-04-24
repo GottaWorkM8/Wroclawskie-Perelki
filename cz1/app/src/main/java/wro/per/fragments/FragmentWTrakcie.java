@@ -63,7 +63,7 @@ public class FragmentWTrakcie extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         Zagadki zagadka = new Zagadki();
-                        zagadka.setId(jsonObject.getInt("riddle_id"));
+                        zagadka.setId(jsonObject.getInt("id"));
                         zagadka.setDifficulty(jsonObject.getString("difficulty"));
                         zagadka.setName(jsonObject.getString("name"));
                         zagadka.setObjectCount(jsonObject.getInt("objectCount"));
