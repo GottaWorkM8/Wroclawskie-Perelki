@@ -6,13 +6,6 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/odczytTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="@color/yellow"
-        android:textSize="40sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,27 +15,28 @@
         android:textSize="40sp" />
 
     <TextView
+        android:id="@+id/promptTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/yellow"
         android:text="@string/uloz_telefon_string" />
 
-    <TextView
-        android:id="@+id/pozycjaTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="na plecach"
-        android:textColor="@color/yellow"
-        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/phonePositionImageView"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:src="@drawable/on_back_icon"/>
 
     <Button
         android:id="@+id/nastepnyPomiarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
         android:text="@string/dalej_string"
-        android:textColor="@color/red_1" />
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        android:background="@drawable/zolte_tlo_poziomow"/>
 
     <TextView
         android:id="@+id/driftyTextView"

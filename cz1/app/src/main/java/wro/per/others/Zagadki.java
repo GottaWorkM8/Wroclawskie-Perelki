@@ -7,31 +7,36 @@ import com.google.gson.annotations.SerializedName;
 
 public class Zagadki {
 
-    @SerializedName("riddle_id")
+    @SerializedName("id")
     @Expose
-    private Integer riddleId;
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("category")
+    @SerializedName("difficulty")
     @Expose
-    private String category;
-    @SerializedName("info")
+    private String difficulty;
+    @SerializedName("infolink")
     @Expose
-    private String info;
-    @SerializedName("congrats")
+    private String infolink;
+    @SerializedName("author")
     @Expose
-    private String congrats;
+    private String author;
     @SerializedName("points")
     @Expose
     private Integer points;
+    @SerializedName("objectCount")
+    @Expose
+    private Integer objectCount;
 
-    public Integer getRiddleId() {
-        return riddleId;
+
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setRiddleId(Integer riddleId) {
-        this.riddleId = riddleId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,28 +47,28 @@ public class Zagadki {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
+    public String getDifficulty() {
+        return difficulty;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
-    public String getInfo() {
-        return info;
+    public String getInfoLink() {
+        return infolink;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setInfoLink(String infolink) {
+        this.infolink = infolink;
     }
 
-    public String getCongrats() {
-        return congrats;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setCongrats(String congrats) {
-        this.congrats = congrats;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public Integer getPoints() {
@@ -73,5 +78,14 @@ public class Zagadki {
     public void setPoints(Integer points) {
         this.points = points;
     }
+    public Integer getObjectCount() {
+        return objectCount;
+    }
+
+    public void setObjectCount(Integer objectCount) {
+        this.objectCount = objectCount;
+    }
+
+
 
 }
