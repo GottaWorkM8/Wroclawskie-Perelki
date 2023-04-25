@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,11 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wro.per.R;
+import wro.per.others.RecyclerViewAdapter;
 import wro.per.others.Zagadki;
 
 
 public class FragmentWTrakcie extends Fragment {
 
+    private RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,10 +67,10 @@ public class FragmentWTrakcie extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         Zagadki zagadka = new Zagadki();
-                        zagadka.setId(jsonObject.getInt("riddle_id"));
+                        zagadka.setId(jsonObject.getInt("id"));
                         zagadka.setDifficulty(jsonObject.getString("difficulty"));
                         zagadka.setName(jsonObject.getString("name"));
-                        zagadka.setObjectCount(jsonObject.getInt("objectCount"));
+                        zagadka.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
                         zagadka.setInfoLink(jsonObject.getString("infolink"));
                         zagadka.setAuthor(jsonObject.getString("author"));
                         zagadka.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
@@ -82,7 +86,6 @@ public class FragmentWTrakcie extends Fragment {
                 }
             }
         }
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         FetchData fetchData = new FetchData();
         fetchData.start(); // uruchamia wątek i wywołuje metodę run()
 
@@ -96,27 +99,14 @@ public class FragmentWTrakcie extends Fragment {
 
         List<Zagadki> zagadkiList = fetchData.zagadkiList;
 
+
         View view = inflater.inflate(R.layout.fragment_w_trakcie, container, false);
 
-        ScrollView scrollView = view.findViewById(R.id.scrollView4);
-        TextView tytul = new TextView(getActivity());
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new RecyclerViewAdapter(zagadkiList, view.getContext()));
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                336
-        );
-        params.height = 200;
-        tytul.setLayoutParams(params);
-        tytul.setText("");
-        for(int i = 0; i < zagadkiList.size(); i++)
-        {
-            tytul.append(zagadkiList.get(i).getName() + "\n");
-        }
-
-        tytul.setTextSize(18);
-        tytul.setTextColor(Color.BLACK);
-
-        scrollView.addView(tytul);
 
         return view;
 

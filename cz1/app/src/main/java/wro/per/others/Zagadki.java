@@ -29,6 +29,8 @@ public class Zagadki {
     @Expose
     private Integer objectCount;
 
+
+
     public Integer getId() {
         return id;
     }
@@ -83,5 +85,7 @@ public class Zagadki {
     public void setObjectCount(Integer objectCount) {
         this.objectCount = objectCount;
     }
+
+
 
 }
