@@ -114,19 +114,16 @@ public class StronaGlownaActivity extends AppCompatActivity {
     public void otworzUlubioneActivity() {
         Intent intent = new Intent(this, UlubioneActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void otworzProfilActivity() {
         Intent intent = new Intent(this, ProfilActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void otworzKalibracjaActivity() {
         Intent intent = new Intent(this, KalibracjaActivity.class);
         startActivity(intent);
-        finish();
     }
 }
 
