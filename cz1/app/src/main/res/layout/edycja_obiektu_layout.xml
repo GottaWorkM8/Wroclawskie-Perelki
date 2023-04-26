@@ -2,138 +2,149 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_1"
-    android:gravity="center_horizontal|top"
-    android:orientation="vertical"
-    android:paddingTop="20sp">
-    <!--    tytul okna-->
-    <TextView
+    android:background="@color/red_1">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Dodawanie informacji o obiekcie"
-        android:textColor="@color/yellow"
-        android:layout_marginBottom="10sp"
-        android:textSize="30dp" />
+        android:layout_height="match_parent">
 
-    <!--    wybieranie zagadki-->
-    <Spinner
-        android:id="@+id/zagadki_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10sp"
-        android:entries="@array/zagadki" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/red_1"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical"
+            android:paddingTop="20sp">
+            <!--    tytul okna-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:gravity="center"
+                android:text="Dodawanie informacji o obiekcie"
+                android:textColor="@color/yellow"
+                android:textSize="30dp" />
 
-    <!--    wybieranie obiektu do edycji-->
-    <Spinner
-        android:id="@+id/obiekty_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/obiekty" />
+            <!--    wybieranie zagadki-->
+            <Spinner
+                android:id="@+id/zagadki_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:entries="@array/zagadki" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="Współrzędne obserwacji"
-        android:textColor="@color/yellow"
-        android:textSize="20sp" />
+            <!--    wybieranie obiektu do edycji-->
+            <Spinner
+                android:id="@+id/obiekty_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/obiekty" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Współrzędne obserwacji"
+                android:textColor="@color/yellow"
+                android:textSize="20sp" />
 
-        <EditText
-            android:id="@+id/wspolrzedne_obserwacji_edittext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:hint=" Naciśnij przycisk aby pobrać dane "
-            android:maxLines="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/wspolrzedne_obserwacji_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/zolte_tlo_poziomow"
-            android:text="Załaduj"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="18dp" />
+                <EditText
+                    android:id="@+id/wspolrzedne_obserwacji_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint=" Naciśnij przycisk aby pobrać dane "
+                    android:maxLines="1" />
 
-    </LinearLayout>
+                <Button
+                    android:id="@+id/wspolrzedne_obserwacji_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/zolte_tlo_poziomow"
+                    android:text="Załaduj"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
 
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="Współrzędne szczegółu"
-        android:textColor="@color/yellow"
-        android:textSize="20sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/wspolrzedne_szczegołu_edittext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:hint=" Naciśnij przycisk aby pobrać dane "
-            android:maxLines="1" />
-
-        <Button
-            android:id="@+id/wspolrzedne_szczególu_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/zolte_tlo_poziomow"
-            android:text="Załaduj"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:textSize="18dp" />
-
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="Zdjęcie szczegółu"
-        android:textColor="@color/yellow"
-        android:textSize="20sp" />
-
-    <ImageView
-        android:id="@+id/zdjecie_szczegolu_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxHeight="250sp"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:src="@drawable/pusty_obrazek"
-        android:layout_marginBottom="5sp"
-        android:layout_marginTop="5sp"
-        android:background="@drawable/image_view_border"
-        />
+            </LinearLayout>
 
 
-    <Button
-        android:id="@+id/zdjecie_szczegolu_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/zolte_tlo_poziomow"
-        android:text="Wykonaj"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:textSize="18dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Współrzędne szczegółu"
+                android:textColor="@color/yellow"
+                android:textSize="20sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/wspolrzedne_szczegołu_edittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:hint=" Naciśnij przycisk aby pobrać dane "
+                    android:maxLines="1" />
+
+                <Button
+                    android:id="@+id/wspolrzedne_szczególu_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/zolte_tlo_poziomow"
+                    android:text="Załaduj"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Zdjęcie szczegółu"
+                android:textColor="@color/yellow"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/zdjecie_szczegolu_imageview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="5sp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/image_view_border"
+                android:maxHeight="250sp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pusty_obrazek" />
+
+
+            <Button
+                android:id="@+id/zdjecie_szczegolu_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/zolte_tlo_poziomow"
+                android:text="Wykonaj"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
