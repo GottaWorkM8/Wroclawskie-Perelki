@@ -14,70 +14,20 @@
         android:background="@drawable/mapa2"
         android:orientation="vertical">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/doneList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:layout_marginTop="0dp"
             android:background="@color/red_4">
-
-            <Button
-                android:id="@+id/hardButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/zolte_tlo_poziomow"
-                android:text="@string/trudne_string"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/mediumButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/mediumButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/zolte_tlo_poziomow"
-                android:text="@string/srednie_string"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/easyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="30dp"
-                android:background="@drawable/zolte_tlo_poziomow"
-                android:text="@string/latwe_string"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toStartOf="@+id/mediumButton"
-                app:layout_constraintHorizontal_bias="0.6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

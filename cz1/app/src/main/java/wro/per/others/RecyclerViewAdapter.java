@@ -31,7 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         holder.name.setText(zagadki.get(position).getName());
-        //holder.objectCount.setText(zagadki.get(position).getObjectCount());
+        holder.objectCount.setText(String.valueOf(zagadki.get(position).getObjectCount()));
     }
 
     @Override
