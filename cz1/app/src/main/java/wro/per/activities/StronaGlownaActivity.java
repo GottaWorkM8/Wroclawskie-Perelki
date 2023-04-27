@@ -97,9 +97,10 @@ public class StronaGlownaActivity extends AppCompatActivity {
                 double lon = intent.getDoubleExtra("longitude", 0f);
 
                 System.out.println(lat + "    " + lon);
-
-                osm.setPoint(new GeoPoint(lat, lon));
-                osm.draw(context, mapView, new GeoPoint(lat - 0.0005, lon - 0.0005), new GeoPoint(lat + 0.0005, lon + 0.0005));
+                GeoPoint point = new GeoPoint(lat, lon);
+                osm.setPoint(point);
+                osm.drawYou(mapView, point);
+                osm.drawCircle(mapView, point, 50f);
             }
         }
     }
