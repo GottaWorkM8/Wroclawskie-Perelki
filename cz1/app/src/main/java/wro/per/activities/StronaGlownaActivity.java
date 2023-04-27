@@ -95,8 +95,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
             if (intent.getAction().equals("ACT_LOC")) {
                 double lat = intent.getDoubleExtra("latitude", 0f);
                 double lon = intent.getDoubleExtra("longitude", 0f);
-                Toast.makeText(StronaGlownaActivity.this, "lat: " + lat + "  " +
-                        " lon: " + lon, Toast.LENGTH_LONG).show();
+
                 System.out.println(lat + "    " + lon);
 
                 osm.setPoint(new GeoPoint(lat, lon));
