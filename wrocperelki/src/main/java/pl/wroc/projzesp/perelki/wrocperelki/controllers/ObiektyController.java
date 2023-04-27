@@ -8,7 +8,7 @@ import pl.wroc.projzesp.perelki.wrocperelki.interfaces.ObiektRepository;
 import java.util.List;
 
 @RestController
-public class PiecesController {
+public class ObiektyController {
     @Autowired
     private ObiektRepository miejsca;
     /*

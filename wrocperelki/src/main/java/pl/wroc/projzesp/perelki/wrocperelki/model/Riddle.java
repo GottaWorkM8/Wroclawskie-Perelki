@@ -19,6 +19,7 @@ public class Riddle {
     private String infolink;
     private String author;
     private int points;
+    //private String photoLink; //sugestia janka
     @JsonIgnore
     @OneToMany
     private Set<Obiekt> obiekty ;

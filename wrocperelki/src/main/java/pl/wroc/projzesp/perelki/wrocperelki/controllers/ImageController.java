@@ -1,27 +1,53 @@
 package pl.wroc.projzesp.perelki.wrocperelki.controllers;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 @RestController
 public class ImageController {
-    @PostMapping("/upload/image")
-    public String uplaodImage(@RequestParam("image") MultipartFile file)
-            throws IOException {
-//        Image.builder()
-//                .name(file.getOriginalFilename())
-//                .type(file.getContentType())
-//                .image(ImageUtility.compressImage(file.getBytes())).build();
-        return "not implemented";
+    private static int loadSavedFromDisk() {
+        try{
+            File f = new File("imageId.txt");
+            BufferedReader fr = new BufferedReader(new java.io.FileReader(f));
+            int id = Integer.parseInt(fr.readLine());
+            fr.close();
+            return id;
+        }
+        catch (Exception e){
+            return 0;
+        }
     }
-    @PostMapping("/upload/imageinfo")
-    public void uplaodImageInfo(Map<String,String> data)
+    private static int imageId = loadSavedFromDisk();
+    private static int getNextId(){
+        ++imageId;
+        try {
+            File f = new File("imageId.txt");
+            f.createNewFile();
+            java.io.FileWriter fw = new java.io.FileWriter(f);
+            fw.write(imageId + "");
+            fw.close();
+            return imageId;
+        }
+        catch (IOException e){
+            return 0;
+        }
+    }
+    @PostMapping("/api/upload/image")
+    public String uplaodImage(@RequestPart("file") MultipartFile file)
             throws IOException {
+        int id = getNextId();
+        String filename = id+"."+file.getOriginalFilename();
+        File imf = new File("/home/pi/projzesp/images");
+        imf.mkdirs();
+        imf = new File("/home/pi/projzesp/images/"+filename);
+        file.transferTo(imf);
+        return "https://szajsjem.mooo.com/images/"+filename;
     }
 
 }
