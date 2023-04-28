@@ -3,6 +3,7 @@ package wro.per.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -35,6 +36,8 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
     private TextView xValueRotGeoMag, yValueRotGeoMag, zValueRotGeoMag;
     private TextView xValueMag, yValueMag, zValueMag;
     private TextView xValueOrient, yValueOrient, zValueOrient;
+
+    private Float driftX, driftZ, driftY;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,11 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
         orientVector = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         sensorManager.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        driftX = Float.valueOf(sharedPreferences.getString("driftX", "0f"));
+        driftY = Float.valueOf(sharedPreferences.getString("driftY", "0f"));
+        driftZ = Float.valueOf(sharedPreferences.getString("driftZ", "0f"));
+
         final ImageButton otworzStroneGlownaButton;
 
         otworzStroneGlownaButton = (ImageButton) findViewById(R.id.homeButton);
@@ -131,9 +139,9 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+            float x = event.values[0] + driftX;
+            float y = event.values[1] + driftY;
+            float z = event.values[2] + driftZ;
 
             xValueAcc.setText("X: " + String.format("%.2f", x));
             yValueAcc.setText("Y: " + String.format("%.2f", y));

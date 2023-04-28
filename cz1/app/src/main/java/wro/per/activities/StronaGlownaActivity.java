@@ -123,6 +123,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
 
     public void otworzKalibracjaActivity() {
         Intent intent = new Intent(this, KalibracjaActivity.class);
+        intent.putExtra("otwarcieAplikacji", false);
         startActivity(intent);
     }
 }

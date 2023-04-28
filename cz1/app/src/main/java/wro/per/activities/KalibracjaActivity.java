@@ -45,11 +45,18 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
 
     private int aktualnypomiar = 1;
 
+    private Boolean otwarcieAplikacji = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kalibracja_layout);
+
+        Intent intent = getIntent();
+        otwarcieAplikacji = intent.getBooleanExtra("otwarcieAplikacji", true);
+        System.out.println("otwarcie aplikacji: "+otwarcieAplikacji);
+
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -62,7 +69,8 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
         przejdzDalejButton = findViewById(R.id.nastepnyPomiarButton);
         przejdzDalejButton.setOnClickListener(view -> nastepnyPomiar());
 
-        readDate();
+        if(otwarcieAplikacji)
+            readDate();
     }
 
     public void readDate() {
@@ -133,33 +141,41 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
     public void nastepnyPomiar() {
         switch (aktualnypomiar) {
             case 1:
-                avgDriftZ = abs(9.81f - z);
+                avgDriftZ = 9.81f - z;
                 wyniki.setText("Odczytany drift: " + avgDriftZ);
                 pozycjaImageView.setImageResource(R.drawable.on_bottom_icon);
                 aktualnypomiar++;
                 break;
             case 2:
-                driftY1 = abs(9.81f - y);
+                driftY1 = 9.81f - y;
                 wyniki.setText("Odczytany drift: " + driftY1);
                 pozycjaImageView.setImageResource(R.drawable.on_right_icon);
                 aktualnypomiar++;
                 break;
             case 3:
-                driftX1 = abs(9.81f - x);
+                driftX1 = 9.81f - abs(x);
                 wyniki.setText("Odczytany drift: " + driftX1);
                 pozycjaImageView.setImageResource(R.drawable.on_top_icon);
                 aktualnypomiar++;
                 break;
             case 4:
-                driftY2 = abs(9.81f - y);
+                driftY2 = 9.81f - abs(y);
                 avgDriftY = (driftY1 + driftY2) / 2;
                 wyniki.setText("Odczytany drift: " + avgDriftY);
                 pozycjaImageView.setImageResource(R.drawable.on_left_icon);
                 aktualnypomiar++;
                 break;
             case 5:
-                driftX2 = abs(9.81f - y);
+                driftX2 = 9.81f - x;
                 avgDriftX = (driftX1 + driftX2) / 2;
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("driftX", String.valueOf(avgDriftX));
+                editor.putString("driftY", String.valueOf(avgDriftY));
+                editor.putString("driftZ", String.valueOf(avgDriftZ));
+                editor.apply();
+
                 wyniki.setText("Wyniki pomiarów:\nPrzesunięcie X: " + avgDriftX + "\nPrzesunięcie Y: " + avgDriftY + "\nPrzesunięcie Z: " + avgDriftZ);
                 aktualnypomiar++;
                 TextView prompt = findViewById(R.id.promptTextView);
@@ -171,8 +187,11 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
                 przejdzDalejButton.setText("Zakończ");
                 break;
             case 6:
-                Intent intent = new Intent(KalibracjaActivity.this, StronaGlownaActivity.class);
-                startActivity(intent);
+
+                if(otwarcieAplikacji) {
+                    Intent intent = new Intent(KalibracjaActivity.this, StronaGlownaActivity.class);
+                    startActivity(intent);
+                }
                 finish();
 
                 break;
