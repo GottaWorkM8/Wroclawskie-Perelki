@@ -47,7 +47,6 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
 
         Button wykonajZdjecieButton;
 
-
         wykonajZdjecieButton = findViewById(R.id.zdjecie_szczegolu_button);
 
         wykonajZdjecieButton.setOnClickListener(view -> {

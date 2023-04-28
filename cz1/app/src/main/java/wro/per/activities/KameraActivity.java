@@ -20,11 +20,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.DisplayMetrics;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -96,8 +98,19 @@ public class KameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kamera_layout);
-
         textureView = (TextureView)findViewById(R.id.textureView);
+
+        // Uzyskanie rozmiarów ekranu
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screenWidth = (int) (displayMetrics.widthPixels * 0.9);
+
+        // Ustawienie wymiarów TextureView
+        ViewGroup.LayoutParams layoutParams = textureView.getLayoutParams();
+        layoutParams.width = screenWidth;
+        layoutParams.height = (screenWidth * 4) / 3;
+        textureView.setLayoutParams(layoutParams);
+
         //From Java 1.4 , you can use keyword 'assert' to check expression true or false
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
