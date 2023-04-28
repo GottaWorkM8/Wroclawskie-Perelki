@@ -13,9 +13,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import wro.per.R;
+import wro.per.others.Camera;
 
 public class ProfilActivity extends AppCompatActivity implements SensorEventListener {
 
@@ -42,14 +46,20 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
         setContentView(R.layout.edycja_obiektu_layout);
 
         Button wykonajZdjecieButton;
+
+
         wykonajZdjecieButton = findViewById(R.id.zdjecie_szczegolu_button);
-        wykonajZdjecieButton.setOnClickListener(view -> takePicture());
+
+        wykonajZdjecieButton.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, CameraActivity.class);
+                    startActivity(intent);
+        });
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometr = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
-    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
+ /*   private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == RESULT_OK) {
@@ -88,7 +98,7 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
 
         }
 
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -109,4 +119,5 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 }
