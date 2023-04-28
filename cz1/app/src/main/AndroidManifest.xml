@@ -10,8 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera2.full" />
 
 
     <supports-screens
@@ -26,6 +25,10 @@
         android:label="wro.per.wrocławskie.perełki"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.KameraActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="wro.per.activities.RozwiazaneZagadkiActivity"
             android:exported="false"
@@ -42,7 +45,6 @@
             android:name="wro.per.activities.ProfilActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.CameraActivity" />
         <activity
             android:name="wro.per.activities.KalibracjaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
