@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>pl.wroc.projzesp.perelki</groupId>
 	<artifactId>wrocperelki</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.7-SNAPSHOT</version>
 	<name>wrocperelki</name>
 	<description>Wrocławskie perełki</description>
 	<properties>

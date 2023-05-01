@@ -41,11 +41,11 @@ public class ImageController {
     @PostMapping("/api/upload/image")
     public String uplaodImage(@RequestPart("file") MultipartFile file)
             throws IOException {
+        //testowanie: curl -F file=@"plik" http://127.0.0.1:8080/api/upload/image
+        //powinno zwrócić link do pliku
         int id = getNextId();
         String filename = id+"."+file.getOriginalFilename();
-        File imf = new File("/home/pi/projzesp/images");
-        imf.mkdirs();
-        imf = new File("/home/pi/projzesp/images/"+filename);
+        File imf = new File("/home/pi/projzesp/images/"+filename);
         file.transferTo(imf);
         return "https://szajsjem.mooo.com/images/"+filename;
     }
