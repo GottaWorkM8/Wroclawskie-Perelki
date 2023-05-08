@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -50,8 +54,11 @@ import java.util.UUID;
 
 import wro.per.R;
 
-public class KameraActivity extends AppCompatActivity {
+public class KameraActivity extends AppCompatActivity implements SensorEventListener {
     private Button btnCapture;
+
+    SensorManager sensorManager;
+    Sensor accelerometr;
     private TextureView textureView;
 
     //Check state orientation of output image
@@ -76,6 +83,8 @@ public class KameraActivity extends AppCompatActivity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+
+    private float x, y, z;
 
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -113,6 +122,11 @@ public class KameraActivity extends AppCompatActivity {
         layoutParams.width = screenWidth;
         layoutParams.height = (screenWidth * 4) / 3;
         textureView.setLayoutParams(layoutParams);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometr = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, accelerometr, SensorManager.SENSOR_DELAY_NORMAL);
+
 
         //From Java 1.4 , you can use keyword 'assert' to check expression true or false
         assert textureView != null;
@@ -159,11 +173,11 @@ public class KameraActivity extends AppCompatActivity {
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION,ORIENTATIONS.get(rotation));
 
-            File dir = new File(Environment.getExternalStorageDirectory() + "/WroclawskiePerelki/");
+            File dir = new File(Environment.getExternalStorageDirectory() + "/Pictures/WroclawskiePerelki/");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            String path = Environment.getExternalStorageDirectory()+"/WroclawskiePerelki/"+UUID.randomUUID().toString()+".jpg";
+            String path = Environment.getExternalStorageDirectory()+"/Pictures/WroclawskiePerelki/"+UUID.randomUUID().toString()+".jpg";
             file = new File(path);
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
@@ -233,8 +247,14 @@ public class KameraActivity extends AppCompatActivity {
     private void backToProfile(String path)
     {
         Intent intent = new Intent();
+        float finalx = x;
+        float finaly = y;
+        float finalz = z;
         //tu powinno dać się przekazać odczyt sensorów do ProfilActivity tak jak zdjęcie
         intent.putExtra("imagePath", path);
+        intent.putExtra("nachylenieX", finalx);
+        intent.putExtra("nachylenieY", finaly);
+        intent.putExtra("nachylenieZ", finalz);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -366,5 +386,20 @@ public class KameraActivity extends AppCompatActivity {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+    }
+
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            x = event.values[0];
+            y = event.values[1];
+            z = event.values[2];
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

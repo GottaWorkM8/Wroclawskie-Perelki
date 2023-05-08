@@ -75,6 +75,22 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Nachylenie telefonu"
+                android:textColor="@color/yellow"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/nachylenieEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:hint="Nachylenie podczas robienia sdjęcia"
+                android:maxLines="1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -85,31 +101,13 @@
                 android:textColor="@color/yellow"
                 android:textSize="20sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/wspolrzedne_szczegołu_edittext"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/wspolrzedne_szczegołu_edittext"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:hint=" Naciśnij przycisk aby pobrać dane "
-                    android:maxLines="1" />
-
-                <Button
-                    android:id="@+id/wspolrzedne_szczególu_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/zolte_tlo_poziomow"
-                    android:text="Załaduj"
-                    android:textAllCaps="false"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-            </LinearLayout>
+                android:editable="false"
+                android:hint=" Współrzędne pobrane podczas robienia zdjęcia "
+                android:maxLines="1" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -139,6 +137,17 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/zolte_tlo_poziomow"
                 android:text="Wykonaj"
+                android:layout_marginBottom="10dp"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/wyslij_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/zolte_tlo_poziomow"
+                android:text="@string/wyslij_string"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="18dp" />

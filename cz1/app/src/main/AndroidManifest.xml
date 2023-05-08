@@ -25,10 +25,6 @@
         android:label="wro.per.wrocławskie.perełki"
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/krztalt_podpowiedzi" />
-
         <activity
             android:name=".activities.KameraActivity"
             android:exported="false"

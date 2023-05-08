@@ -2,63 +2,55 @@ package wro.per.activities;
 
 import static java.lang.Math.abs;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.SurfaceView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
 
 import wro.per.R;
-import wro.per.others.Camera;
 
-public class ProfilActivity extends AppCompatActivity implements SensorEventListener {
+public class ProfilActivity extends AppCompatActivity {
 
-    SensorManager sensorManager;
-    Sensor accelerometr;
-
-    private float x, y, z;
-
+    private EditText nachylenie;
+    float nachylenieX, nachylenieY, nachylenieZ;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edycja_obiektu_layout);
 
+        nachylenie = findViewById(R.id.nachylenieEditText);
+
         Button wykonajZdjecieButton;
 
+        Button wysliljDoBazyButton;
+
         wykonajZdjecieButton = findViewById(R.id.zdjecie_szczegolu_button);
+        wysliljDoBazyButton = findViewById(R.id.wyslij_button);
 
         wykonajZdjecieButton.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, KameraActivity.class);
-                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            Intent intent = new Intent(this, KameraActivity.class);
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         });
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometr = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        wysliljDoBazyButton.setOnClickListener(view -> {
+            Toast.makeText(this, "Jeszcze nie działa", Toast.LENGTH_LONG).show();
+        });
+
+
     }
 
     @Override
@@ -67,6 +59,16 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             String imagePath = data.getStringExtra("imagePath");
+            nachylenieX = data.getFloatExtra("nachylenieX", 0);
+            nachylenieY = data.getFloatExtra("nachylenieY", 0);
+            nachylenieZ = data.getFloatExtra("nachylenieZ", 0);
+
+            nachylenie.setText(Float.toString(nachylenieX));
+
+            System.out.println("Nachylenie:");
+            System.out.println("X: "+nachylenieX);
+            System.out.println("Y: "+nachylenieY);
+            System.out.println("Z: "+nachylenieZ);
 
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             try {
@@ -89,24 +91,6 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sensorManager.registerListener(this, accelerometr, SensorManager.SENSOR_DELAY_NORMAL);
-    }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            x = event.values[0];
-            y = event.values[1];
-            z = event.values[2];
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
 
 }
