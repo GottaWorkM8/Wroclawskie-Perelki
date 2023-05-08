@@ -28,11 +28,11 @@
             android:id="@+id/questionMarkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/czerwone_rozwijane_informacje"
+            android:background="@drawable/podpowiedz_shape"
             android:contentDescription="Info"
             android:src="@drawable/zolta_ikona_znaku_zapytania"
-            tools:src="@drawable/zolta_ikona_znaku_zapytania"
-            app:srcCompat="@drawable/zolta_ikona_znaku_zapytania" />
+            app:srcCompat="@drawable/zolta_ikona_znaku_zapytania"
+            tools:src="@drawable/zolta_ikona_znaku_zapytania" />
     </RelativeLayout>
 
     <RelativeLayout

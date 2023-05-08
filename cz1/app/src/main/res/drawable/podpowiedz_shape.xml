@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ___typrofil from your XD file. -->
+<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android" >
+	<stroke  android:background="@color/red_2" />
+	<corners
+		android:bottomRightRadius="100dp"
+		android:topRightRadius="100dp"
+		/>
+	<solid android:color="@color/red_2" />
+	<size android:height="68dp"
+		android:width="50dp"></size>
+
+</shape>
+
