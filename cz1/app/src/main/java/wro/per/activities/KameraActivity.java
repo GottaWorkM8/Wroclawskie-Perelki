@@ -2,8 +2,10 @@ package wro.per.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
@@ -35,6 +37,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,6 +56,7 @@ import java.util.List;
 import java.util.UUID;
 
 import wro.per.R;
+import wro.per.others.LocationService;
 
 public class KameraActivity extends AppCompatActivity implements SensorEventListener {
     private Button btnCapture;
@@ -69,6 +73,20 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
         ORIENTATIONS.append(Surface.ROTATION_180,270);
         ORIENTATIONS.append(Surface.ROTATION_270,180);
     }
+    private double latitude;
+
+    private double longitude;
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            latitude = intent.getDoubleExtra("latitude", 0);
+            longitude = intent.getDoubleExtra("longitude", 0);
+
+        }
+    };
+
 
     private String cameraId;
     private CameraDevice cameraDevice;
@@ -136,6 +154,8 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onClick(View view) {
                 takePhoto();
+                Intent intent = new Intent(KameraActivity.this, LocationService.class);
+                startService(intent);
             }
         });
     }
@@ -255,6 +275,8 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
         intent.putExtra("nachylenieX", finalx);
         intent.putExtra("nachylenieY", finaly);
         intent.putExtra("nachylenieZ", finalz);
+        intent.putExtra("lat", latitude);
+        intent.putExtra("lon", longitude);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -359,10 +381,17 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     protected void onResume() {
         super.onResume();
         startBackgroundThread();
+        registerReceiver(broadcastReceiver, new IntentFilter("ACT_LOC"));
         if(textureView.isAvailable())
             openCamera();
         else
             textureView.setSurfaceTextureListener(textureListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -402,4 +431,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
+
+
 }

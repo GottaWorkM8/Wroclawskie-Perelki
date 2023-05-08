@@ -16,7 +16,10 @@ import wro.per.R;
 
 public class OSM {
     private final IMapController mapController;
-    public OSM(MapView mapView){
+
+    private UserLocation userLocation;
+
+    public OSM(MapView mapView) {
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
         mapView.setBuiltInZoomControls(true);
@@ -26,15 +29,21 @@ public class OSM {
     }
 
 
-    public void setPoint(GeoPoint point){
+    public void setPoint(GeoPoint point) {
         mapController.setCenter(point);
     }
 
-    public void drawYou(MapView mapView, GeoPoint geoPoint){
-        mapView.getOverlays().add(new UserLocation(geoPoint));
+    public void drawYou(MapView mapView, GeoPoint geoPoint) {
+        userLocation = new UserLocation(geoPoint);
+        mapView.getOverlays().add(userLocation);
     }
 
-    public void drawCircle(MapView mapView, GeoPoint geoPoint, float r){
+    public void drawCircle(MapView mapView, GeoPoint geoPoint, float r) {
         mapView.getOverlays().add(new Circle(geoPoint, mapView, r));
     }
+
+    public void deleteYou(MapView mapView) {
+        mapView.getOverlays().remove(userLocation);
+    }
+
 }

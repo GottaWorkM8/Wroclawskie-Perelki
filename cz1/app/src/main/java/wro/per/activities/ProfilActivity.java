@@ -2,12 +2,17 @@ package wro.per.activities;
 
 import static java.lang.Math.abs;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,12 +24,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.IOException;
 
 import wro.per.R;
+import wro.per.others.LocationService;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    private EditText nachylenie;
+    private EditText nachylenie, detailCoords;
     float nachylenieX, nachylenieY, nachylenieZ;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    double detailLatitude, detailLongitude;
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+        EditText wspolrzedneText;
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            wspolrzedneText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
+
+            double latitude = intent.getDoubleExtra("latitude", 0);
+            double longitude = intent.getDoubleExtra("longitude", 0);
+
+            wspolrzedneText.setText(latitude + ",  " + longitude);
+
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,18 +56,34 @@ public class ProfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edycja_obiektu_layout);
 
-        nachylenie = findViewById(R.id.nachylenieEditText);
-
         Button wykonajZdjecieButton;
 
         Button wysliljDoBazyButton;
 
+        Button zaladujWspolrzedne;
+
+        nachylenie = findViewById(R.id.nachylenieEditText);
+
+        detailCoords = findViewById(R.id.wspolrzedne_szczegołu_edittext);
+
+        zaladujWspolrzedne = findViewById(R.id.wspolrzedne_obserwacji_button);
+
         wykonajZdjecieButton = findViewById(R.id.zdjecie_szczegolu_button);
+
         wysliljDoBazyButton = findViewById(R.id.wyslij_button);
 
         wykonajZdjecieButton.setOnClickListener(view -> {
             Intent intent = new Intent(this, KameraActivity.class);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+        });
+
+
+        zaladujWspolrzedne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfilActivity.this, LocationService.class);
+                startService(intent);
+            }
         });
 
         wysliljDoBazyButton.setOnClickListener(view -> {
@@ -64,6 +104,11 @@ public class ProfilActivity extends AppCompatActivity {
             nachylenieZ = data.getFloatExtra("nachylenieZ", 0);
 
             nachylenie.setText(Float.toString(nachylenieX));
+
+            detailLatitude = data.getDoubleExtra("lat",0);
+            detailLongitude = data.getDoubleExtra("lon", 0);
+
+            detailCoords.setText(Double.toString(detailLatitude)+ ",  " + Double.toString(detailLongitude));
 
             System.out.println("Nachylenie:");
             System.out.println("X: "+nachylenieX);
@@ -91,6 +136,16 @@ public class ProfilActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadcastReceiver, new IntentFilter("ACT_LOC"));
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadcastReceiver);
+    }
 
 }

@@ -92,6 +92,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            osm.deleteYou(mapView);
             if (intent.getAction().equals("ACT_LOC")) {
                 double lat = intent.getDoubleExtra("latitude", 0f);
                 double lon = intent.getDoubleExtra("longitude", 0f);
@@ -100,8 +101,8 @@ public class StronaGlownaActivity extends AppCompatActivity {
                 GeoPoint point = new GeoPoint(lat, lon);
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
-                osm.drawCircle(mapView, point, 0.01f);
-                osm.drawCircle(mapView, point, 0.005f);
+                osm.drawCircle(mapView, point, 100);
+                osm.drawCircle(mapView, point, 150);
             }
         }
     }
