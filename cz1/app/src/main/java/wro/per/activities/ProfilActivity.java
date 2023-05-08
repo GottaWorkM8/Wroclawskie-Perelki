@@ -7,10 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.SurfaceView;
@@ -26,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.IOException;
+
 import wro.per.R;
 import wro.per.others.Camera;
 
@@ -37,8 +42,6 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
     private float x, y, z;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -51,11 +54,39 @@ public class ProfilActivity extends AppCompatActivity implements SensorEventList
 
         wykonajZdjecieButton.setOnClickListener(view -> {
                     Intent intent = new Intent(this, KameraActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         });
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometr = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+
+            String imagePath = data.getStringExtra("imagePath");
+
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            try {
+                ExifInterface exif = new ExifInterface(imagePath);
+                int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                Matrix matrix = new Matrix();
+                if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                    matrix.postRotate(90);
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                    matrix.postRotate(180);
+                } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                    matrix.postRotate(270);
+                }
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ImageView imageView = findViewById(R.id.zdjecie_szczegolu_imageview);
+            imageView.setImageBitmap(bitmap);
+        }
     }
 
     @Override

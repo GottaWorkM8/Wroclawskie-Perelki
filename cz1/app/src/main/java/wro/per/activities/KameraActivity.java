@@ -1,8 +1,11 @@
 package wro.per.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -156,7 +159,12 @@ public class KameraActivity extends AppCompatActivity {
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION,ORIENTATIONS.get(rotation));
 
-            file = new File(Environment.getExternalStorageDirectory()+"/"+UUID.randomUUID().toString()+".jpg");
+            File dir = new File(Environment.getExternalStorageDirectory() + "/WroclawskiePerelki/");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            String path = Environment.getExternalStorageDirectory()+"/WroclawskiePerelki/"+UUID.randomUUID().toString()+".jpg";
+            file = new File(path);
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader imageReader) {
@@ -196,6 +204,7 @@ public class KameraActivity extends AppCompatActivity {
                     super.onCaptureCompleted(session, request, result);
                     Toast.makeText(KameraActivity.this, "Saved "+file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
+                    backToProfile(path);
                 }
             };
 
@@ -219,6 +228,15 @@ public class KameraActivity extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void backToProfile(String path)
+    {
+        Intent intent = new Intent();
+        //tu powinno dać się przekazać odczyt sensorów do ProfilActivity tak jak zdjęcie
+        intent.putExtra("imagePath", path);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private void createCameraPreview() {
