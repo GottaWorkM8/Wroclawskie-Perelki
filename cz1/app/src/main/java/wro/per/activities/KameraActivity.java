@@ -1,19 +1,13 @@
 package wro.per.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
@@ -58,12 +52,12 @@ import java.util.UUID;
 
 import wro.per.R;
 import wro.per.others.LocationService;
+import wro.per.others.SensorDataCollector;
 
-public class KameraActivity extends AppCompatActivity implements SensorEventListener {
+public class KameraActivity extends AppCompatActivity {
     private Button btnCapture;
+    private SensorDataCollector sensorDataCollector;
 
-    SensorManager sensorManager;
-    Sensor accelerometr;
     private TextureView textureView;
 
     //Check state orientation of output image
@@ -81,14 +75,12 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            latitude = intent.getDoubleExtra("latitude", 2);
-            longitude = intent.getDoubleExtra("longitude", 2);
+            latitude = intent.getDoubleExtra("latitude", 3);
+            longitude = intent.getDoubleExtra("longitude", 3);
             Log.d("BroadcastReceiver", "Received location update: " + latitude + ", " + longitude);
 
         }
     };
-
 
     private String cameraId;
     private CameraDevice cameraDevice;
@@ -104,7 +96,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    private float x, y, z;
+    private float[] accelerometerValues = new float [3];
 
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -130,6 +122,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.kamera_layout);
+        sensorDataCollector = new SensorDataCollector(this);
         textureView = (TextureView)findViewById(R.id.textureView);
 
         // Uzyskanie rozmiarów ekranu
@@ -142,11 +135,6 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
         layoutParams.width = screenWidth;
         layoutParams.height = (screenWidth * 4) / 3;
         textureView.setLayoutParams(layoutParams);
-
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometr = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, accelerometr, SensorManager.SENSOR_DELAY_NORMAL);
-
 
         //From Java 1.4 , you can use keyword 'assert' to check expression true or false
         assert textureView != null;
@@ -285,14 +273,12 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     private void backToProfile(String path)
     {
         Intent intent = new Intent();
-        float finalx = x;
-        float finaly = y;
-        float finalz = z;
         //tu powinno dać się przekazać odczyt sensorów do ProfilActivity tak jak zdjęcie
         intent.putExtra("imagePath", path);
-        intent.putExtra("nachylenieX", finalx);
-        intent.putExtra("nachylenieY", finaly);
-        intent.putExtra("nachylenieZ", finalz);
+        intent.putExtra("azimuth", getSensorValues(1));
+        intent.putExtra("pitch", getSensorValues(2));
+        intent.putExtra("roll", getSensorValues(3));
+        intent.putExtra("accelerometerZ", getSensorValues(4));
         intent.putExtra("lat", latitude);
         intent.putExtra("lon", longitude);
         setResult(RESULT_OK, intent);
@@ -398,6 +384,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
     @Override
     protected void onResume() {
         super.onResume();
+        sensorDataCollector.start();
         startBackgroundThread();
         registerReceiver(broadcastReceiver, new IntentFilter("ACT_LOC"));
         if(textureView.isAvailable())
@@ -414,6 +401,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
 
     @Override
     protected void onPause() {
+        sensorDataCollector.stop();
         stopBackgroundThread();
         super.onPause();
     }
@@ -435,21 +423,20 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
 
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            x = event.values[0];
-            y = event.values[1];
-            z = event.values[2];
+    private float getSensorValues(int choise)
+    {
+        switch (choise)
+        {
+            case 1:
+                return sensorDataCollector.getAzimuth();
+            case 2:
+                return sensorDataCollector.getPitch();
+            case 3:
+                return sensorDataCollector.getRoll();
+            case 4:
+                return sensorDataCollector.getAccelerometrValues()[2];
+            default:
+                return 0;
         }
     }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-
-
 }

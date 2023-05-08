@@ -2,14 +2,15 @@ package wro.per.activities;
 
 import static java.lang.Math.abs;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.location.LocationManager;
+import android.hardware.SensorManager;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -28,8 +29,13 @@ import wro.per.others.LocationService;
 
 public class ProfilActivity extends AppCompatActivity {
 
-    private EditText nachylenie, detailCoords;
-    float nachylenieX, nachylenieY, nachylenieZ;
+    private Float driftX, driftZ, driftY;
+    private Float accelerometerZ;
+    float nachylenieWStopniach;
+
+
+    private EditText nachylenie, detailCoords, azimuthEditText;
+    float azimuth, pitch, roll;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     double  currLatitude, currLongitude, latitude, longitude, detailLatitude, detailLongitude;
@@ -64,6 +70,8 @@ public class ProfilActivity extends AppCompatActivity {
         Button zaladujWspolrzedne;
 
         nachylenie = findViewById(R.id.nachylenieEditText);
+
+        azimuthEditText = findViewById(R.id.kierunekEditText);
 
         detailCoords = findViewById(R.id.wspolrzedne_szczegołu_edittext);
 
@@ -106,21 +114,22 @@ public class ProfilActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             String imagePath = data.getStringExtra("imagePath");
-            nachylenieX = data.getFloatExtra("nachylenieX", 0);
-            nachylenieY = data.getFloatExtra("nachylenieY", 0);
-            nachylenieZ = data.getFloatExtra("nachylenieZ", 0);
+            azimuth = data.getFloatExtra("azimuth", 0);
+            pitch = data.getFloatExtra("pitch", 0);
+            roll = data.getFloatExtra("roll", 0);
+            accelerometerZ = data.getFloatExtra("accelerometerZ", 0);
+//            azimuth += driftX;
+//            pitch += driftY;
+//            accelerometerZ += driftZ;
+            nachylenieWStopniach = (float) Math.toDegrees(Math.acos(accelerometerZ / SensorManager.GRAVITY_EARTH));
 
-            nachylenie.setText(Float.toString(nachylenieX));
+            nachylenie.setText(Float.toString(nachylenieWStopniach));
+            azimuthEditText.setText(Float.toString(azimuth));
 
             detailLatitude = data.getDoubleExtra("lat",1);
             detailLongitude = data.getDoubleExtra("lon", 1);
 
-            detailCoords.setText(Double.toString(detailLatitude)+ ",  " + Double.toString(detailLongitude));
-
-            System.out.println("Nachylenie:");
-            System.out.println("X: "+nachylenieX);
-            System.out.println("Y: "+nachylenieY);
-            System.out.println("Z: "+nachylenieZ);
+            detailCoords.setText(Double.toString(detailLatitude) + ",  " + Double.toString(detailLongitude));
 
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             try {
@@ -155,8 +164,7 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
         stopLocationService();
     }
