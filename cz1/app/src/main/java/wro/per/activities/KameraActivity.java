@@ -30,6 +30,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -83,6 +84,7 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
 
             latitude = intent.getDoubleExtra("latitude", 0);
             longitude = intent.getDoubleExtra("longitude", 0);
+            Log.d("BroadcastReceiver", "Received location update: " + latitude + ", " + longitude);
 
         }
     };

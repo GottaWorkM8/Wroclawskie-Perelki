@@ -136,6 +136,11 @@ public class ProfilActivity extends AppCompatActivity {
         }
     }
 
+    private void stopLocationService() {
+        Intent intent = new Intent(this, LocationService.class);
+        stopService(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -143,8 +148,16 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop()
+    {
+        super.onStop();
+        stopLocationService();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopLocationService();
         unregisterReceiver(broadcastReceiver);
     }
 
