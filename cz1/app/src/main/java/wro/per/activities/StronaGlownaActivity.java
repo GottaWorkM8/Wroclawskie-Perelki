@@ -100,7 +100,8 @@ public class StronaGlownaActivity extends AppCompatActivity {
                 GeoPoint point = new GeoPoint(lat, lon);
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
-                osm.drawCircle(mapView, point, 50f);
+                osm.drawCircle(mapView, point, 0.01f);
+                osm.drawCircle(mapView, point, 0.005f);
             }
         }
     }
