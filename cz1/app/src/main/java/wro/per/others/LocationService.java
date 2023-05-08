@@ -1,8 +1,10 @@
 package wro.per.others;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
@@ -17,29 +19,34 @@ import com.google.android.gms.location.Priority;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class LocationService extends Service {
 
-    FusedLocationProviderClient fusedLocationProviderClient;
-    LocationCallback locationCallback;
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Inicjalizacja klienta FusedLocationProvider
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        // Utworzenie obiektu LocationRequest i ustawienie parametrów aktualizacji lokalizacji
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(500); // 0.5 sekundy
+        locationRequest.setFastestInterval(500);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        // Utworzenie obiektu LocationCallback do obsługi aktualizacji lokalizacji
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(@NonNull LocationResult locationResult) {
+            public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
-                Log.d("myLog", "Szerokość: " + locationResult.getLastLocation().getLatitude() +
-                        ",     wysokość: " + locationResult.getLastLocation().getLongitude());
 
+                // Wysłanie nowych danych o lokalizacji do aktywności przez Broadcast
                 Intent intent = new Intent("ACT_LOC");
                 intent.putExtra("latitude", locationResult.getLastLocation().getLatitude());
                 intent.putExtra("longitude", locationResult.getLastLocation().getLongitude());
@@ -50,25 +57,37 @@ public class LocationService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        requestLocation();
-        return super.onStartCommand(intent, flags, startId);
+        // Wywołanie metody do żądania aktualizacji lokalizacji
+        requestLocationUpdates();
+
+        // Powiadomienie systemu, że usługa nie powinna być zatrzymywana w przypadku braku zasobów
+        return START_STICKY;
     }
 
-    private void requestLocation() {
-        LocationRequest locationRequest = new LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY)
-                .setWaitForAccurateLocation(true)
-                .setDurationMillis(5000)
-                .build();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+    @Override
+    public void onDestroy() {
+        // Wywołanie metody do zatrzymania aktualizacji lokalizacji
+        removeLocationUpdates();
+        super.onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    private void requestLocationUpdates() {
+        // Sprawdzenie uprawnień do lokalizacji
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Wywołanie metody do żądania aktualizacji lokalizacji
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+    }
+
+    private void removeLocationUpdates() {
+        // Wywołanie metody do zatrzymania aktualizacji lokalizacji
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 }
+

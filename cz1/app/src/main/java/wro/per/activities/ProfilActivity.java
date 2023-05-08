@@ -32,20 +32,21 @@ public class ProfilActivity extends AppCompatActivity {
     float nachylenieX, nachylenieY, nachylenieZ;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    double detailLatitude, detailLongitude;
+    double  currLatitude, currLongitude, latitude, longitude, detailLatitude, detailLongitude;
+
+    EditText wspolrzedneText;
+
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
-        EditText wspolrzedneText;
 
         @Override
         public void onReceive(Context context, Intent intent) {
             wspolrzedneText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
 
-            double latitude = intent.getDoubleExtra("latitude", 0);
-            double longitude = intent.getDoubleExtra("longitude", 0);
+            latitude = intent.getDoubleExtra("latitude", 3);
+            longitude = intent.getDoubleExtra("longitude", 3);
 
-            wspolrzedneText.setText(latitude + ",  " + longitude);
 
         }
     };
@@ -83,6 +84,12 @@ public class ProfilActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ProfilActivity.this, LocationService.class);
                 startService(intent);
+
+                currLatitude = latitude;
+                currLongitude = longitude;
+
+                wspolrzedneText.setText(currLatitude + ",  " + currLongitude);
+
             }
         });
 
@@ -105,8 +112,8 @@ public class ProfilActivity extends AppCompatActivity {
 
             nachylenie.setText(Float.toString(nachylenieX));
 
-            detailLatitude = data.getDoubleExtra("lat",0);
-            detailLongitude = data.getDoubleExtra("lon", 0);
+            detailLatitude = data.getDoubleExtra("lat",1);
+            detailLongitude = data.getDoubleExtra("lon", 1);
 
             detailCoords.setText(Double.toString(detailLatitude)+ ",  " + Double.toString(detailLongitude));
 

@@ -20,6 +20,7 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+
 import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
@@ -101,8 +102,8 @@ public class StronaGlownaActivity extends AppCompatActivity {
                 GeoPoint point = new GeoPoint(lat, lon);
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
-                osm.drawCircle(mapView, point, 100);
-                osm.drawCircle(mapView, point, 150);
+                //osm.drawCircle(mapView, point, 100);
+                //osm.drawCircle(mapView, point, 150);
             }
         }
     }

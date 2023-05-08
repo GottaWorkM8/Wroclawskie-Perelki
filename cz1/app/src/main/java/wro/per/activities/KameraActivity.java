@@ -82,8 +82,8 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            latitude = intent.getDoubleExtra("latitude", 0);
-            longitude = intent.getDoubleExtra("longitude", 0);
+            latitude = intent.getDoubleExtra("latitude", 2);
+            longitude = intent.getDoubleExtra("longitude", 2);
             Log.d("BroadcastReceiver", "Received location update: " + latitude + ", " + longitude);
 
         }
@@ -156,8 +156,6 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onClick(View view) {
                 takePhoto();
-                Intent intent = new Intent(KameraActivity.this, LocationService.class);
-                startService(intent);
             }
         });
     }
@@ -194,6 +192,20 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
             //Check orientation base on device
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION,ORIENTATIONS.get(rotation));
+
+//WERSJA LEPSZA ALE DO TESTÓW TA NIZEJ
+//            File internalStorageDir = getFilesDir();
+//            String internalStoragePath = internalStorageDir.getAbsolutePath();
+//
+//            File dir = new File(internalStoragePath + "/Pictures/");
+//            if (!dir.exists()) {
+//                dir.mkdirs();
+//            }
+//
+//
+//            String path = internalStoragePath +"/Pictures/"+UUID.randomUUID().toString()+".jpg";
+//            file = new File(path);
+
 
             File dir = new File(Environment.getExternalStorageDirectory() + "/Pictures/WroclawskiePerelki/");
             if (!dir.exists()) {
@@ -240,6 +252,10 @@ public class KameraActivity extends AppCompatActivity implements SensorEventList
                     super.onCaptureCompleted(session, request, result);
                     Toast.makeText(KameraActivity.this, "Saved "+file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
+
+                    Intent intent = new Intent(KameraActivity.this, LocationService.class);
+                    startService(intent);
+
                     backToProfile(path);
                 }
             };
