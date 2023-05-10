@@ -6,7 +6,7 @@
     android:background="@color/red_1"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="wro.per.activities.KameraActivity">
+    tools:context="wro.per.activities.CameraActivity">
 
 
     <TextureView
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:background="@drawable/zolte_tlo_poziomow"
+        android:background="@drawable/yellow_button_bg_shape"
         android:padding="15dp"
         android:text="Zrób zdjęcie" />
 

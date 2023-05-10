@@ -1,6 +1,5 @@
 package wro.per.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,6 +11,7 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import com.google.android.material.tabs.TabLayout;
 
 import org.json.JSONArray;
@@ -28,24 +28,25 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import wro.per.R;
-import wro.per.fragments.FragmentNierozwiazane;
-import wro.per.fragments.FragmentRozwiazane;
-import wro.per.fragments.FragmentWTrakcie;
+import wro.per.fragments.UnsolvedFragment;
+import wro.per.fragments.SolvedFragment;
+import wro.per.fragments.InProgressFragment;
 import wro.per.others.TabAdapter;
-import wro.per.others.Zagadki;
+import wro.per.others.Riddles;
 
-public class RozwiazaneZagadkiActivity extends AppCompatActivity {
+public class SolvedActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    public static ArrayList<Zagadki> zagadkiArrayList;
+    public static ArrayList<Riddles> riddlesArrayList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         class FetchData extends Thread {
 
-            public ArrayList<Zagadki> zagadkiList = new ArrayList<>();
+            public ArrayList<Riddles> riddlesArrList = new ArrayList<>();
 
             @Override
             public void run() {
@@ -64,15 +65,15 @@ public class RozwiazaneZagadkiActivity extends AppCompatActivity {
                     JSONArray jsonArray = new JSONArray(data.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Zagadki zagadka = new Zagadki();
-                        zagadka.setId(jsonObject.getInt("id"));
-                        zagadka.setDifficulty(jsonObject.getString("difficulty"));
-                        zagadka.setName(jsonObject.getString("name"));
-                        zagadka.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
-                        zagadka.setInfoLink(jsonObject.getString("infolink"));
-                        zagadka.setAuthor(jsonObject.getString("author"));
-                        zagadka.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
-                        zagadkiList.add(zagadka);
+                        Riddles riddle = new Riddles();
+                        riddle.setId(jsonObject.getInt("id"));
+                        riddle.setDifficulty(jsonObject.getString("difficulty"));
+                        riddle.setName(jsonObject.getString("name"));
+                        riddle.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
+                        riddle.setInfoLink(jsonObject.getString("infolink"));
+                        riddle.setAuthor(jsonObject.getString("author"));
+                        riddle.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
+                        riddlesArrList.add(riddle);
                     }
                     bufferedReader.close();
                 } catch (MalformedURLException e) {
@@ -95,11 +96,11 @@ public class RozwiazaneZagadkiActivity extends AppCompatActivity {
             }
         }
 
-        zagadkiArrayList = fetchData.zagadkiList;
+        riddlesArrayList = fetchData.riddlesArrList;
 
-        setContentView(R.layout.lista_rozwiazanych_zagadek_layout);
+        setContentView(R.layout.solved_layout);
 
-        final ImageButton otworzStroneGlownaButton;
+        final ImageButton openMainPageImageButton;
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -108,28 +109,23 @@ public class RozwiazaneZagadkiActivity extends AppCompatActivity {
 
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-        tabAdapter.addFragment(new FragmentRozwiazane(), "Rozwiązane");
-        tabAdapter.addFragment(new FragmentWTrakcie(), "W trakcie");
-        tabAdapter.addFragment(new FragmentNierozwiazane(), "Nierozwiązane");
-
+        tabAdapter.addFragment(new SolvedFragment(), "Rozwiązane");
+        tabAdapter.addFragment(new InProgressFragment(), "W trakcie");
+        tabAdapter.addFragment(new UnsolvedFragment(), "Nierozwiązane");
 
         viewPager.setAdapter(tabAdapter);
 
-        otworzStroneGlownaButton = (ImageButton) findViewById(R.id.homeButton);
-        otworzStroneGlownaButton.setOnClickListener(new View.OnClickListener() {
+        openMainPageImageButton = (ImageButton) findViewById(R.id.homeButton);
+        openMainPageImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("działa");
                 openActivityHome();
             }
         });
-
-
-
     }
 
-    public void openActivityHome(){
-        Intent intent = new Intent(this, StronaGlownaActivity.class);
+    public void openActivityHome() {
+        Intent intent = new Intent(this, MainPageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();

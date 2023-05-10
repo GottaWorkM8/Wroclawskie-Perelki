@@ -32,7 +32,6 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,8 +53,8 @@ import wro.per.R;
 import wro.per.others.LocationService;
 import wro.per.others.SensorDataCollector;
 
-public class KameraActivity extends AppCompatActivity {
-    private Button btnCapture;
+public class CameraActivity extends AppCompatActivity {
+    private Button captureButton;
     private SensorDataCollector sensorDataCollector;
 
     private TextureView textureView;
@@ -87,16 +86,15 @@ public class KameraActivity extends AppCompatActivity {
     private CameraCaptureSession cameraCaptureSessions;
     private CaptureRequest.Builder captureRequestBuilder;
     private Size imageDimension;
-    private ImageReader imageReader;
+//    private ImageReader imageReader;
 
-    //Save to FILE
     private File file;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private boolean mFlashSupported;
+//    private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    private float[] accelerometerValues = new float [3];
+//    private float[] accelerometerValues = new float [3];
 
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -121,7 +119,7 @@ public class KameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.kamera_layout);
+        setContentView(R.layout.camera_layout);
         sensorDataCollector = new SensorDataCollector(this);
         textureView = (TextureView)findViewById(R.id.textureView);
 
@@ -139,8 +137,8 @@ public class KameraActivity extends AppCompatActivity {
         //From Java 1.4 , you can use keyword 'assert' to check expression true or false
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
-        btnCapture = (Button)findViewById(R.id.btnZdjecie);
-        btnCapture.setOnClickListener(new View.OnClickListener() {
+        captureButton = (Button)findViewById(R.id.btnZdjecie);
+        captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePhoto();
@@ -238,10 +236,10 @@ public class KameraActivity extends AppCompatActivity {
                 @Override
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
-                    Toast.makeText(KameraActivity.this, "Saved "+file, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CameraActivity.this, "Saved "+file, Toast.LENGTH_SHORT).show();
                     createCameraPreview();
 
-                    Intent intent = new Intent(KameraActivity.this, LocationService.class);
+                    Intent intent = new Intent(CameraActivity.this, LocationService.class);
                     startService(intent);
 
                     backToProfile(path);
@@ -304,7 +302,7 @@ public class KameraActivity extends AppCompatActivity {
 
                 @Override
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(KameraActivity.this, "Changed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CameraActivity.this, "Changed", Toast.LENGTH_SHORT).show();
                 }
             },null);
         } catch (CameraAccessException e) {

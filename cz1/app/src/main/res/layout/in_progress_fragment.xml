@@ -4,24 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="wro.per.fragments.FragmentNierozwiazane">
+    tools:context="wro.per.fragments.InProgressFragment">
+
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/mapa2"
+        android:background="@drawable/map"
         android:orientation="vertical">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/doneList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:layout_marginTop="0dp"
             android:background="@color/red_4">
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
@@ -30,10 +28,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

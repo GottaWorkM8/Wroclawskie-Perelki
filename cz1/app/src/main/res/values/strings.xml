@@ -2,66 +2,64 @@
 <resources>
     <string name="app_name">Wrocławskie Perełki</string>
 
-    <string name="kalibracja_string">Kalibracja</string>
-    <string name="uloz_telefon_string">Ułóż telefon w pozycji pokazanej na ekranie</string>
-    <string name="dalej_string">Dalej</string>
+    <string name="calibration_string">Kalibracja</string>
+    <string name="put_phone_string">Ułóż telefon w pozycji pokazanej na ekranie</string>
+    <string name="next_stage_string">Dalej</string>
 
-    <string name="lista_zagadek_string">Lista zagadek</string>
-    <string name="ulubione_string">Ulubione</string>
-    <string name="dodawanie_string">Dodawanie</string>
+    <string name="riddle_list_string">Lista zagadek</string>
+    <string name="favourites_string">Ulubione</string>
+    <string name="adding_string">Dodawanie</string>
 
-    <string name="rozwiazane_string">Rozwiązane</string>
-    <string name="w_trakcie_string">W trakcie</string>
-    <string name="nierozwiazane_string">Nierozwiązane</string>
+    <string name="solved_string">Rozwiązane</string>
+    <string name="in_progress_string">W trakcie</string>
+    <string name="unsolved_string">Nierozwiązane</string>
 
-    <string name="latwe_string">Łatwe</string>
-    <string name="srednie_string">Średnie</string>
-    <string name="trudne_string">Trudne</string>
+    <string name="easy_string">Łatwe</string>
+    <string name="medium_string">Średnie</string>
+    <string name="hard_string">Trudne</string>
 
-    <string name="Nieodblokowane_string">Nieodblokowane</string>
-    <string name="tytul_murale_string">Murale</string>
-    <string name="tytul_kampus_string">Kampus PWR</string>
-    <string name="tytul_ostrow_string">Magiczny Ostrów Tumski</string>
-    <string name="tytul_wieze_string">Wieże ciśnień</string>
+    <string name="locked_string">Nieodblokowane</string>
+    <string name="murale_title_string">Murale</string>
+    <string name="kampus_title_string">Kampus PWR</string>
+    <string name="ostrow_title_string">Magiczny Ostrów Tumski</string>
+    <string name="wieze_title_string">Wieże ciśnień</string>
 
-    <string name="ilosc_obiektow_string">Ilość obiektów:&#160;</string>
-    <string name="ilosc_5_string"> 5</string>
-    <string name="ilosc_7_string"> 7</string>
-    <string name="ilosc_8_string"> 8</string>
-    <string name="ilosc_10_string"> 10</string>
+    <string name="number_of_objects_string">Ilość obiektów:&#160;</string>
+    <string name="number_5_string"> 5</string>
+    <string name="number_7_string"> 7</string>
+    <string name="number_8_string"> 8</string>
+    <string name="number_10_string"> 10</string>
 
     <string name="status_string">Status:&#160;</string>
-    <string name="status_nierozpoczeto_string"> nierozpoczeto</string>
-    <string name="status_2_obiekty_string"> znaleziono 2 obiekty</string>
-    <string name="status_ukonczono_string"> ukończono</string>
+    <string name="status_not_started_string"> nierozpoczeto</string>
+    <string name="status_2_found_string"> znaleziono 2 obiekty</string>
+    <string name="status_finished_string"> ukończono</string>
 
-    <string name="ile_rozwiazanych_string">3/8</string>
-    <string name="ile_nierozwiazanych_string">5/8</string>
+    <string name="how_many_solved_string">3/8</string>
+    <string name="how_many_unsolved_string">5/8</string>
     <string name="title_activity_dodawanie_zagadki">DodawanieZagadkiActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="first_fragment_label_string">First Fragment</string>
+    <string name="second_fragment_label_string">Second Fragment</string>
+    <string name="next_string">Next</string>
+    <string name="previous_string">Previous</string>
+
+    <string name="hello_first_fragment_string">Hello first fragment</string>
+    <string name="hello_second_fragment_string">Hello second fragment. Arg: %1$s</string>
+    <string name="messages_header_string">Messages</string>
+    <string name="sync_header_string">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="signature_title_string">Your signature</string>
+    <string name="reply_title_string">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    <string name="sync_title_string">Sync email periodically</string>
+    <string name="attachment_title_string">Download incoming attachments</string>
+    <string name="attachment_summary_on_string">Automatically download attachments for incoming emails
     </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="wyslij_string">Wyślij do bazy</string>
+    <string name="attachment_summary_off_string">Only download attachments when manually requested</string>
+    <string name="hello_blank_fragment_string">Hello blank fragment</string>
+    <string name="send_string">Wyślij do bazy</string>
 
 </resources>

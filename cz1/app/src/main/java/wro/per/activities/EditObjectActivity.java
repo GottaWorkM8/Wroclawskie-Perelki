@@ -5,7 +5,6 @@ import static java.lang.Math.abs;
 import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,33 +26,24 @@ import java.io.IOException;
 import wro.per.R;
 import wro.per.others.LocationService;
 
-public class ProfilActivity extends AppCompatActivity {
+public class EditObjectActivity extends AppCompatActivity {
 
     private Float driftX, driftZ, driftY;
     private Float accelerometerZ;
-    float nachylenieWStopniach;
-
-
-    private EditText nachylenie, detailCoords, azimuthEditText;
+    float tiltInDegrees;
+    private EditText tileEditText, detailCoordsEditText, azimuthEditText, coordinatesEditTest;
     float azimuth, pitch, roll;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-
-    double  currLatitude, currLongitude, latitude, longitude, detailLatitude, detailLongitude;
-
-    EditText wspolrzedneText;
-
+    double currLatitude, currLongitude, latitude, longitude, detailLatitude, detailLongitude;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            wspolrzedneText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
-
+            coordinatesEditTest = findViewById(R.id.wspolrzedne_obserwacji_edittext);
             latitude = intent.getDoubleExtra("latitude", 3);
             longitude = intent.getDoubleExtra("longitude", 3);
-
-
         }
     };
 
@@ -61,47 +51,47 @@ public class ProfilActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edycja_obiektu_layout);
+        setContentView(R.layout.object_edit_layout);
 
-        Button wykonajZdjecieButton;
+        Button takePhotoButton;
 
-        Button wysliljDoBazyButton;
+        Button sendToDatabaseButton;
 
-        Button zaladujWspolrzedne;
+        Button getCoordinatesButton;
 
-        nachylenie = findViewById(R.id.nachylenieEditText);
+        tileEditText = findViewById(R.id.nachylenieEditText);
 
         azimuthEditText = findViewById(R.id.kierunekEditText);
 
-        detailCoords = findViewById(R.id.wspolrzedne_szczegołu_edittext);
+        detailCoordsEditText = findViewById(R.id.wspolrzedne_szczegołu_edittext);
 
-        zaladujWspolrzedne = findViewById(R.id.wspolrzedne_obserwacji_button);
+        getCoordinatesButton = findViewById(R.id.wspolrzedne_obserwacji_button);
 
-        wykonajZdjecieButton = findViewById(R.id.zdjecie_szczegolu_button);
+        takePhotoButton = findViewById(R.id.zdjecie_szczegolu_button);
 
-        wysliljDoBazyButton = findViewById(R.id.wyslij_button);
+        sendToDatabaseButton = findViewById(R.id.wyslij_button);
 
-        wykonajZdjecieButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, KameraActivity.class);
+        takePhotoButton.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CameraActivity.class);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         });
 
 
-        zaladujWspolrzedne.setOnClickListener(new View.OnClickListener() {
+        getCoordinatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfilActivity.this, LocationService.class);
+                Intent intent = new Intent(EditObjectActivity.this, LocationService.class);
                 startService(intent);
 
                 currLatitude = latitude;
                 currLongitude = longitude;
 
-                wspolrzedneText.setText(currLatitude + ",  " + currLongitude);
+                coordinatesEditTest.setText(currLatitude + ",  " + currLongitude);
 
             }
         });
 
-        wysliljDoBazyButton.setOnClickListener(view -> {
+        sendToDatabaseButton.setOnClickListener(view -> {
             Toast.makeText(this, "Jeszcze nie działa", Toast.LENGTH_LONG).show();
         });
 
@@ -118,18 +108,15 @@ public class ProfilActivity extends AppCompatActivity {
             pitch = data.getFloatExtra("pitch", 0);
             roll = data.getFloatExtra("roll", 0);
             accelerometerZ = data.getFloatExtra("accelerometerZ", 0);
-//            azimuth += driftX;
-//            pitch += driftY;
-//            accelerometerZ += driftZ;
-            nachylenieWStopniach = (float) Math.toDegrees(Math.acos(accelerometerZ / SensorManager.GRAVITY_EARTH));
+            tiltInDegrees = (float) Math.toDegrees(Math.acos(accelerometerZ / SensorManager.GRAVITY_EARTH));
 
-            nachylenie.setText(Float.toString(nachylenieWStopniach));
+            tileEditText.setText(Float.toString(tiltInDegrees));
             azimuthEditText.setText(Float.toString(azimuth));
 
-            detailLatitude = data.getDoubleExtra("lat",1);
+            detailLatitude = data.getDoubleExtra("lat", 1);
             detailLongitude = data.getDoubleExtra("lon", 1);
 
-            detailCoords.setText(Double.toString(detailLatitude) + ",  " + Double.toString(detailLongitude));
+            detailCoordsEditText.setText(Double.toString(detailLatitude) + ",  " + Double.toString(detailLongitude));
 
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
             try {

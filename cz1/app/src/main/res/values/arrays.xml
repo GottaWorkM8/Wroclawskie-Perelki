@@ -10,13 +10,13 @@
         <item>reply_all</item>
     </string-array>
 
-    <string-array name="zagadki">
+    <string-array name="riddles_array">
         <item>przykładowa zagadka 1</item>
         <item>przykładowa zagadka 2</item>
         <item>przykładowa zagadka 3</item>
     </string-array>
 
-    <string-array name="obiekty">
+    <string-array name="objects_array">
         <item>przykładowy obiekt 1</item>
         <item>przykładowy obiekt 2</item>
         <item>przykładowy obiekt 3</item>

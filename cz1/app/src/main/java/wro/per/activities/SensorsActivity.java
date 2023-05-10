@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import wro.per.R;
 
-public class UlubioneActivity extends Activity implements SensorEventListener {
+public class SensorsActivity extends Activity implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -43,7 +43,7 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ulubione_layout);
+        setContentView(R.layout.favourite_layout);
 
         xValueAcc = (TextView) findViewById(R.id.accXTextView);
         yValueAcc = (TextView) findViewById(R.id.accYTextView);
@@ -104,14 +104,13 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
         otworzStroneGlownaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("działa");
-                openActivityHome();
+                openHomeActivity();
             }
         });
     }
 
-    public void openActivityHome() {
-        Intent intent = new Intent(this, StronaGlownaActivity.class);
+    public void openHomeActivity() {
+        Intent intent = new Intent(this, MainPageActivity.class);
         startActivity(intent);
         finish();
     }
@@ -207,6 +206,5 @@ public class UlubioneActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // do something if the sensor accuracy changes
     }
 }

@@ -12,19 +12,19 @@ import wro.per.R;
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
 
-    TextView name;
-    TextView objectCountName;
-    TextView objectCount;
-    View quest;
-    ConstraintLayout object;
+    TextView nameTextView;
+    TextView objectCountNameTextView;
+    TextView objectCountTextView;
+    View questView;
+    ConstraintLayout objectConstraintLayout;
 
     public RecyclerViewHolder(@NonNull View itemView) {
         super(itemView);
-        name = itemView.findViewById(R.id.name);
-        objectCountName = itemView.findViewById(R.id.objectCountName);
-        objectCount = itemView.findViewById(R.id.objectCount);
-        quest = itemView.findViewById(R.id.quest);
-        object = itemView.findViewById(R.id.object);
+        nameTextView = itemView.findViewById(R.id.name);
+        objectCountNameTextView = itemView.findViewById(R.id.objectCountName);
+        objectCountTextView = itemView.findViewById(R.id.objectCount);
+        questView = itemView.findViewById(R.id.quest);
+        objectConstraintLayout = itemView.findViewById(R.id.object);
     }
 
 

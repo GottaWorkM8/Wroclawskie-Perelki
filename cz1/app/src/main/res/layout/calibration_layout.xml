@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/kalibracja_string"
+        android:text="@string/calibration_string"
         android:textColor="@color/yellow"
         android:textSize="40sp" />
 
@@ -20,23 +20,23 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/yellow"
-        android:text="@string/uloz_telefon_string" />
+        android:text="@string/put_phone_string" />
 
     <ImageView
         android:id="@+id/phonePositionImageView"
         android:layout_width="150dp"
         android:layout_height="100dp"
-        android:src="@drawable/on_back_icon"/>
+        android:src="@drawable/black_on_back_icon"/>
 
     <Button
         android:id="@+id/nastepnyPomiarButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dalej_string"
+        android:text="@string/next_stage_string"
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="18dp"
-        android:background="@drawable/zolte_tlo_poziomow"/>
+        android:background="@drawable/yellow_button_bg_shape"/>
 
     <TextView
         android:id="@+id/driftyTextView"

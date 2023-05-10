@@ -14,62 +14,56 @@ import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.net.ParseException;
-
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import wro.per.R;
 
-public class KalibracjaActivity extends Activity implements SensorEventListener {
+public class CalibrationActivity extends Activity implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
 
-    TextView wyniki;
-    TextView naZywo;
+    TextView resultsTextView;
 
-    ImageView pozycjaImageView;
+    ImageView positionImageView;
 
     private float x, y, z;
 
     private float avgDriftX, avgDriftY, avgDriftZ;
     private float driftX1, driftX2, driftY1, driftY2;
 
-    private int aktualnypomiar = 1;
+    private int currentMeasurement = 1;
 
-    private Boolean otwarcieAplikacji = true;
+    private Boolean openingApp = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.kalibracja_layout);
+        setContentView(R.layout.calibration_layout);
 
         Intent intent = getIntent();
-        otwarcieAplikacji = intent.getBooleanExtra("otwarcieAplikacji", true);
-        System.out.println("otwarcie aplikacji: "+otwarcieAplikacji);
+        openingApp = intent.getBooleanExtra("otwarcieAplikacji", true);
+        System.out.println("otwarcie aplikacji: "+ openingApp);
 
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        wyniki = findViewById(R.id.driftyTextView);
-        pozycjaImageView = findViewById(R.id.phonePositionImageView);
+        resultsTextView = findViewById(R.id.driftyTextView);
+        positionImageView = findViewById(R.id.phonePositionImageView);
 
-        Button przejdzDalejButton;
+        Button goNextButton;
 
-        przejdzDalejButton = findViewById(R.id.nastepnyPomiarButton);
-        przejdzDalejButton.setOnClickListener(view -> nastepnyPomiar());
+        goNextButton = findViewById(R.id.nastepnyPomiarButton);
+        goNextButton.setOnClickListener(view -> nextMeasurement());
 
-        if(otwarcieAplikacji)
+        if(openingApp)
             readDate();
     }
 
@@ -81,9 +75,9 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
 
         if (!dateString.isEmpty()) {
             System.out.println("Pobrana data nie jest pusta");
-            String pobranyRok = dateString.substring(0, 4);
-            String pobranyMsc = dateString.substring(5, 7);
-            String pobranyDzien = dateString.substring(8, 10);
+            String collectedYear = dateString.substring(0, 4);
+            String collecterMonth = dateString.substring(5, 7);
+            String collectedDay = dateString.substring(8, 10);
 
             Calendar calendar = Calendar.getInstance();
             Date date = calendar.getTime();
@@ -91,16 +85,16 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String dateNow = dateFormat.format(date);
 
-            String nowRok = dateNow.substring(0, 4);
-            String nowMsc = dateNow.substring(5, 7);
-            String nowDzien = dateNow.substring(8, 10);
+            String nowYear = dateNow.substring(0, 4);
+            String nowMonth = dateNow.substring(5, 7);
+            String nowDay = dateNow.substring(8, 10);
 
-            System.out.println("Pobrana data fragmenty: "+pobranyRok+" "+pobranyMsc+" "+pobranyDzien);
-            System.out.println("Aktualna data fragmenty: "+nowRok+" "+nowMsc+" "+nowDzien);
+            System.out.println("Pobrana data fragmenty: "+collectedYear+" "+collecterMonth+" "+collectedDay);
+            System.out.println("Aktualna data fragmenty: "+nowYear+" "+nowMonth+" "+nowDay);
 
-            if (pobranyRok.equals(nowRok) && pobranyMsc.equals(nowMsc) && pobranyDzien.equals(nowDzien)) {
+            if (collectedYear.equals(nowYear) && collecterMonth.equals(nowMonth) && collectedDay.equals(nowDay)) {
                 System.out.println("Daty są te same");
-                Intent intent = new Intent(KalibracjaActivity.this, StronaGlownaActivity.class);
+                Intent intent = new Intent(CalibrationActivity.this, MainPageActivity.class);
                 startActivity(intent);
                 finish();
             } else {
@@ -138,32 +132,32 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public void nastepnyPomiar() {
-        switch (aktualnypomiar) {
+    public void nextMeasurement() {
+        switch (currentMeasurement) {
             case 1:
                 avgDriftZ = 9.81f - z;
-                wyniki.setText("Odczytany drift: " + avgDriftZ);
-                pozycjaImageView.setImageResource(R.drawable.on_bottom_icon);
-                aktualnypomiar++;
+                resultsTextView.setText("Odczytany drift: " + avgDriftZ);
+                positionImageView.setImageResource(R.drawable.black_on_bottom_icon);
+                currentMeasurement++;
                 break;
             case 2:
                 driftY1 = 9.81f - y;
-                wyniki.setText("Odczytany drift: " + driftY1);
-                pozycjaImageView.setImageResource(R.drawable.on_right_icon);
-                aktualnypomiar++;
+                resultsTextView.setText("Odczytany drift: " + driftY1);
+                positionImageView.setImageResource(R.drawable.black_on_right_icon);
+                currentMeasurement++;
                 break;
             case 3:
                 driftX1 = 9.81f - abs(x);
-                wyniki.setText("Odczytany drift: " + driftX1);
-                pozycjaImageView.setImageResource(R.drawable.on_top_icon);
-                aktualnypomiar++;
+                resultsTextView.setText("Odczytany drift: " + driftX1);
+                positionImageView.setImageResource(R.drawable.black_on_top_icon);
+                currentMeasurement++;
                 break;
             case 4:
                 driftY2 = 9.81f - abs(y);
                 avgDriftY = (driftY1 + driftY2) / 2;
-                wyniki.setText("Odczytany drift: " + avgDriftY);
-                pozycjaImageView.setImageResource(R.drawable.on_left_icon);
-                aktualnypomiar++;
+                resultsTextView.setText("Odczytany drift: " + avgDriftY);
+                positionImageView.setImageResource(R.drawable.black_on_left_icon);
+                currentMeasurement++;
                 break;
             case 5:
                 driftX2 = 9.81f - x;
@@ -176,20 +170,20 @@ public class KalibracjaActivity extends Activity implements SensorEventListener 
                 editor.putString("driftZ", String.valueOf(avgDriftZ));
                 editor.apply();
 
-                wyniki.setText("Wyniki pomiarów:\nPrzesunięcie X: " + avgDriftX + "\nPrzesunięcie Y: " + avgDriftY + "\nPrzesunięcie Z: " + avgDriftZ);
-                aktualnypomiar++;
+                resultsTextView.setText("Wyniki pomiarów:\nPrzesunięcie X: " + avgDriftX + "\nPrzesunięcie Y: " + avgDriftY + "\nPrzesunięcie Z: " + avgDriftZ);
+                currentMeasurement++;
                 TextView prompt = findViewById(R.id.promptTextView);
                 prompt.setText("Kalibracja zakończona");
                 //pozycjaImageView.setImageDrawable(null);
-                pozycjaImageView.setVisibility(View.GONE);
-                Button przejdzDalejButton;
-                przejdzDalejButton = findViewById(R.id.nastepnyPomiarButton);
-                przejdzDalejButton.setText("Zakończ");
+                positionImageView.setVisibility(View.GONE);
+                Button goNextButton;
+                goNextButton = findViewById(R.id.nastepnyPomiarButton);
+                goNextButton.setText("Zakończ");
                 break;
             case 6:
 
-                if(otwarcieAplikacji) {
-                    Intent intent = new Intent(KalibracjaActivity.this, StronaGlownaActivity.class);
+                if(openingApp) {
+                    Intent intent = new Intent(CalibrationActivity.this, MainPageActivity.class);
                     startActivity(intent);
                 }
                 finish();

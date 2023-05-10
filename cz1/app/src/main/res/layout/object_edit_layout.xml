@@ -31,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10sp"
-                android:entries="@array/zagadki" />
+                android:entries="@array/riddles_array" />
 
             <!--    wybieranie obiektu do edycji-->
             <Spinner
                 android:id="@+id/obiekty_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/obiekty" />
+                android:entries="@array/objects_array" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                     android:id="@+id/wspolrzedne_obiektu_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/zolte_tlo_poziomow"
+                    android:background="@drawable/yellow_button_bg_shape"
                     android:text="Załaduj"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
@@ -104,7 +104,7 @@
                     android:id="@+id/wspolrzedne_obserwacji_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/zolte_tlo_poziomow"
+                    android:background="@drawable/yellow_button_bg_shape"
                     android:text="Załaduj"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
@@ -181,17 +181,17 @@
                 android:layout_marginTop="5sp"
                 android:layout_marginBottom="5sp"
                 android:adjustViewBounds="true"
-                android:background="@drawable/image_view_border"
+                android:background="@drawable/black_border_shape"
                 android:maxHeight="250sp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/pusty_obrazek" />
+                android:src="@drawable/transparent_example_image" />
 
             <Button
                 android:id="@+id/zdjecie_szczegolu_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/zolte_tlo_poziomow"
+                android:background="@drawable/yellow_button_bg_shape"
                 android:text="Wykonaj"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
@@ -202,8 +202,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/zolte_tlo_poziomow"
-                android:text="@string/wyslij_string"
+                android:background="@drawable/yellow_button_bg_shape"
+                android:text="@string/send_string"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="18dp" />

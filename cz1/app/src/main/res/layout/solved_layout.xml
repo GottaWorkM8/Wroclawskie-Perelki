@@ -28,7 +28,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/czerwone_tlo_menu_shape" />
+            android:background="@drawable/red_1_menu_bg_shape" />
 
         <ImageButton
             android:id="@+id/profileButton"
@@ -37,22 +37,22 @@
             android:layout_marginTop="35dp"
             android:layout_marginEnd="25dp"
             android:layout_toStartOf="@id/listButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Profile"
             android:scaleType="centerInside"
-            android:src="@drawable/czarna_ikona_profilu"
-            tools:src="@drawable/czarna_ikona_profilu" />
+            android:src="@drawable/black_profile_icon"
+            tools:src="@drawable/black_profile_icon" />
 
         <ImageButton
             android:id="@+id/homeButton"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/zolte_tlo_ikony_domu_shape"
+            android:background="@drawable/yellow_home_icon_bg_shape"
             android:contentDescription="Home"
-            android:src="@drawable/czarna_ikona_domu"
+            android:src="@drawable/black_home_icon"
             android:visibility="visible"
-            tools:src="@drawable/czarna_ikona_domu" />
+            tools:src="@drawable/black_home_icon" />
 
         <ImageButton
             android:id="@+id/listButton"
@@ -61,10 +61,10 @@
             android:layout_marginTop="35dp"
             android:layout_marginEnd="25dp"
             android:layout_toStartOf="@id/homeButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="List"
-            android:src="@drawable/czarna_ikona_listy_zadan"
-            tools:src="@drawable/czarna_ikona_listy_zadan" />
+            android:src="@drawable/black_list_icon"
+            tools:src="@drawable/black_list_icon" />
 
         <ImageButton
             android:id="@+id/favouriteButton"
@@ -73,11 +73,11 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="32dp"
             android:layout_toEndOf="@id/homeButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Favourite"
-            android:src="@drawable/czarna_ikona_gwiazdy"
-            app:srcCompat="@drawable/czarna_ikona_gwiazdy"
-            tools:src="@drawable/czarna_ikona_gwiazdy" />
+            android:src="@drawable/black_star_icon"
+            app:srcCompat="@drawable/black_star_icon"
+            tools:src="@drawable/black_star_icon" />
 
         <ImageButton
             android:id="@+id/settingsButton"
@@ -86,11 +86,11 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="32dp"
             android:layout_toEndOf="@id/favouriteButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Settings"
-            android:src="@drawable/czarna_ikona_ustawien"
-            app:srcCompat="@drawable/czarna_ikona_ustawien"
-            tools:src="@drawable/czarna_ikona_ustawien" />
+            android:src="@drawable/black_settings_icon"
+            app:srcCompat="@drawable/black_settings_icon"
+            tools:src="@drawable/black_settings_icon" />
 
     </RelativeLayout>
 
@@ -104,7 +104,7 @@
             android:id="@+id/t_o_lista_zadagek"
             android:layout_width="match_parent"
             android:layout_height="115dp"
-            android:background="@drawable/czerwone_tlo_tytulu_menu_shape"
+            android:background="@drawable/red_2_rectangle_shape"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp" />
 
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
             android:contentDescription="ikona_lista_zagadek"
-            android:src="@drawable/zolta_ikona_listy_zadan"
+            android:src="@drawable/yellow_list_icon"
             app:layout_constraintEnd_toStartOf="@+id/lista_zagadek"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="28dp"
-            android:text="@string/lista_zagadek_string"
+            android:text="@string/riddle_list_string"
             android:textColor="@color/yellow"
             android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +172,7 @@
         android:layout_width="match_parent"
         android:layout_height="76dp"
         android:layout_below="@id/listLayout"
-        android:background="@drawable/czerwone_tlo_wybrane_shape">
+        android:background="@drawable/red_4_rectangle_shape">
 
 
         <Button
@@ -182,8 +182,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/zolte_tlo_poziomow"
-            android:text="@string/trudne_string"
+            android:background="@drawable/yellow_button_bg_shape"
+            android:text="@string/hard_string"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -195,8 +195,8 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/zolte_tlo_poziomow"
-            android:text="@string/srednie_string"
+            android:background="@drawable/yellow_button_bg_shape"
+            android:text="@string/medium_string"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -209,8 +209,8 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:background="@drawable/zolte_tlo_poziomow"
-            android:text="@string/latwe_string"
+            android:background="@drawable/yellow_button_bg_shape"
+            android:text="@string/easy_string"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@+id/mediumButton"
             app:layout_constraintHorizontal_bias="0.6"

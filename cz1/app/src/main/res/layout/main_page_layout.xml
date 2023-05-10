@@ -28,11 +28,11 @@
             android:id="@+id/questionMarkButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/podpowiedz_shape"
+            android:background="@drawable/red_2_hint_bg_shape"
             android:contentDescription="Info"
-            android:src="@drawable/zolta_ikona_znaku_zapytania"
-            app:srcCompat="@drawable/zolta_ikona_znaku_zapytania"
-            tools:src="@drawable/zolta_ikona_znaku_zapytania" />
+            android:src="@drawable/yellow_hint_icon"
+            app:srcCompat="@drawable/yellow_hint_icon"
+            tools:src="@drawable/yellow_hint_icon" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -48,7 +48,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
-            android:background="@drawable/czerwone_tlo_menu_shape" />
+            android:background="@drawable/red_1_menu_bg_shape" />
 
         <ImageButton
             android:id="@+id/profileButton"
@@ -57,11 +57,11 @@
             android:layout_marginTop="35dp"
             android:layout_marginEnd="25dp"
             android:layout_toStartOf="@id/listButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Profile"
             android:scaleType="centerInside"
-            android:src="@drawable/czarna_ikona_profilu"
-            tools:src="@drawable/czarna_ikona_profilu"
+            android:src="@drawable/black_profile_icon"
+            tools:src="@drawable/black_profile_icon"
              />
 
         <ImageButton
@@ -69,11 +69,11 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/zolte_tlo_ikony_domu_shape"
+            android:background="@drawable/yellow_home_icon_bg_shape"
             android:contentDescription="Home"
             android:visibility="visible"
-            android:src="@drawable/czarna_ikona_domu"
-            tools:src="@drawable/czarna_ikona_domu"
+            android:src="@drawable/black_home_icon"
+            tools:src="@drawable/black_home_icon"
              />
 
         <ImageButton
@@ -83,10 +83,10 @@
             android:layout_marginTop="35dp"
             android:layout_marginEnd="25dp"
             android:layout_toStartOf="@id/homeButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="List"
-            android:src="@drawable/czarna_ikona_listy_zadan"
-            tools:src="@drawable/czarna_ikona_listy_zadan"
+            android:src="@drawable/black_list_icon"
+            tools:src="@drawable/black_list_icon"
             />
 
         <ImageButton
@@ -96,11 +96,11 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="32dp"
             android:layout_toEndOf="@id/homeButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Favourite"
-            android:src="@drawable/czarna_ikona_gwiazdy"
-            tools:src="@drawable/czarna_ikona_gwiazdy"
-            app:srcCompat="@drawable/czarna_ikona_gwiazdy" />
+            android:src="@drawable/black_star_icon"
+            tools:src="@drawable/black_star_icon"
+            app:srcCompat="@drawable/black_star_icon" />
 
         <ImageButton
             android:id="@+id/settingsButton"
@@ -109,11 +109,11 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="32dp"
             android:layout_toEndOf="@id/favouriteButton"
-            android:background="@drawable/zolte_tlo_ikony"
+            android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Settings"
-            android:src="@drawable/czarna_ikona_ustawien"
-            tools:src="@drawable/czarna_ikona_ustawien"
-            app:srcCompat="@drawable/czarna_ikona_ustawien" />
+            android:src="@drawable/black_settings_icon"
+            tools:src="@drawable/black_settings_icon"
+            app:srcCompat="@drawable/black_settings_icon" />
 
     </RelativeLayout>
 

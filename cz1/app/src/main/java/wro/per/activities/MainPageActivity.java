@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -26,7 +25,7 @@ import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
 
-public class StronaGlownaActivity extends AppCompatActivity {
+public class MainPageActivity extends AppCompatActivity {
 
     private MapView mapView;
     private OSM osm;
@@ -37,32 +36,32 @@ public class StronaGlownaActivity extends AppCompatActivity {
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.strona_glowna_z_mapa_layout);
+        setContentView(R.layout.main_page_layout);
 
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else
             startService();
 
-        final ImageButton otworzMenuZadaniaButton;
+        final ImageButton openRiddlesMenuButton;
 
-        otworzMenuZadaniaButton = (ImageButton) findViewById(R.id.listButton);
-        otworzMenuZadaniaButton.setOnClickListener(view -> otworzRozwiazaneActivity());
+        openRiddlesMenuButton = (ImageButton) findViewById(R.id.listButton);
+        openRiddlesMenuButton.setOnClickListener(view -> openSolvedActivity());
 
-        final ImageButton otworzMenuUlubioneButton;
+        final ImageButton openFavouritesMenuButton;
 
-        otworzMenuUlubioneButton = (ImageButton) findViewById(R.id.favouriteButton);
-        otworzMenuUlubioneButton.setOnClickListener(view -> otworzUlubioneActivity());
+        openFavouritesMenuButton = (ImageButton) findViewById(R.id.favouriteButton);
+        openFavouritesMenuButton.setOnClickListener(view -> openFavouritesActivity());
 
-        final ImageButton otworzMenuProfilButton;
+        final ImageButton openProfileMenuButton;
 
-        otworzMenuProfilButton = (ImageButton) findViewById(R.id.profileButton);
-        otworzMenuProfilButton.setOnClickListener(view -> otworzProfilActivity());
+        openProfileMenuButton = (ImageButton) findViewById(R.id.profileButton);
+        openProfileMenuButton.setOnClickListener(view -> openProfileActivity());
 
-        final ImageButton otworzMenuInfoButton;
+        final ImageButton openInfoMenuButton;
 
-        otworzMenuInfoButton = (ImageButton) findViewById(R.id.settingsButton);
-        otworzMenuInfoButton.setOnClickListener(view -> otworzKalibracjaActivity());
+        openInfoMenuButton = (ImageButton) findViewById(R.id.settingsButton);
+        openInfoMenuButton.setOnClickListener(view -> openCalibrationActivity());
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
@@ -73,7 +72,7 @@ public class StronaGlownaActivity extends AppCompatActivity {
         LocationBroadcastReciever reciever = new LocationBroadcastReciever();
         IntentFilter filter = new IntentFilter("ACT_LOC");
         registerReceiver(reciever, filter);
-        Intent intent = new Intent(StronaGlownaActivity.this, LocationService.class);
+        Intent intent = new Intent(MainPageActivity.this, LocationService.class);
         startService(intent);
     }
 
@@ -108,24 +107,24 @@ public class StronaGlownaActivity extends AppCompatActivity {
         }
     }
 
-    public void otworzRozwiazaneActivity() {
-        Intent intent = new Intent(this, RozwiazaneZagadkiActivity.class);
+    public void openSolvedActivity() {
+        Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
         
     }
 
-    public void otworzUlubioneActivity() {
-        Intent intent = new Intent(this, UlubioneActivity.class);
+    public void openFavouritesActivity() {
+        Intent intent = new Intent(this, SensorsActivity.class);
         startActivity(intent);
     }
 
-    public void otworzProfilActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+    public void openProfileActivity() {
+        Intent intent = new Intent(this, EditObjectActivity.class);
         startActivity(intent);
     }
 
-    public void otworzKalibracjaActivity() {
-        Intent intent = new Intent(this, KalibracjaActivity.class);
+    public void openCalibrationActivity() {
+        Intent intent = new Intent(this, CalibrationActivity.class);
         intent.putExtra("otwarcieAplikacji", false);
         startActivity(intent);
     }

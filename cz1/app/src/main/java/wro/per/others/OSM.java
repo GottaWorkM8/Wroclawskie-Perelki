@@ -15,8 +15,8 @@ import org.osmdroid.views.MapView;
 import wro.per.R;
 
 public class OSM {
-    private final IMapController mapController;
 
+    private final IMapController mapController;
     private UserLocation userLocation;
 
     public OSM(MapView mapView) {
@@ -27,7 +27,6 @@ public class OSM {
         mapController = mapView.getController();
         mapController.setZoom(18);
     }
-
 
     public void setPoint(GeoPoint point) {
         mapController.setCenter(point);

@@ -15,28 +15,28 @@ import wro.per.R;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder>{
 
     Context context;
-    List<Zagadki> zagadki;
+    List<Riddles> riddleList;
 
-    public RecyclerViewAdapter(List<Zagadki> zagadki, Context context) {
-        this.zagadki = zagadki;
+    public RecyclerViewAdapter(List<Riddles> riddleList, Context context) {
+        this.riddleList = riddleList;
         this.context = context;
     }
 
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RecyclerViewHolder(LayoutInflater.from(context).inflate(R.layout.kafelek_zagadki_layout,parent, false));
+        return new RecyclerViewHolder(LayoutInflater.from(context).inflate(R.layout.riddle_tile_fragment,parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        holder.name.setText(zagadki.get(position).getName());
-        holder.objectCount.setText(String.valueOf(zagadki.get(position).getObjectCount()));
+        holder.nameTextView.setText(riddleList.get(position).getName());
+        holder.objectCountTextView.setText(String.valueOf(riddleList.get(position).getObjectCount()));
     }
 
     @Override
     public int getItemCount() {
-        return zagadki.size();
+        return riddleList.size();
     }
 
 

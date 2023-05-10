@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="wro.per.fragments.FragmentRozwiazane">
+    tools:context="wro.per.fragments.UnsolvedFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/mapa2"
+        android:background="@drawable/map"
         android:orientation="vertical">
 
 
@@ -38,5 +38,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </RelativeLayout>
-
 </FrameLayout>
