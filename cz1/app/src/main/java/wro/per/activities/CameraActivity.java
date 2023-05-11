@@ -277,6 +277,7 @@ public class CameraActivity extends AppCompatActivity {
         intent.putExtra("pitch", getSensorValues(2));
         intent.putExtra("roll", getSensorValues(3));
         intent.putExtra("accelerometerZ", getSensorValues(4));
+        intent.putExtra("rotationZ", getSensorValues(5));
         intent.putExtra("lat", latitude);
         intent.putExtra("lon", longitude);
         setResult(RESULT_OK, intent);
@@ -433,6 +434,8 @@ public class CameraActivity extends AppCompatActivity {
                 return sensorDataCollector.getRoll();
             case 4:
                 return sensorDataCollector.getAccelerometrValues()[2];
+            case 5:
+                return sensorDataCollector.getDirection();
             default:
                 return 0;
         }

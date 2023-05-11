@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import wro.per.R;
 import wro.per.others.LocationService;
@@ -30,18 +31,21 @@ public class EditObjectActivity extends AppCompatActivity {
 
     private Float driftX, driftZ, driftY;
     private Float accelerometerZ;
+    private Float rotationZ;
     float tiltInDegrees;
-    private EditText tileEditText, detailCoordsEditText, azimuthEditText, coordinatesEditTest;
+    Bitmap bitmap;
+    private EditText tileEditText, detailCoordsEditText, azimuthEditText, coordinates1EditTest, coordinates2EditTest;
     float azimuth, pitch, roll;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
-    double currLatitude, currLongitude, latitude, longitude, detailLatitude, detailLongitude;
+    double objectLatitude, objectLongitude, observationLatitude, observationLongitude, latitude, longitude, detailLatitude, detailLongitude;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            coordinatesEditTest = findViewById(R.id.wspolrzedne_obserwacji_edittext);
+            coordinates1EditTest = findViewById(R.id.wspolrzedne_obserwacji_edittext);
+            coordinates2EditTest = findViewById(R.id.wspolrzedne_obiektu_edittext);
             latitude = intent.getDoubleExtra("latitude", 3);
             longitude = intent.getDoubleExtra("longitude", 3);
         }
@@ -57,7 +61,8 @@ public class EditObjectActivity extends AppCompatActivity {
 
         Button sendToDatabaseButton;
 
-        Button getCoordinatesButton;
+        Button getCoordinates1Button;
+        Button getCoordinates2Button;
 
         tileEditText = findViewById(R.id.nachylenieEditText);
 
@@ -65,7 +70,8 @@ public class EditObjectActivity extends AppCompatActivity {
 
         detailCoordsEditText = findViewById(R.id.wspolrzedne_szczegołu_edittext);
 
-        getCoordinatesButton = findViewById(R.id.wspolrzedne_obserwacji_button);
+        getCoordinates1Button = findViewById(R.id.wspolrzedne_obserwacji_button);
+        getCoordinates2Button = findViewById(R.id.wspolrzedne_obiektu_button);
 
         takePhotoButton = findViewById(R.id.zdjecie_szczegolu_button);
 
@@ -77,16 +83,30 @@ public class EditObjectActivity extends AppCompatActivity {
         });
 
 
-        getCoordinatesButton.setOnClickListener(new View.OnClickListener() {
+        getCoordinates1Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditObjectActivity.this, LocationService.class);
                 startService(intent);
 
-                currLatitude = latitude;
-                currLongitude = longitude;
+                objectLatitude = latitude;
+                objectLongitude = longitude;
 
-                coordinatesEditTest.setText(currLatitude + ",  " + currLongitude);
+                coordinates1EditTest.setText(objectLatitude + ",  " + objectLongitude);
+
+            }
+        });
+
+        getCoordinates2Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditObjectActivity.this, LocationService.class);
+                startService(intent);
+
+                observationLatitude = latitude;
+                observationLongitude = longitude;
+
+                coordinates2EditTest.setText(observationLatitude + ",  " + observationLongitude);
 
             }
         });
@@ -108,17 +128,18 @@ public class EditObjectActivity extends AppCompatActivity {
             pitch = data.getFloatExtra("pitch", 0);
             roll = data.getFloatExtra("roll", 0);
             accelerometerZ = data.getFloatExtra("accelerometerZ", 0);
+            rotationZ = data.getFloatExtra("rotationZ", 0);
             tiltInDegrees = (float) Math.toDegrees(Math.acos(accelerometerZ / SensorManager.GRAVITY_EARTH));
 
             tileEditText.setText(Float.toString(tiltInDegrees));
-            azimuthEditText.setText(Float.toString(azimuth));
+            azimuthEditText.setText(Float.toString(rotationZ));
 
             detailLatitude = data.getDoubleExtra("lat", 1);
             detailLongitude = data.getDoubleExtra("lon", 1);
 
             detailCoordsEditText.setText(Double.toString(detailLatitude) + ",  " + Double.toString(detailLongitude));
 
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            bitmap = BitmapFactory.decodeFile(imagePath);
             try {
                 ExifInterface exif = new ExifInterface(imagePath);
                 int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -162,5 +183,8 @@ public class EditObjectActivity extends AppCompatActivity {
         stopLocationService();
         unregisterReceiver(broadcastReceiver);
     }
+
+    private HashMap<Integer, String> riddlesHashMap = new HashMap<>();
+
 
 }

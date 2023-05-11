@@ -12,11 +12,14 @@ public class SensorDataCollector implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometerSensor;
     private Sensor magnetometerSensor;
-
+    private Sensor rotationSensor;
     private float[] lastAccelerometerValues = new float[3];
     private float[] lastMagnetometerValues = new float[3];
     private float[] rotationMatrix = new float[9];
     private float[] orientation = new float[3];
+    private float[] rotation = new float[3];
+
+    private float direction=0;
 
     private float azimuth = 0.0f;
     private float pitch = 0.0f;
@@ -31,6 +34,7 @@ public class SensorDataCollector implements SensorEventListener {
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         driftX = Float.parseFloat(sharedPreferences.getString("driftX", "0f"));
         driftY = Float.parseFloat(sharedPreferences.getString("driftY", "0f"));
@@ -41,6 +45,7 @@ public class SensorDataCollector implements SensorEventListener {
         // Rejestracja SensorEventListenera
         sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, magnetometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void stop() {
@@ -65,6 +70,8 @@ public class SensorDataCollector implements SensorEventListener {
         return lastAccelerometerValues;
     }
 
+    public float getDirection(){return direction;}
+
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -80,6 +87,15 @@ public class SensorDataCollector implements SensorEventListener {
         if (event.sensor == magnetometerSensor) {
             System.arraycopy(event.values, 0, lastMagnetometerValues, 0, event.values.length);
         }
+
+        // Sprawdzenie, czy zdarzenie pochodzi z czujnika magnetometru
+        if (event.sensor == rotationSensor) {
+            rotation[0] = event.values[0];
+            rotation[1] = event.values[1];
+            rotation[2] = event.values[2];
+        }
+
+        direction = (rotation[2]+1)/2*360;
 
         // Aktualizacja macierzy obrotu i obliczenie azymutu, pitchu i rollu
         SensorManager.getRotationMatrix(rotationMatrix, null, lastAccelerometerValues, lastMagnetometerValues);
