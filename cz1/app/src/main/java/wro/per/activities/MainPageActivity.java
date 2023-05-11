@@ -15,20 +15,38 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
+import wro.per.others.Riddles;
 
 public class MainPageActivity extends AppCompatActivity {
 
     private MapView mapView;
     private OSM osm;
+    public static ArrayList<Riddles> riddlesArrayList;
+    public HashMap<Integer, String> objectHashMap = new HashMap<>();
+
+    public static ArrayList<HashMap<Integer,String>> objectsArrayList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +84,100 @@ public class MainPageActivity extends AppCompatActivity {
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
 
+        class FetchData extends Thread {
+
+            public ArrayList<Riddles> riddlesArrList = new ArrayList<>();
+
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://szajsjem.mooo.com/api/zagadka");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    String line;
+
+                    StringBuilder data = new StringBuilder();
+                    while ((line = bufferedReader.readLine()) != null) {
+                        data.append(line);
+                    }
+
+                    JSONArray jsonArray = new JSONArray(data.toString());
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        Riddles riddle = new Riddles();
+                        riddle.setId(jsonObject.getInt("id"));
+                        riddle.setDifficulty(jsonObject.getString("difficulty"));
+                        riddle.setName(jsonObject.getString("name"));
+                        riddle.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
+                        riddle.setInfoLink(jsonObject.getString("infolink"));
+                        riddle.setAuthor(jsonObject.getString("author"));
+                        riddle.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
+                        riddlesArrList.add(riddle);
+                    }
+                    bufferedReader.close();
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        class FetchDataObject extends Thread {
+            @Override
+            public void run() {
+                try {
+                    for(Riddles riddle : riddlesArrayList){
+                        URL url = new URL("https://szajsjem.mooo.com/api/zagadka/" + riddle.getId() + "/getMiejsca");
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                        InputStream inputStream = httpURLConnection.getInputStream();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                        String line;
+
+                        StringBuilder data = new StringBuilder();
+                        while ((line = bufferedReader.readLine()) != null) {
+                            data.append(line);
+                        }
+
+                        JSONArray jsonArray = new JSONArray(data.toString());
+                        objectsArrayList.add(new HashMap<>());
+                        System.out.println(objectsArrayList.size());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            objectsArrayList.get(objectsArrayList.size()-1).put(jsonObject.getInt("id"), jsonObject.getString("objectName"));
+                            System.out.println(objectHashMap.get("id"));
+                        }
+
+                        bufferedReader.close();
+                    }
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+        FetchData fetchData = new FetchData();
+        fetchData.start(); // uruchamia wątek i wywołuje metodę run()
+
+        while (fetchData.isAlive()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        riddlesArrayList = fetchData.riddlesArrList;
+
+        FetchDataObject fetchDataObject = new FetchDataObject();
+        fetchDataObject.start(); // uruchamia wątek i wywołuje metodę run()
     }
 
     void startService() {

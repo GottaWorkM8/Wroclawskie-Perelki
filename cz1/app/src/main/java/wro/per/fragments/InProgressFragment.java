@@ -1,6 +1,8 @@
 package wro.per.fragments;
 
-import static wro.per.activities.SolvedActivity.riddlesArrayList;
+
+
+import static wro.per.activities.MainPageActivity.riddlesArrayList;
 
 import android.os.Bundle;
 

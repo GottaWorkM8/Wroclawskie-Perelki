@@ -26,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import wro.per.R;
 import wro.per.fragments.UnsolvedFragment;
@@ -38,65 +39,13 @@ public class SolvedActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    public static ArrayList<Riddles> riddlesArrayList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        class FetchData extends Thread {
 
-            public ArrayList<Riddles> riddlesArrList = new ArrayList<>();
-
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://szajsjem.mooo.com/api/zagadka");
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-
-                    StringBuilder data = new StringBuilder();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        data.append(line);
-                    }
-
-                    JSONArray jsonArray = new JSONArray(data.toString());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Riddles riddle = new Riddles();
-                        riddle.setId(jsonObject.getInt("id"));
-                        riddle.setDifficulty(jsonObject.getString("difficulty"));
-                        riddle.setName(jsonObject.getString("name"));
-                        riddle.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
-                        riddle.setInfoLink(jsonObject.getString("infolink"));
-                        riddle.setAuthor(jsonObject.getString("author"));
-                        riddle.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
-                        riddlesArrList.add(riddle);
-                    }
-                    bufferedReader.close();
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        FetchData fetchData = new FetchData();
-        fetchData.start(); // uruchamia wątek i wywołuje metodę run()
-
-        while (fetchData.isAlive()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        riddlesArrayList = fetchData.riddlesArrList;
 
         setContentView(R.layout.solved_layout);
 
