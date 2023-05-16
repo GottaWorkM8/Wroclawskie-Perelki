@@ -49,5 +49,16 @@ public class ImageController {
         file.transferTo(imf);
         return "https://szajsjem.mooo.com/images/"+filename;
     }
+    @DeleteMapping("/api/image")///https://szajsjem.mooo.comapi/image?link=https://szajsjem.mooo.com/images/nazwapliku
+    public String deleteImage(@RequestParam String link){
+        if(!link.startsWith("https://szajsjem.mooo.com/images/")){
+            return "Link not valid";
+        }
+        String filename = link.substring(link.lastIndexOf("/")+1);
+        File imf = new File("/home/pi/projzesp/images/"+filename);
+        if(imf.delete())
+            return "OK";
+        return "Image not found";
+    }
 
 }

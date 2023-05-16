@@ -69,7 +69,7 @@ public class ZagadkaController {
 
     //pobieranie jednej zagadki
     @GetMapping("/api/zagadka/{id}")
-    Riddle one(@PathVariable Long id) throws Exception {
+    Riddle oneZagadka(@PathVariable Long id) throws Exception {
 
         return riddleRepository.findById(id)
                 .orElseThrow(() -> new Exception(String.valueOf(id)));
@@ -122,32 +122,24 @@ public class ZagadkaController {
         //todo check if user is admin
         riddleRepository.deleteById(id);
     }
-    @GetMapping(value={"/api/zagadka/{id}/getPoints"})
-    int getPoints(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getPoints();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getAuthor"})
-    String getAuthor(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getAuthor();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getDifficulty"})
-    String getDifficulty(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getDifficulty();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getName"})
-    String getName(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getName();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getObjectCount"})
-    int getObjectCount(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getObjectCount();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getInfolink"})
-    String getInfoLink(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getInfolink();
-    }
-    @GetMapping(value={"/api/zagadka/{id}/getObiekty"})
-    Set<Obiekt> getObiekty(@PathVariable Long id) {
-        return riddleRepository.getReferenceById(id).getObiekty();
+
+
+
+
+
+
+    @GetMapping("/api/zagadka/{id}/getRoadLength")
+    float odlegloscZagadki(@PathVariable Long id,@RequestParam String gpsPosition) {
+        Riddle zagadka = riddleRepository.getReferenceById(id);
+        Set<Obiekt> miejscaZagadki = zagadka.getObiekty();
+        //Set<Obiekt> miejscaZagadkiWyjscie = miejscaZagadki.stream().filter(obiekt -> obiekt.isVisible()).collect(Collectors.toSet());
+        float minodleglosc = 10000000.0f;
+        for (Obiekt obiekt : miejscaZagadki) {
+            float odleglosc = obiekt.odlegloscDoPunktu(gpsPosition);
+            if (odleglosc < minodleglosc) {
+                minodleglosc = odleglosc;
+            }
+        }
+        return minodleglosc;
     }
 }

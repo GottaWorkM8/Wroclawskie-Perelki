@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,11 +18,11 @@ public class User {
     private String login ;
     private String password  ;
     private String email ;
-    private String phone ;
-    private String access ;
     private Long points ;
-    //@OneToMany(mappedBy = "user_id")
-    //private Set<Found_Pieces> found_Pieces ;
-    //@OneToMany(mappedBy = "user_id")
-    //private Set<Completed_Riddles> completed_Riddles ;
+
+    //@ManyToMany(mappedBy = "user_id")
+    //private Set<Obiekt> found_Pieces ;
+
+    //@ManyToMany(mappedBy = "user_id")
+    //private Set<Riddle> completed_Riddles ;
 }
