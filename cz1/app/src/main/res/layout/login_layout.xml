@@ -15,21 +15,23 @@
         android:textSize="40sp" />
 
     <EditText
-        android:id="@+id/login"
+        android:id="@+id/login_edittext"
+        android:hint="Wpisz login"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="textPersonName|textCapWords"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/password_edittext"
+        android:hint="Wpisz hasło"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:inputType="textPersonName|textCapWords"/>
 
     <Button
-        android:id="@+id/Login"
+        android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Zaloguj"
@@ -37,5 +39,13 @@
         android:textColor="@color/black"
         android:textSize="18dp"
         android:background="@drawable/yellow_button_bg_shape"/>
+
+    <TextView
+        android:id="@+id/error_textView"
+        android:layout_marginTop="15dp"
+        android:text="Błędny login lub hasło"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
