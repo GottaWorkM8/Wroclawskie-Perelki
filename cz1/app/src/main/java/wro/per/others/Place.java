@@ -12,20 +12,20 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
-public class UserLocation extends Overlay {
+public class Place extends Overlay {
     private final Paint paint1, paint2;
     private final GeoPoint geoPoint;
 
     private boolean rotation;
 
-    public UserLocation(GeoPoint geoPoint) {
+    public Place(GeoPoint geoPoint) {
         rotation = false;
         this.geoPoint = geoPoint;
         paint1 = new Paint();
-        paint1.setColor(Color.argb(255, 0, 255, 255));
+        paint1.setColor(Color.argb(255, 0, 255, 0));
         paint1.setStyle(Paint.Style.FILL);
         paint2 = new Paint();
-        paint2.setColor(Color.argb(255, 0, 150, 255));
+        paint2.setColor(Color.argb(255, 0, 150, 0));
         paint2.setStyle(Paint.Style.STROKE);
         paint2.setStrokeWidth(7f);
     }

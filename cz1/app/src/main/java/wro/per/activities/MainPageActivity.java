@@ -51,6 +51,8 @@ public class MainPageActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
+
+
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         super.onCreate(savedInstanceState);
@@ -83,6 +85,21 @@ public class MainPageActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
+
+        ArrayList<GeoPoint> americaGeoPoints = new ArrayList<>();
+
+        americaGeoPoints.add(new GeoPoint(37.7749, -122.4194)); // San Francisco, California
+        americaGeoPoints.add(new GeoPoint(34.0522, -118.2437)); // Los Angeles, California
+        americaGeoPoints.add(new GeoPoint(40.7128, -74.0060));  // New York City, New York
+        americaGeoPoints.add(new GeoPoint(41.8781, -87.6298));  // Chicago, Illinois
+        americaGeoPoints.add(new GeoPoint(29.7604, -95.3698));  // Houston, Texas
+        americaGeoPoints.add(new GeoPoint(25.7617, -80.1918));  // Miami, Florida
+        americaGeoPoints.add(new GeoPoint(39.9526, -75.1652));  // Philadelphia, Pennsylvania
+        americaGeoPoints.add(new GeoPoint(33.4484, -112.0740)); // Phoenix, Arizona
+        americaGeoPoints.add(new GeoPoint(32.7767, -96.7970));  // Dallas, Texas
+        americaGeoPoints.add(new GeoPoint(47.6062, -122.3321));
+
+        osm.drawPlaces(mapView, americaGeoPoints);
 
         class FetchData extends Thread {
 
