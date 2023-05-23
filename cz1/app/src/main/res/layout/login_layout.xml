@@ -14,6 +14,13 @@
         android:textColor="@color/yellow"
         android:textSize="40sp" />
 
+    <TextView
+        android:id="@+id/error_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="20dp" />
+
     <EditText
         android:id="@+id/login_edittext"
         android:hint="Wpisz login"
@@ -41,11 +48,13 @@
         android:background="@drawable/yellow_button_bg_shape"/>
 
     <TextView
-        android:id="@+id/error_textView"
-        android:layout_marginTop="15dp"
-        android:text="Błędny login lub hasło"
-        android:textSize="20dp"
+        android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Zarejestruj się"
+        android:clickable="true"
+        android:textColor="@color/yellow"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

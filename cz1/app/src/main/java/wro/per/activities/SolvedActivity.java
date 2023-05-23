@@ -1,6 +1,8 @@
 package wro.per.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 
@@ -55,6 +57,10 @@ public class SolvedActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        System.out.println(sharedPreferences.getString("userLogin", "brak loginu"));
+        System.out.println(sharedPreferences.getString("userPass", "brak hasła"));
 
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 

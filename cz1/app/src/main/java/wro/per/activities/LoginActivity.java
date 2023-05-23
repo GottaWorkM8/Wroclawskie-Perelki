@@ -1,14 +1,25 @@
 package wro.per.activities;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,13 +31,47 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import wro.per.R;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-public class LoginActivity extends AppCompatActivity {
+import wro.per.R;
+import wro.per.others.SendJsonTask;
+
+public class LoginActivity extends AppCompatActivity implements SendJsonTask.ResponseListener {
 
     private EditText loginEditText, passwordEditText;
     private TextView errorTextView;
     private Button loginButton;
+
+    Boolean result = false;
+
+    @Override
+    public void onResponseReceived(String response) {
+        System.out.println("Odpowiedz: " + response);
+
+        if (response.equals("true")) {
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+            String login, password;
+            login = loginEditText.getText().toString();
+            password = passwordEditText.getText().toString();
+
+            System.out.println(login);
+            System.out.println(password);
+
+            editor.putString("userLogin", login);
+            editor.putString("userPass", password);
+            editor.apply();
+
+            next();
+        } else {
+            errorTextView.setText("Błędny login lub hasło");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,65 +83,92 @@ public class LoginActivity extends AppCompatActivity {
 
         loginEditText = findViewById(R.id.login_edittext);
         passwordEditText = findViewById(R.id.password_edittext);
-
         errorTextView = findViewById(R.id.error_textView);
+
+        TextView registerTextView = findViewById(R.id.registerTextView);
+        registerTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openRegistrationPage();
+            }
+        });
+
+        loginEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Wywołaj swoją akcję tutaj po wpisaniu znaku w EditText
+                errorTextView.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+        loginEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Wywołaj swoją akcję tutaj po wpisaniu znaku w EditText
+                errorTextView.setText("");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Do nothing
+            }
+        });
+
+        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    logIn();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
+
+    private void openRegistrationPage() {
+        String url = "https://szajsjem.mooo.com/register.html";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+
 
     public void logIn() {
         String login, password;
         login = loginEditText.getText().toString();
         password = passwordEditText.getText().toString();
 
-        JSONObject loginJson = new JSONObject();
-        try {
-            loginJson.put("login", login);
-            loginJson.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (login.isEmpty() || password.isEmpty()) {
+            errorTextView.setText("Nie wpisano wszystkich danych");
+            return;
         }
 
-        sendLoginRequest(loginJson);
+        String apiUrl = "https://szajsjem.mooo.com/api/user/testlogin";
+        String jsonData = "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}";
+
+        SendJsonTask sendJsonTask = new SendJsonTask(this);
+
+        sendJsonTask.execute(apiUrl, jsonData);
+
+
+        // next();
     }
 
-    private void sendLoginRequest(JSONObject loginJson) {
-        String url = "http://szajsjem.mooo.com/api/user/testlogin"; // Adres URL do API
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, loginJson,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        errorTextView.setText("Wysyłanie");
-                        try {
-                            boolean success = response.getBoolean("success");
-                            if (success) {
-                                // Zalogowano pomyślnie
-                                Log.d("LoginActivity", "Zalogowano");
-                                errorTextView.setText("Błąd");
-                            } else {
-                                // Nie udało się zalogować
-                                Log.d("LoginActivity", "Nie udało się zalogować");
-                                errorTextView.setText("Jest git");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // Błąd sieci lub odpowiedź HTTP innego niż 2xx
-                Log.d("LoginActivity", "Błąd sieci");
-            }
-        });
-
-        requestQueue.add(jsonObjectRequest);
-        //next();
-    }
-
-    public void next()
-    {
+    public void next() {
         Intent intent = new Intent(this, CalibrationActivity.class);
         startActivity(intent);
         finish();
