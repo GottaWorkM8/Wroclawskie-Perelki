@@ -16,10 +16,7 @@ public class Place extends Overlay {
     private final Paint paint1, paint2;
     private final GeoPoint geoPoint;
 
-    private boolean rotation;
-
     public Place(GeoPoint geoPoint) {
-        rotation = false;
         this.geoPoint = geoPoint;
         paint1 = new Paint();
         paint1.setColor(Color.argb(255, 0, 255, 0));
@@ -43,4 +40,7 @@ public class Place extends Overlay {
         }
     }
 
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
+    }
 }

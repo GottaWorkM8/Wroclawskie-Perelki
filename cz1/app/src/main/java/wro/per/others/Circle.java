@@ -36,7 +36,7 @@ public class Circle extends Overlay {
             public void onLayoutChange(View v, int left, int top, int right, int bottom,
                                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
                 // Calculate the initial circle radius based on the current zoom level
-                radius = mapView.getProjection().metersToEquatorPixels(width);
+                radius = mapView.getProjection().metersToPixels(width, geoPoint.getLatitude(), mapView.getZoomLevelDouble());
                 System.out.println("Radius: "+radius);
                 // Calculate the center point of the circle on the screen
                 center = getScreenCoordinates(mapView, geoPoint);
@@ -46,9 +46,8 @@ public class Circle extends Overlay {
 
         mapView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                radius = mapView.getProjection().metersToEquatorPixels(width);
+                radius = mapView.getProjection().metersToPixels(width, geoPoint.getLatitude(), mapView.getZoomLevelDouble());
                 System.out.println("Radius: "+radius);
-                // Calculate the center point of the circle on the screen
                 center = getScreenCoordinates(mapView, geoPoint);
                 mapView.invalidate();
             }
@@ -61,12 +60,10 @@ public class Circle extends Overlay {
         super.draw(canvas, mapView, shadow);
 
         if (!shadow) {
-            // Draw the circle using the screen coordinates of its center point
             canvas.drawCircle(center.x, center.y, radius, paint);
         }
     }
 
-    // Helper method to calculate the screen coordinates of a GeoPoint
     private Point getScreenCoordinates(MapView mapView, GeoPoint geoPoint) {
         Projection projection = mapView.getProjection();
         Point point = new Point();

@@ -23,7 +23,7 @@ public class OSM {
 
     private final IMapController mapController;
     private UserLocation userLocation;
-
+    private Circle cmin, cmax;
     private GeoPoint geoPoint;
 
     private boolean track;
@@ -67,12 +67,37 @@ public class OSM {
         mapView.getOverlays().add(userLocation);
     }
 
-    public void drawCircle(MapView mapView, GeoPoint geoPoint, float r) {
-        mapView.getOverlays().add(new Circle(geoPoint, mapView, r));
+    public void drawRing(MapView mapView, GeoPoint geoPoint){
+        if(!places.isEmpty()){
+            double min = Double.MAX_VALUE;
+            double max = Double.MIN_VALUE;
+            for (Place place : places) {
+                GeoPoint placePoint = place.getGeoPoint();
+                double distance = geoPoint.distanceToAsDouble(placePoint);
+
+                if (distance < min) {
+                    min = distance;
+                }
+
+                if (distance > max) {
+                    max = distance;
+                }
+            }
+
+            cmin = new Circle(geoPoint, mapView, (float) min);
+            cmax = new Circle(geoPoint, mapView, (float) max);
+            mapView.getOverlays().add(cmax);
+            mapView.getOverlays().add(cmin);
+        }
     }
 
     public void deleteYou(MapView mapView) {
         mapView.getOverlays().remove(userLocation);
+    }
+
+    public void deleteRing(MapView mapView) {
+        mapView.getOverlays().remove(cmin);
+        mapView.getOverlays().remove(cmax);
     }
 
     public void drawPlaces(MapView mapView, ArrayList<GeoPoint> points){
