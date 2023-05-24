@@ -1,5 +1,6 @@
 package pl.wroc.projzesp.perelki.wrocperelki.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,11 +19,18 @@ public class User {
     private String login ;
     private String password  ;
     private String email ;
+    private boolean admin;
     private Long points ;
 
-    //@ManyToMany(mappedBy = "user_id")
-    //private Set<Obiekt> found_Pieces ;
+    @JsonIgnore
+    @ManyToMany
+    private Set<Obiekt> znalezioneMiejsca;
 
-    //@ManyToMany(mappedBy = "user_id")
-    //private Set<Riddle> completed_Riddles ;
+    @JsonIgnore
+    @ManyToMany
+    private Set<Riddle> znalezioneZagadki;
+
+    @JsonIgnore
+    @ManyToMany
+    private Set<Obiekt> ulubioneMiejsca;
 }

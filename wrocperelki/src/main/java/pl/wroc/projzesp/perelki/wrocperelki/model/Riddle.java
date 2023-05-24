@@ -21,11 +21,6 @@ public class Riddle {
     private int points;
     //private String photoLink; //sugestia janka
 
-    @JoinTable(
-            name = "obiekty_zagadki",
-            joinColumns = {@JoinColumn(name = "Riddle.id")},
-            inverseJoinColumns = {@JoinColumn(name = "Obiekt.id")}
-    )
     @JsonIgnore
     @OneToMany
     private Set<Obiekt> obiekty ;

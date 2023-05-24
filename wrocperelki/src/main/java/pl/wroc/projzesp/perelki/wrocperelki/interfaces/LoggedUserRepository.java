@@ -8,4 +8,6 @@ public interface LoggedUserRepository
         extends JpaRepository<LoggedUser, Long> {
     LoggedUser findByToken(String token);
     LoggedUser findByUser(User user);
+
+    void deleteByToken(String key);
 }
