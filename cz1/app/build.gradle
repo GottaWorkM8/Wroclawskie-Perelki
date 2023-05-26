@@ -20,13 +20,25 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "wroclawskie_perelki.apk"
-                }
-            }
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            // Uzyskaj dzisiejszą datę
+            def currentDate = new Date().format('yyyy_MM_dd')
+
+            // Pobierz aktualną nazwę pliku APK
+            def currentApkName = outputFileName
+
+            // Zdefiniuj nową nazwę pliku APK z datą
+            def newApkName = "wroclawskie_perelki_${currentDate}.apk" // Zmodyfikuj format nazwy pliku, jeśli potrzebujesz innego formatu daty
+
+            // Zmień nazwę pliku APK na nową nazwę
+            outputFileName = newApkName
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

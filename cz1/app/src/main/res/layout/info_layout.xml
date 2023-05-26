@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/map"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_gravity="top"
+        android:animateLayoutChanges="false">
+
+        <View
+            android:id="@+id/redMenuView"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/red_1_menu_bg_shape" />
+
+        <ImageButton
+            android:id="@+id/profileButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@id/listButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Profile"
+            android:scaleType="centerInside"
+            tools:src="@drawable/black_profile_icon" />
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/yellow_home_icon_bg_shape"
+            android:contentDescription="Home"
+            android:src="@drawable/black_home_icon"
+            android:visibility="visible"
+            tools:src="@drawable/black_home_icon" />
+
+        <ImageButton
+            android:id="@+id/listButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@id/homeButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="List"
+            android:src="@drawable/black_list_icon"
+            tools:src="@drawable/black_list_icon" />
+
+        <ImageButton
+            android:id="@+id/favouriteButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_toEndOf="@id/homeButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Favourite"
+            android:src="@drawable/black_star_icon"
+            app:srcCompat="@drawable/black_star_icon"
+            tools:src="@drawable/black_star_icon" />
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_toEndOf="@id/favouriteButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Settings"
+            android:src="@drawable/black_settings_icon"
+            app:srcCompat="@drawable/black_settings_icon"
+            tools:src="@drawable/black_settings_icon" />
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/listLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menuBar">
+
+        <View
+            android:id="@+id/t_o_lista_zadagek"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/red_2_rectangle_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <ImageView
+            android:id="@+id/ikona_ustawienia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:contentDescription="ikona_lista_zagadek"
+            android:src="@drawable/black_settings_icon"
+            app:layout_constraintEnd_toStartOf="@+id/ubulioneTextView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="10dp" />
+
+        <TextView
+            android:id="@+id/infoTextView"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="124dp"
+            android:text="@string/info_string"
+            android:textColor="@color/yellow"
+            android:textSize="36sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/t_o_lista_zadagek" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/doneList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/listLayout"
+        android:layout_marginTop="0dp"
+        android:background="@color/red_3">
+
+        <ScrollView
+            android:layout_width="409dp"
+            android:layout_height="538dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="1dp"
+                tools:layout_editor_absoluteY="1dp">
+
+                <Button
+                    android:id="@+id/sensory_button"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/yellow_button_bg_shape"
+                    android:layout_width="wrap_content"
+                    android:text="Sensory"
+                    android:paddingHorizontal="10dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/kalibracja_botton"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Kalibracja"
+                    android:paddingHorizontal="10dp"
+                    android:background="@drawable/yellow_button_bg_shape"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/edycja_obiektu_button"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="eEdycja obiektu"
+                    android:paddingHorizontal="10dp"
+                    android:background="@drawable/yellow_button_bg_shape"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

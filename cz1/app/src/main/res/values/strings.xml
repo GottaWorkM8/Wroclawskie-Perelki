@@ -9,6 +9,8 @@
     <string name="riddle_list_string">Lista zagadek</string>
     <string name="favourites_string">Ulubione</string>
     <string name="adding_string">Dodawanie</string>
+    <string name="profile_string">Profil</string>
+
 
     <string name="solved_string">Rozwiązane</string>
     <string name="in_progress_string">W trakcie</string>
@@ -61,5 +63,15 @@
     <string name="attachment_summary_off_string">Only download attachments when manually requested</string>
     <string name="hello_blank_fragment_string">Hello blank fragment</string>
     <string name="send_string">Wyślij do bazy</string>
+    <string name="title_activity_info">InfoActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="info_string">Informacje</string>
 
 </resources>

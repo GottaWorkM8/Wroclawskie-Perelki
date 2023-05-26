@@ -48,14 +48,17 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
 
     Boolean result = false;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+
+    //metoda wykonywana po odebraniu odpowiedzi od api
+    // jeżeli git to zapisuje login oraz hasło i przechodzi dalej (kalibracja)
+    // albo wyświetla komunikat błędu
     @Override
     public void onResponseReceived(String response) {
         System.out.println("Odpowiedz: " + response);
 
         if (response.equals("true")) {
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-
             String login, password;
             login = loginEditText.getText().toString();
             password = passwordEditText.getText().toString();
@@ -77,6 +80,13 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
+            if(czyZalogowano)
+                next();
 
         loginButton = findViewById(R.id.login_button);
         loginButton.setOnClickListener(view -> logIn());
@@ -164,15 +174,13 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
 
         sendJsonTask.execute(apiUrl, jsonData);
 
-
-        // next();
     }
 
     public void next() {
+        editor.putBoolean("zalogowano", true);
+        editor.apply();
         Intent intent = new Intent(this, CalibrationActivity.class);
         startActivity(intent);
         finish();
     }
-
-
 }

@@ -71,7 +71,7 @@ public class MainPageActivity extends AppCompatActivity {
         final ImageButton openFavouritesMenuButton;
 
         openFavouritesMenuButton = (ImageButton) findViewById(R.id.favouriteButton);
-        openFavouritesMenuButton.setOnClickListener(view -> openFavouritesActivity());
+
 
         final ImageButton openProfileMenuButton;
 
@@ -81,7 +81,7 @@ public class MainPageActivity extends AppCompatActivity {
         final ImageButton openInfoMenuButton;
 
         openInfoMenuButton = (ImageButton) findViewById(R.id.settingsButton);
-        openInfoMenuButton.setOnClickListener(view -> openCalibrationActivity());
+        openInfoMenuButton.setOnClickListener(view -> openInfoActivity());
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
@@ -248,13 +248,13 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, EditObjectActivity.class);
+        Intent intent = new Intent(this, ProfilActivity.class);
         startActivity(intent);
     }
 
-    public void openCalibrationActivity() {
-        Intent intent = new Intent(this, CalibrationActivity.class);
-        intent.putExtra("otwarcieAplikacji", false);
+    public void openInfoActivity() {
+        Intent intent = new Intent(this, InfoActivity.class);
+
         startActivity(intent);
     }
 }
