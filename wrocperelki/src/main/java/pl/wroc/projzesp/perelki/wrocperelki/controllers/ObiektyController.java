@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.wroc.projzesp.perelki.wrocperelki.model.Obiekt;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.ObiektRepository;
+import pl.wroc.projzesp.perelki.wrocperelki.model.User;
 
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class ObiektyController {
     private String infoLink  ;
     private boolean visible ;
      */
+    @Autowired
+    private UserController  userController;
 
     //pobieranie wszystkich miejsc
     @GetMapping("/api/miejsca")
@@ -33,9 +36,10 @@ public class ObiektyController {
 
     //wkładanie nowego miejsca
     @PostMapping("/api/miejsca")
-    Obiekt newMiejsce(@RequestBody Obiekt newObiekt) {
-        //todo identification
-        //todo add user as author of this
+    Obiekt newMiejsce(@RequestBody Obiekt newObiekt,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        newObiekt.setAuthor(u.getLogin());
         return miejsca.save(newObiekt);
     }
 
@@ -55,11 +59,14 @@ public class ObiektyController {
 
     //edycja miejsca
     @PutMapping("/api/miejsca/{id}")
-    Obiekt replaceMiejsce(@RequestBody Obiekt newObiekt, @PathVariable Long id) {
-        //todo identification
-        //todo check if user is autor of this
+    Obiekt replaceMiejsce(@RequestBody Obiekt newObiekt, @PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        newObiekt.setAuthor(u.getLogin());
         return miejsca.findById(id)
                 .map(miejsce -> {
+                    if(miejsce.getAuthor().equals(u.getLogin()))
+                        throw new RuntimeException("not yours");
                     miejsce.setId(id);
                     miejsce.setObjectName(newObiekt.getObjectName());
                     miejsce.setObjectPosition(newObiekt.getObjectPosition());
@@ -82,9 +89,11 @@ public class ObiektyController {
 
     //Usówanie raczej nie, lepiej zmienić widoczność
     @DeleteMapping("/api/miejsca/{id}")
-    void deleteEmployee(@PathVariable Long id) {
-        //todo identification
-        //todo check if user is admin
+    void deleteEmployee(@PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return;
+        if(miejsca.findById(id).get().getAuthor().equals(u.getLogin()))
+            return;
         miejsca.deleteById(id);
     }
 

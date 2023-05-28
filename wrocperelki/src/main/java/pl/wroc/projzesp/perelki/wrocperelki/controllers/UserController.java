@@ -54,11 +54,18 @@ public class UserController {
     @PostMapping("/api/user/login")
     String login(@RequestBody Map<String,String> map) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if(testLogin(map)) {
-            String token = RandomString(20);
-            while(loggedUsers.findByToken(token)!=null) {
-                token = RandomString(20);
+            User u = users.findByLogin(map.get("login"));
+            List<LoggedUser> l = loggedUsers.findByUser(u);
+            if(l.size()>0) {
+                for (LoggedUser lu : l) {
+                    loggedUsers.delete(lu);
+                }
             }
-            loggedUsers.save(new LoggedUser(token,users.findByLogin(map.get("login"))));
+            String token = RandomString(40);
+            while(loggedUsers.findByToken(token)!=null) {
+                token = RandomString(40);
+            }
+            loggedUsers.save(new LoggedUser(token,u));
             return token;
         }
         return null;
@@ -163,7 +170,9 @@ public class UserController {
         if(map.containsKey("id")) {
             Optional<Obiekt> o = miejsca.findById(Long.parseLong(map.get("id")));
             if(o.isEmpty())return;
-            u.getZnalezioneMiejsca().add(o.get());
+            Obiekt ob = o.get();
+            u.setPoints(u.getPoints()+getpointsobiekt(ob));
+            u.getZnalezioneMiejsca().add(ob);
             users.save(u);
         }
     }
@@ -181,10 +190,28 @@ public class UserController {
         if(map.containsKey("id")) {
             Optional<Riddle> o = riddles.findById(Long.parseLong(map.get("id")));
             if(o.isEmpty())return;
+            u.setPoints(u.getPoints()+getpointsRiddle(o.get()));
             u.getZnalezioneZagadki().add(o.get());
             users.save(u);
         }
     }
+
+    //trzeba przedyskutować
+    int getpointsobiekt(Obiekt o) {
+        if(o==null)return 0;
+        return o.getRiddles().getDifficulty().equals("easy")?5:o.getRiddles().getDifficulty().equals("medium")?10:15;
+    }
+    int getpointsRiddle(Riddle r) {
+        if(r==null)return 0;
+        return r.getPoints();
+    }
+
+
+
+
+
+
+
 
 
 

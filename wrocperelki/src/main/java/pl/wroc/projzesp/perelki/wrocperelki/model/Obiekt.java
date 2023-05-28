@@ -26,6 +26,7 @@ public class Obiekt {
     private String photoLink  ;
     private String infoLink  ;
     private boolean visible ;
+    private String author;
 
     @ManyToOne
     private Riddle riddles ;

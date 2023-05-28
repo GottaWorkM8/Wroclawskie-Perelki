@@ -6,6 +6,7 @@ import pl.wroc.projzesp.perelki.wrocperelki.interfaces.ObiektRepository;
 import pl.wroc.projzesp.perelki.wrocperelki.model.Obiekt;
 import pl.wroc.projzesp.perelki.wrocperelki.model.Riddle;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.RiddleRepository;
+import pl.wroc.projzesp.perelki.wrocperelki.model.User;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,10 +41,9 @@ public class ZagadkaController {
     private String infoLink  ;
     private boolean visible ;
      */
-
-    ZagadkaController(RiddleRepository riddleRepository) {
-        this.riddleRepository = riddleRepository;
-    }
+    
+    @Autowired
+    private UserController  userController;
 
 
     //pobieranie wszystkich zagadek
@@ -54,9 +54,10 @@ public class ZagadkaController {
 
     //wkładanie nowej zagadki
     @PostMapping("/api/zagadka")
-    Riddle newZagadka(@RequestBody Riddle newEmployee) {
-        //todo identification
-        //todo add user as author of this
+    Riddle newZagadka(@RequestBody Riddle newEmployee,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        newEmployee.setAuthor(u.getLogin());
         return riddleRepository.save(newEmployee);
     }
 
@@ -81,17 +82,19 @@ public class ZagadkaController {
 
     //edycja zagadki
     @PutMapping("/api/zagadka/{id}")
-    Riddle replaceEmployee(@RequestBody Riddle newZagadka, @PathVariable Long id) {
-        //todo identification
-        //todo check if user is autor of this, or admin
+    Riddle replaceEmployee(@RequestBody Riddle newZagadka, @PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        newZagadka.setAuthor(u.getLogin());
         return riddleRepository.findById(id)
                 .map(zagadka -> {
+                    if(zagadka.getAuthor().equals(u.getLogin()))
+                        throw new RuntimeException("Nie masz uprawnień");
                     zagadka.setId(id);
                     zagadka.setDifficulty(newZagadka.getDifficulty());
                     zagadka.setName(newZagadka.getName());
                     zagadka.setObjectCount(countMiejsceZagadki(id).size());
                     zagadka.setInfolink(newZagadka.getInfolink());
-                    zagadka.setAuthor(newZagadka.getAuthor());
                     zagadka.setPoints(newZagadka.getPoints());
                     return riddleRepository.save(zagadka);
                 })
@@ -102,11 +105,15 @@ public class ZagadkaController {
     }
 
     @PutMapping("/api/zagadka/{id}/addMiejsce/{idMiejsca}")
-    Riddle connectMiejsce(@PathVariable Long id, @PathVariable Long idMiejsca) {
-        //todo identification
-        //todo check if user is autor of this, or admin
+    Riddle connectMiejsce(@PathVariable Long id, @PathVariable Long idMiejsca,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
         Riddle zagadka = riddleRepository.getReferenceById(id);
         Obiekt obiekt = miejsca.getReferenceById(idMiejsca);
+        if(!zagadka.getAuthor().equals(u.getLogin()))
+            return null;
+        if(!obiekt.getAuthor().equals(u.getLogin()))
+            return null;
         obiekt.setId(idMiejsca);
         zagadka.setId(id);
         obiekt.setRiddles(zagadka);
@@ -117,9 +124,11 @@ public class ZagadkaController {
 
     //Usówanie raczej nie, lepiej zmienić widoczność
     @DeleteMapping("/api/zagadka/{id}")
-    void deleteEmployee(@PathVariable Long id) {
-        //todo identification
-        //todo check if user is admin
+    void deleteEmployee(@PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return;
+        Riddle r = riddleRepository.findById(id).get();
+        if(!r.getAuthor().equals(u.getLogin()))return;
         riddleRepository.deleteById(id);
     }
 
