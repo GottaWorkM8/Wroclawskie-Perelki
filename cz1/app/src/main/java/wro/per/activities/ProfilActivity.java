@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import wro.per.R;
@@ -15,6 +17,8 @@ public class ProfilActivity extends AppCompatActivity {
 
     TextView loginTextView, activityDateTextView, pointsTextView, objectsTextView, riddlesTextView, easyTextView, mediumTextView, hardTextView;
     Button logoutButton;
+
+    ImageButton solvedButton, homeButton, favouritesButton, infoButton;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
@@ -26,18 +30,28 @@ public class ProfilActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+        solvedButton = findViewById(R.id.listButton);
+        solvedButton.setOnClickListener(view -> openSolvedActivity());
+
+        favouritesButton = findViewById(R.id.favouriteButton);
+        favouritesButton.setOnClickListener(view -> openFavouritesActivity());
+
+        homeButton = findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(view->openMainPageActivity());
+
+        infoButton = findViewById(R.id.settingsButton);
+        infoButton.setOnClickListener(view-> openInfoActivity());
+
         setIds();
         setLogin();
     }
 
-    private void setLogin()
-    {
+    private void setLogin() {
         String login = sharedPreferences.getString("userLogin", "Login");
         loginTextView.setText(login);
     }
 
-    private void setIds()
-    {
+    private void setIds() {
         loginTextView = findViewById(R.id.loginTextView);
         activityDateTextView = findViewById(R.id.activity_date_textView);
         pointsTextView = findViewById(R.id.points_get_textView);
@@ -52,14 +66,37 @@ public class ProfilActivity extends AppCompatActivity {
 
     }
 
-    private void logOut()
-    {
+    private void logOut() {
         editor.putString("userLogin", "");
         editor.putString("userPass", "");
         editor.putBoolean("zalogowano", false);
         editor.apply();
 
         Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openSolvedActivity() {
+        Intent intent = new Intent(this, SolvedActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openMainPageActivity() {
+        Intent intent = new Intent(this, MainPageActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openFavouritesActivity() {
+        Intent intent = new Intent(this, FavouritesActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openInfoActivity() {
+        Intent intent = new Intent(this, InfoActivity.class);
         startActivity(intent);
         finish();
     }

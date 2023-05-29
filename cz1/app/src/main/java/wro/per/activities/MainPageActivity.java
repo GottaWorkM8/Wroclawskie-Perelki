@@ -70,7 +70,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         final ImageButton openFavouritesMenuButton;
 
-        openFavouritesMenuButton = (ImageButton) findViewById(R.id.favouriteButton);
+        openFavouritesMenuButton = findViewById(R.id.favouriteButton);
 
 
         final ImageButton openProfileMenuButton;
@@ -86,20 +86,16 @@ public class MainPageActivity extends AppCompatActivity {
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
 
-        ArrayList<GeoPoint> americaGeoPoints = new ArrayList<>();
+        ArrayList<GeoPoint> wroclawGeoPoints = new ArrayList<>();
 
-        americaGeoPoints.add(new GeoPoint(37.7749, -122.4194)); // San Francisco, California
-        americaGeoPoints.add(new GeoPoint(34.0522, -118.2437)); // Los Angeles, California
-        americaGeoPoints.add(new GeoPoint(40.7128, -74.0060));  // New York City, New York
-        americaGeoPoints.add(new GeoPoint(41.8781, -87.6298));  // Chicago, Illinois
-        americaGeoPoints.add(new GeoPoint(29.7604, -95.3698));  // Houston, Texas
-        americaGeoPoints.add(new GeoPoint(25.7617, -80.1918));  // Miami, Florida
-        americaGeoPoints.add(new GeoPoint(39.9526, -75.1652));  // Philadelphia, Pennsylvania
-        americaGeoPoints.add(new GeoPoint(33.4484, -112.0740)); // Phoenix, Arizona
-        americaGeoPoints.add(new GeoPoint(32.7767, -96.7970));  // Dallas, Texas
-        americaGeoPoints.add(new GeoPoint(47.6062, -122.3321));
+        wroclawGeoPoints.add(new GeoPoint(51.1094, 17.0327)); // Rynek
+        wroclawGeoPoints.add(new GeoPoint(51.1142, 17.0459)); // Ostrów Tumski
+        wroclawGeoPoints.add(new GeoPoint(51.1069, 17.0773)); // Hala Stulecia
+        wroclawGeoPoints.add(new GeoPoint(51.1101, 17.0444)); // Panorama Racławicka
+        wroclawGeoPoints.add(new GeoPoint(51.1052, 17.0756)); // Zoo Wrocław
 
-        osm.drawPlaces(mapView, americaGeoPoints);
+
+        osm.drawPlaces(mapView, wroclawGeoPoints);
 
         class FetchData extends Thread {
 
@@ -229,22 +225,11 @@ public class MainPageActivity extends AppCompatActivity {
 
                 System.out.println(lat + "    " + lon);
                 GeoPoint point = new GeoPoint(lat, lon);
-                osm.setPoint(point);
+                //osm.setPoint(point);
                 osm.drawYou(mapView, point);
                 osm.drawRing(mapView, point);
             }
         }
-    }
-
-    public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
-        startActivity(intent);
-        
-    }
-
-    public void openFavouritesActivity() {
-        Intent intent = new Intent(this, SensorsActivity.class);
-        startActivity(intent);
     }
 
     public void openProfileActivity() {
@@ -252,9 +237,18 @@ public class MainPageActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openSolvedActivity() {
+        Intent intent = new Intent(this, SolvedActivity.class);
+        startActivity(intent);
+    }
+
+    public void openFavouritesActivity() {
+        Intent intent = new Intent(this, SensorsActivity.class);
+        startActivity(intent);
+    }
+
     public void openInfoActivity() {
         Intent intent = new Intent(this, InfoActivity.class);
-
         startActivity(intent);
     }
 }

@@ -3,6 +3,7 @@ package wro.per.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +13,8 @@ public class InfoActivity extends AppCompatActivity {
 
     Button sensorsButton, calibrationButton, editButton;
 
+    ImageButton profilButton, homeButton, solvedButton, favouritesButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +23,18 @@ public class InfoActivity extends AppCompatActivity {
         sensorsButton = findViewById(R.id.sensory_button);
         calibrationButton = findViewById(R.id.kalibracja_botton);
         editButton = findViewById(R.id.edycja_obiektu_button);
+
+        profilButton = findViewById(R.id.profileButton);
+        profilButton.setOnClickListener(view -> openProfileActivity());
+
+        solvedButton = findViewById(R.id.listButton);
+        solvedButton.setOnClickListener(view -> openSolvedActivity());
+
+        homeButton = findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(view->openMainPageActivity());
+
+        favouritesButton = findViewById(R.id.favouriteButton);
+        favouritesButton.setOnClickListener(view-> openFavouritesActivity());
 
         sensorsButton.setOnClickListener(view -> openSensors());
         calibrationButton.setOnClickListener(view -> openCalibration());
@@ -44,6 +59,30 @@ public class InfoActivity extends AppCompatActivity {
     private void openEdit()
     {
         Intent intent = new Intent(this, EditObjectActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openProfileActivity() {
+        Intent intent = new Intent(this, ProfilActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openMainPageActivity() {
+        Intent intent = new Intent(this, MainPageActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openSolvedActivity() {
+        Intent intent = new Intent(this, SolvedActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openFavouritesActivity() {
+        Intent intent = new Intent(this, FavouritesActivity.class);
         startActivity(intent);
         finish();
     }
