@@ -49,11 +49,6 @@ public class ImageController {
             return 0;
         }
     }
-    @RouterOperation(operation = @Operation(operationId = "upladFile", summary = "wgrywanie pliku do serwera",
-            parameters = { @Parameter(in = ParameterIn.PATH, name = "key", description = "Token of logged in user", required = true), },
-            responses = { @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = String.class))),
-                    @ApiResponse(responseCode = "400", description = "Invalid Employee ID supplied"),
-                    @ApiResponse(responseCode = "404", description = "Employee not found") }))
     @PostMapping("/api/upload/image")
     public String uplaodImage(@RequestPart("file") MultipartFile file,@RequestParam String key) throws Exception, IOException {
         User u = userController.getUser(key);
@@ -64,9 +59,10 @@ public class ImageController {
         String filename = id+"."+file.getOriginalFilename();
         File imf = new File("/home/pi/projzesp/images/"+filename);
         file.transferTo(imf);
+        pl.szajsjem.SimpleLog.log("Dodano nowy plik o nazwie:"+filename+" przez:"+u.getLogin());
         return "https://szajsjem.mooo.com/images/"+filename;
     }
-    @DeleteMapping("/api/image")///https://szajsjem.mooo.comapi/image?link=https://szajsjem.mooo.com/images/nazwapliku
+    @DeleteMapping("/api/image")///https://szajsjem.mooo.com/api/image?link=https://szajsjem.mooo.com/images/nazwapliku
     public String deleteImage(@RequestParam String link,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);
         if(u==null)return null;
@@ -75,6 +71,7 @@ public class ImageController {
         }
         String filename = link.substring(link.lastIndexOf("/")+1);
         File imf = new File("/home/pi/projzesp/images/"+filename);
+        pl.szajsjem.SimpleLog.log("Próba usunięcia pliku o nazwie:"+filename+" przez:"+u.getLogin());
         if(imf.delete())
             return "OK";
         return "Image not found";

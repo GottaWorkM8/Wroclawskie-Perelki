@@ -40,6 +40,7 @@ public class ObiektyController {
         User u = userController.getUser(key);
         if(u==null)return null;
         newObiekt.setAuthor(u.getLogin());
+        pl.szajsjem.SimpleLog.log("Nowy obiekt przez:"+u.getLogin());
         return miejsca.save(newObiekt);
     }
 
@@ -65,8 +66,13 @@ public class ObiektyController {
         newObiekt.setAuthor(u.getLogin());
         return miejsca.findById(id)
                 .map(miejsce -> {
-                    if(miejsce.getAuthor().equals(u.getLogin()))
-                        throw new RuntimeException("not yours");
+                    if(miejsce.getAuthor()!=null) {
+                        if (!miejsce.getAuthor().equals(u.getLogin()))
+                            throw new RuntimeException("not yours");
+                    }
+                    else{
+                        miejsce.setAuthor(u.getLogin());
+                    }
                     miejsce.setId(id);
                     miejsce.setObjectName(newObiekt.getObjectName());
                     miejsce.setObjectPosition(newObiekt.getObjectPosition());
@@ -78,10 +84,12 @@ public class ObiektyController {
                     miejsce.setPhotoLink(newObiekt.getPhotoLink());
                     miejsce.setInfoLink(newObiekt.getInfoLink());
                     miejsce.setVisible(newObiekt.isVisible());
+                    pl.szajsjem.SimpleLog.log("Update obiektu o id:"+id.toString()+" przez:"+u.getLogin());
                     return miejsca.save(miejsce);
                 })
                 .orElseGet(() -> {
                     newObiekt.setId(id);
+                    pl.szajsjem.SimpleLog.log("Nowy obiekt o id:"+id.toString()+" przez:"+u.getLogin());
                     return miejsca.save(newObiekt);
                 });
     }
@@ -92,8 +100,10 @@ public class ObiektyController {
     void deleteEmployee(@PathVariable Long id,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);
         if(u==null)return;
-        if(miejsca.findById(id).get().getAuthor().equals(u.getLogin()))
-            return;
+        if(!u.isAdmin())
+            if(miejsca.findById(id).get().getAuthor().equals(u.getLogin()))
+                return;
+        pl.szajsjem.SimpleLog.log("Usówanie obiektu o id:"+id.toString()+" przez:"+u.getLogin());
         miejsca.deleteById(id);
     }
 

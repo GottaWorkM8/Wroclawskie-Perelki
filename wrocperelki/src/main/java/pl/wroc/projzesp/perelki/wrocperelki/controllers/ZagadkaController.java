@@ -58,6 +58,7 @@ public class ZagadkaController {
         User u = userController.getUser(key);
         if(u==null)return null;
         newEmployee.setAuthor(u.getLogin());
+        pl.szajsjem.SimpleLog.log("Nowa zagadka od autora:"+u.getLogin());
         return riddleRepository.save(newEmployee);
     }
 
@@ -88,7 +89,7 @@ public class ZagadkaController {
         newZagadka.setAuthor(u.getLogin());
         return riddleRepository.findById(id)
                 .map(zagadka -> {
-                    if(zagadka.getAuthor().equals(u.getLogin()))
+                    if(!zagadka.getAuthor().equals(u.getLogin()))
                         throw new RuntimeException("Nie masz uprawnień");
                     zagadka.setId(id);
                     zagadka.setDifficulty(newZagadka.getDifficulty());
@@ -96,10 +97,12 @@ public class ZagadkaController {
                     zagadka.setObjectCount(countMiejsceZagadki(id).size());
                     zagadka.setInfolink(newZagadka.getInfolink());
                     zagadka.setPoints(newZagadka.getPoints());
+                    pl.szajsjem.SimpleLog.log("Edycja zagadki przez:"+u.getLogin()+" o id:"+id);
                     return riddleRepository.save(zagadka);
                 })
                 .orElseGet(() -> {
                     newZagadka.setId(id);
+                    pl.szajsjem.SimpleLog.log("Nowa zagadka przez:"+u.getLogin()+" o id:"+id);
                     return riddleRepository.save(newZagadka);
                 });
     }
@@ -110,15 +113,27 @@ public class ZagadkaController {
         if(u==null)return null;
         Riddle zagadka = riddleRepository.getReferenceById(id);
         Obiekt obiekt = miejsca.getReferenceById(idMiejsca);
-        if(!zagadka.getAuthor().equals(u.getLogin()))
-            return null;
-        if(!obiekt.getAuthor().equals(u.getLogin()))
-            return null;
+
+        if(zagadka.getAuthor()!=null) {
+            if(!zagadka.getAuthor().equals(u.getLogin()))
+                return null;
+        }
+        else{
+            zagadka.setAuthor(u.getLogin());
+        }
+        if(obiekt.getAuthor()!=null) {
+            if(!obiekt.getAuthor().equals(u.getLogin()))
+                return null;
+        }
+        else{
+            obiekt.setAuthor(u.getLogin());
+        }
         obiekt.setId(idMiejsca);
         zagadka.setId(id);
         obiekt.setRiddles(zagadka);
         miejsca.save(obiekt);
         zagadka.setObjectCount(countMiejsceZagadki(id).size());
+        pl.szajsjem.SimpleLog.log("połączenie zagadki"+" o id:"+zagadka.getId()+" i miejsca"+" o id:"+obiekt.getId()+" przez:"+u.getLogin());
         return riddleRepository.save(zagadka);
     }
 
@@ -127,8 +142,11 @@ public class ZagadkaController {
     void deleteEmployee(@PathVariable Long id,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);
         if(u==null)return;
-        Riddle r = riddleRepository.findById(id).get();
-        if(!r.getAuthor().equals(u.getLogin()))return;
+        if(!u.isAdmin()){
+            Riddle r = riddleRepository.findById(id).get();
+            if (!r.getAuthor().equals(u.getLogin())) return;
+        }
+        pl.szajsjem.SimpleLog.log("Usunięcie zagadki"+" o id:"+id +" przez:"+u.getLogin());
         riddleRepository.deleteById(id);
     }
 

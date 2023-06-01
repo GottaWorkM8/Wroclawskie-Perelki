@@ -92,6 +92,7 @@ public class UserController {
         if(map.get("email").length()<3)return false;
         if(!map.get("email").contains("@"))return false;
         if(!map.get("email").contains("."))return false;
+        pl.szajsjem.SimpleLog.log("Nowy urzytkownik o loginie:"+map.get("login") + " i emailu:"+map.get("email"));
         users.save(new User(0L,map.get("login"),passhash(map.get("password")),map.get("email"),false,0L,new HashSet<>(),new HashSet<>(),new HashSet<>()));
         return true;
     }
@@ -116,8 +117,10 @@ public class UserController {
     }
     @DeleteMapping("/api/user/logoutAll")
     void deleteAll(@RequestParam String key) {
-        if(isKeyAdminLogged(key))
-                loggedUsers.deleteAll();
+        if(isKeyAdminLogged(key)) {
+            loggedUsers.deleteAll();
+            pl.szajsjem.SimpleLog.log("Wylogowywanie wszystkich urzytkowników");
+        }
     }
     @DeleteMapping("/api/user/{id}")
     void deleteUser(@PathVariable Long id,@RequestParam String key) {
@@ -126,6 +129,7 @@ public class UserController {
         if(Objects.equals(u.getUserId(), id)) {
             loggedUsers.deleteByToken(key);
             users.deleteById(id);
+            pl.szajsjem.SimpleLog.log("Urzytkownik o id:"+id.toString()+" i loginie:"+u.getLogin()+" przestał grać w tą grę");
         }
     }
 
@@ -174,6 +178,7 @@ public class UserController {
             u.setPoints(u.getPoints()+getpointsobiekt(ob));
             u.getZnalezioneMiejsca().add(ob);
             users.save(u);
+            pl.szajsjem.SimpleLog.log("Urzytkownik o loginie:"+u.getLogin()+" znalazł miejsce o id:"+map.get("id"));
         }
     }
 
@@ -193,6 +198,7 @@ public class UserController {
             u.setPoints(u.getPoints()+getpointsRiddle(o.get()));
             u.getZnalezioneZagadki().add(o.get());
             users.save(u);
+            pl.szajsjem.SimpleLog.log("Urzytkownik o loginie:"+u.getLogin()+" rozwiązał zagadkę o id:"+map.get("id"));
         }
     }
 
