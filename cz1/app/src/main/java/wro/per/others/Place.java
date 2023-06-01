@@ -7,9 +7,9 @@ public class Place {
     private boolean found;
     private double distance;
 
-    public Place(GeoPoint location, boolean found){
+    public Place(GeoPoint location, boolean b){
         this.location = location;
-        this.found = found;
+        this.found = b;
     }
 
     public GeoPoint getLocation() {

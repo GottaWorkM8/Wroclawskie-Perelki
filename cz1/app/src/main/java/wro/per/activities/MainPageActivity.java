@@ -1,6 +1,7 @@
 package wro.per.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
-
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,11 +40,13 @@ import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
+import wro.per.others.Place;
 import wro.per.others.Places;
 import wro.per.others.Riddles;
 
 public class MainPageActivity extends AppCompatActivity {
 
+    private TextView textHint;
     private Places places;
     private MapView mapView;
     private OSM osm;
@@ -88,26 +91,38 @@ public class MainPageActivity extends AppCompatActivity {
         openInfoMenuButton.setOnClickListener(view -> openInfoActivity());
 
         ImageButton questionMarkButton = findViewById(R.id.questionMarkButton);
-        TextView textHint = findViewById(R.id.textHint);
+        textHint = findViewById(R.id.textHint);
 
-
+        questionMarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (textHint.getVisibility() == View.VISIBLE) {
+                    textHint.setVisibility(View.GONE);
+                } else {
+                    textHint.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
         places = new Places(mapView);
 
-        ArrayList<GeoPoint> americaGeoPoints = new ArrayList<>();
+        ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
 
-        americaGeoPoints.add(new GeoPoint(37.7749, -122.4194)); // San Francisco, California
-        americaGeoPoints.add(new GeoPoint(34.0522, -118.2437)); // Los Angeles, California
-        americaGeoPoints.add(new GeoPoint(40.7128, -74.0060));  // New York City, New York
-        americaGeoPoints.add(new GeoPoint(41.8781, -87.6298));  // Chicago, Illinois
-        americaGeoPoints.add(new GeoPoint(29.7604, -95.3698));  // Houston, Texas
-        americaGeoPoints.add(new GeoPoint(25.7617, -80.1918));  // Miami, Florida
-        americaGeoPoints.add(new GeoPoint(39.9526, -75.1652));  // Philadelphia, Pennsylvania
-        americaGeoPoints.add(new GeoPoint(33.4484, -112.0740)); // Phoenix, Arizona
-        americaGeoPoints.add(new GeoPoint(32.7767, -96.7970));  // Dallas, Texas
-        americaGeoPoints.add(new GeoPoint(47.6062, -122.3321));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1079, 17.0385), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1094, 17.0310), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1106, 17.0610), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1049, 17.0244), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1083, 17.0299), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1131, 17.0457), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1062, 17.0453), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1098, 17.0317), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1130, 17.0197), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.1006, 17.0360), true));
+
+        places.setPlaces(wroclawGeoPoints);
+        places.drawPlaces();
 
         class FetchData extends Thread {
 
@@ -227,8 +242,9 @@ public class MainPageActivity extends AppCompatActivity {
 
     public class LocationBroadcastReciever extends BroadcastReceiver {
 
+        @SuppressLint("SetTextI18n")
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, @NonNull Intent intent) {
             osm.deleteYou(mapView);
             places.deleteRing(mapView);
             if (intent.getAction().equals("ACT_LOC")) {
@@ -240,6 +256,7 @@ public class MainPageActivity extends AppCompatActivity {
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
                 places.drawRing(mapView, point);
+                textHint.setText("min: " + places.close(point) + " km\n" + places.far(point) + " km");
             }
         }
     }

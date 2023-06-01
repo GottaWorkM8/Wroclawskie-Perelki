@@ -3,6 +3,8 @@ package wro.per.others;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Places {
@@ -26,9 +28,10 @@ public class Places {
         for (Place p : places){
             if(p.isFound()){
                 drawnPlaces.add(new PlaceImage(p.getLocation()));
-                mapView.getOverlays().add(drawnPlaces.get(i));
-                i++;
             }
+        }
+        for (PlaceImage pi : drawnPlaces){
+            mapView.getOverlays().add(pi);
         }
     }
 
@@ -78,5 +81,42 @@ public class Places {
     public void deleteRing(MapView mapView) {
         mapView.getOverlays().remove(cmin);
         mapView.getOverlays().remove(cmax);
+    }
+
+    public String close(GeoPoint geoPoint){
+        if(!places.isEmpty()) {
+            double min = Double.MAX_VALUE;
+            for (Place place : places) {
+                GeoPoint placePoint = place.getLocation();
+                double distance = geoPoint.distanceToAsDouble(placePoint);
+
+                if (distance < min) {
+                    min = distance;
+                }
+            }
+            min /= 1000;
+            DecimalFormat decimalFormat = new DecimalFormat("#.###");
+            decimalFormat.setRoundingMode(RoundingMode.DOWN);
+            return decimalFormat.format(min);
+        }
+        return "-";
+    }
+
+    public String far(GeoPoint geoPoint){
+        if(!places.isEmpty()) {
+            double max = Double.MIN_VALUE;
+            for (Place place : places) {
+                GeoPoint placePoint = place.getLocation();
+                double distance = geoPoint.distanceToAsDouble(placePoint);
+                if (distance > max) {
+                    max = distance;
+                }
+            }
+            max /= 1000;
+            DecimalFormat decimalFormat = new DecimalFormat("#.###");
+            decimalFormat.setRoundingMode(RoundingMode.DOWN);
+            return decimalFormat.format(max);
+        }
+        return "-";
     }
 }

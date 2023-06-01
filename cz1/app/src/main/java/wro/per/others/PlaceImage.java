@@ -37,8 +37,4 @@ public class PlaceImage extends Overlay {
             canvas.drawCircle(point.x, point.y, 20f, paint2);
         }
     }
-
-    public GeoPoint getGeoPoint() {
-        return geoPoint;
-    }
 }
