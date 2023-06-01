@@ -9,7 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,11 +34,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
+import wro.per.others.Place;
 import wro.per.others.Riddles;
 
 public class MainPageActivity extends AppCompatActivity {
@@ -83,6 +88,11 @@ public class MainPageActivity extends AppCompatActivity {
         openInfoMenuButton = (ImageButton) findViewById(R.id.settingsButton);
         openInfoMenuButton.setOnClickListener(view -> openInfoActivity());
 
+        ImageButton questionMarkButton = findViewById(R.id.questionMarkButton);
+        TextView textHint = findViewById(R.id.textHint);
+
+
+
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
 
@@ -96,6 +106,21 @@ public class MainPageActivity extends AppCompatActivity {
 
 
         osm.drawPlaces(mapView, wroclawGeoPoints);
+
+        questionMarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                System.out.println(wroclawGeoPoints.get(0).distanceToAsDouble(wroclawGeoPoints.get(2)));
+
+
+                if (textHint.getVisibility() == View.VISIBLE) {
+                    textHint.setVisibility(View.GONE);
+                } else {
+                    textHint.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         class FetchData extends Thread {
 
