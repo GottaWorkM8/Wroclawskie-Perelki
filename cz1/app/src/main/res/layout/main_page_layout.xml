@@ -31,8 +31,20 @@
             android:background="@drawable/red_2_hint_bg_shape"
             android:contentDescription="Info"
             android:src="@drawable/yellow_hint_icon"
+            android:layout_toRightOf="@id/textHint"
             app:srcCompat="@drawable/yellow_hint_icon"
             tools:src="@drawable/yellow_hint_icon" />
+
+        <TextView
+            android:id="@+id/textHint"
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:background="#B72121"
+            android:text="Odległosc 1: 530m Odleglosc 2: 5km"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textIsSelectable="false"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout

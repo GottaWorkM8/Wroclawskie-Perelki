@@ -42,6 +42,8 @@ public class SolvedActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    ImageButton profilButton, homeButton, favouritesButton, infoButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,16 +53,23 @@ public class SolvedActivity extends AppCompatActivity {
 
         setContentView(R.layout.solved_layout);
 
-        final ImageButton openMainPageImageButton;
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
-        tabLayout.setupWithViewPager(viewPager);
+        profilButton = findViewById(R.id.profileButton);
+        profilButton.setOnClickListener(view -> openProfileActivity());
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        System.out.println(sharedPreferences.getString("userLogin", "brak loginu"));
-        System.out.println(sharedPreferences.getString("userPass", "brak hasła"));
+        favouritesButton = findViewById(R.id.favouriteButton);
+        favouritesButton.setOnClickListener(view -> openFavouritesActivity());
+
+        homeButton = findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(view->openMainPageActivity());
+
+        infoButton = findViewById(R.id.settingsButton);
+        infoButton.setOnClickListener(view-> openInfoActivity());
+
+        tabLayout.setupWithViewPager(viewPager);
 
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
@@ -70,20 +79,29 @@ public class SolvedActivity extends AppCompatActivity {
 
         viewPager.setAdapter(tabAdapter);
 
-        openMainPageImageButton = (ImageButton) findViewById(R.id.homeButton);
-        openMainPageImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openActivityHome();
-            }
-        });
     }
 
-    public void openActivityHome() {
-        Intent intent = new Intent(this, MainPageActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    public void openProfileActivity() {
+        Intent intent = new Intent(this, ProfilActivity.class);
         startActivity(intent);
         finish();
     }
 
+    public void openMainPageActivity() {
+        Intent intent = new Intent(this, MainPageActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openFavouritesActivity() {
+        Intent intent = new Intent(this, FavouritesActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void openInfoActivity() {
+        Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

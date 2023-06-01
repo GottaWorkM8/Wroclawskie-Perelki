@@ -9,7 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
+
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -72,7 +74,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         final ImageButton openFavouritesMenuButton;
 
-        openFavouritesMenuButton = (ImageButton) findViewById(R.id.favouriteButton);
+        openFavouritesMenuButton = findViewById(R.id.favouriteButton);
 
 
         final ImageButton openProfileMenuButton;
@@ -84,6 +86,11 @@ public class MainPageActivity extends AppCompatActivity {
 
         openInfoMenuButton = (ImageButton) findViewById(R.id.settingsButton);
         openInfoMenuButton.setOnClickListener(view -> openInfoActivity());
+
+        ImageButton questionMarkButton = findViewById(R.id.questionMarkButton);
+        TextView textHint = findViewById(R.id.textHint);
+
+
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
@@ -240,7 +247,6 @@ public class MainPageActivity extends AppCompatActivity {
     public void openSolvedActivity() {
         Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
-        
     }
 
     public void openFavouritesActivity() {
@@ -255,7 +261,6 @@ public class MainPageActivity extends AppCompatActivity {
 
     public void openInfoActivity() {
         Intent intent = new Intent(this, InfoActivity.class);
-
         startActivity(intent);
     }
 }

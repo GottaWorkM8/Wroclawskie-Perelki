@@ -26,15 +26,18 @@
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.InfoActivity"
+            android:name=".activities.FavouritesActivity"
             android:exported="true"
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".activities.InfoActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.ProfilActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CalibrationActivity"
             android:exported="false"

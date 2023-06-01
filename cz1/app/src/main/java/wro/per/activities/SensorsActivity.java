@@ -43,7 +43,7 @@ public class SensorsActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.favourite_layout);
+        setContentView(R.layout.sensors_layout);
 
         xValueAcc = (TextView) findViewById(R.id.accXTextView);
         yValueAcc = (TextView) findViewById(R.id.accYTextView);
