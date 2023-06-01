@@ -37,10 +37,12 @@ import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
+import wro.per.others.Places;
 import wro.per.others.Riddles;
 
 public class MainPageActivity extends AppCompatActivity {
 
+    private Places places;
     private MapView mapView;
     private OSM osm;
     public static ArrayList<Riddles> riddlesArrayList;
@@ -85,6 +87,7 @@ public class MainPageActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
+        places = new Places(mapView);
 
         ArrayList<GeoPoint> americaGeoPoints = new ArrayList<>();
 
@@ -98,8 +101,6 @@ public class MainPageActivity extends AppCompatActivity {
         americaGeoPoints.add(new GeoPoint(33.4484, -112.0740)); // Phoenix, Arizona
         americaGeoPoints.add(new GeoPoint(32.7767, -96.7970));  // Dallas, Texas
         americaGeoPoints.add(new GeoPoint(47.6062, -122.3321));
-
-        osm.drawPlaces(mapView, americaGeoPoints);
 
         class FetchData extends Thread {
 
@@ -222,7 +223,7 @@ public class MainPageActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             osm.deleteYou(mapView);
-            osm.deleteRing(mapView);
+            places.deleteRing(mapView);
             if (intent.getAction().equals("ACT_LOC")) {
                 double lat = intent.getDoubleExtra("latitude", 0f);
                 double lon = intent.getDoubleExtra("longitude", 0f);
@@ -231,7 +232,7 @@ public class MainPageActivity extends AppCompatActivity {
                 GeoPoint point = new GeoPoint(lat, lon);
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
-                osm.drawRing(mapView, point);
+                places.drawRing(mapView, point);
             }
         }
     }

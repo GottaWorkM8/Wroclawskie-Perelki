@@ -13,7 +13,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
-public class Circle extends Overlay {
+public class CircleImage extends Overlay {
     private final Paint paint;
     private final GeoPoint geoPoint;
     private boolean rotation;
@@ -22,7 +22,7 @@ public class Circle extends Overlay {
     private Point center;
 
     @SuppressLint("ClickableViewAccessibility")
-    public Circle(GeoPoint geoPoint, MapView mapView, float r) {
+    public CircleImage(GeoPoint geoPoint, MapView mapView, float r) {
         rotation = false;
         this.geoPoint = geoPoint;
         width = r;

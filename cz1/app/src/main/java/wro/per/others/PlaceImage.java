@@ -4,28 +4,23 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.view.MotionEvent;
 
-import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.Projection;
 import org.osmdroid.views.overlay.Overlay;
 
-public class UserLocation extends Overlay {
+public class PlaceImage extends Overlay {
     private final Paint paint1, paint2;
     private final GeoPoint geoPoint;
 
-    private boolean rotation;
-
-    public UserLocation(GeoPoint geoPoint) {
-        rotation = false;
+    public PlaceImage(GeoPoint geoPoint) {
         this.geoPoint = geoPoint;
         paint1 = new Paint();
-        paint1.setColor(Color.argb(255, 0, 255, 255));
+        paint1.setColor(Color.argb(255, 0, 255, 0));
         paint1.setStyle(Paint.Style.FILL);
         paint2 = new Paint();
-        paint2.setColor(Color.argb(255, 0, 150, 255));
+        paint2.setColor(Color.argb(255, 0, 150, 0));
         paint2.setStyle(Paint.Style.STROKE);
         paint2.setStrokeWidth(7f);
     }
@@ -43,4 +38,7 @@ public class UserLocation extends Overlay {
         }
     }
 
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
+    }
 }

@@ -1,0 +1,82 @@
+package wro.per.others;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
+import java.util.ArrayList;
+
+public class Places {
+
+    private ArrayList<Place> places;
+
+    private ArrayList<PlaceImage> drawnPlaces;
+
+    private CircleImage cmin, cmax;
+
+    private MapView mapView;
+
+    public Places(MapView mapView){
+        this.mapView = mapView;
+        places = new ArrayList<Place>();
+        drawnPlaces = new ArrayList<PlaceImage>();
+    }
+
+    public void drawPlaces(){
+        int i = 0;
+        for (Place p : places){
+            if(p.isFound()){
+                drawnPlaces.add(new PlaceImage(p.getLocation()));
+                mapView.getOverlays().add(drawnPlaces.get(i));
+                i++;
+            }
+        }
+    }
+
+    public void deletePlaces(){
+        for (PlaceImage p : drawnPlaces){
+            mapView.getOverlays().remove(p);
+        }
+    }
+
+    public void setPlaces(ArrayList<Place> places) {
+        this.places = places;
+    }
+
+    public Place isClose(GeoPoint geoPoint){
+        for(Place p : places){
+            if(p.getLocation().distanceToAsDouble(geoPoint) < p.getDistance()){
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void drawRing(MapView mapView, GeoPoint geoPoint){
+        if(!places.isEmpty()){
+            double min = Double.MAX_VALUE;
+            double max = Double.MIN_VALUE;
+            for (Place place : places) {
+                GeoPoint placePoint = place.getLocation();
+                double distance = geoPoint.distanceToAsDouble(placePoint);
+
+                if (distance < min) {
+                    min = distance;
+                }
+
+                if (distance > max) {
+                    max = distance;
+                }
+            }
+
+            cmin = new CircleImage(geoPoint, mapView, (float) min);
+            cmax = new CircleImage(geoPoint, mapView, (float) max);
+            mapView.getOverlays().add(cmax);
+            mapView.getOverlays().add(cmin);
+        }
+    }
+
+    public void deleteRing(MapView mapView) {
+        mapView.getOverlays().remove(cmin);
+        mapView.getOverlays().remove(cmax);
+    }
+}
