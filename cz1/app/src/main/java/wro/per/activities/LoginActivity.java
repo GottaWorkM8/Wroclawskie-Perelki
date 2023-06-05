@@ -1,46 +1,26 @@
 package wro.per.activities;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import wro.per.R;
-import wro.per.others.SendJsonTask;
+import wro.per.others.APICallAsyncTask;
+import wro.per.others.ApiRequestTask;
+import wro.per.others.SendJsonTaskPost;
 
-public class LoginActivity extends AppCompatActivity implements SendJsonTask.ResponseListener {
+public class LoginActivity extends AppCompatActivity implements ApiRequestTask.ApiResponseListener {
 
     private EditText loginEditText, passwordEditText;
     private TextView errorTextView;
@@ -48,32 +28,70 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
 
     Boolean result = false;
 
+    private String login, password;
+    private String tempLogin, tempPassword;
+
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    //metoda wykonywana po odebraniu odpowiedzi od api
-    // jeżeli git to zapisuje login oraz hasło i przechodzi dalej (kalibracja)
-    // albo wyświetla komunikat błędu
+    Boolean keyOK = false;
+
+    Boolean testLoginBool=false, loginBool=false, testKeyBool=false;
+
     @Override
-    public void onResponseReceived(String response) {
-        System.out.println("Odpowiedz: " + response);
+    public void onApiResponse(String data) {
+//        System.out.println("Odebrane dane: "+data);
+        if(testLoginBool) {
+            if (data.equals("true")) {
 
-        if (response.equals("true")) {
-            String login, password;
-            login = loginEditText.getText().toString();
-            password = passwordEditText.getText().toString();
+                testLoginBool=false;
+                System.out.println(login);
+                System.out.println(password);
+                editor.putString("userLogin", login);
+                editor.putString("userPass", password);
+                editor.apply();
 
-            System.out.println(login);
-            System.out.println(password);
+                loginBool=true;
+                makeAPICall("https://szajsjem.mooo.com/api/user/login", "POST", "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}");
 
-            editor.putString("userLogin", login);
-            editor.putString("userPass", password);
-            editor.apply();
 
-            next();
-        } else {
-            errorTextView.setText("Błędny login lub hasło");
+            } else if (data.equals("false")) {
+                testLoginBool=false;
+                errorTextView.setText("Błędny login lub hasło");
+            }
         }
+        else if(loginBool){
+            if(data.equals("false"))
+            {
+                System.out.println("Klucz się nie wygenerował");
+            }
+            else {
+                System.out.println("Generated key: "+data);
+                editor.putString("userKey", data);
+                editor.apply();
+            }
+
+            loginBool=false;
+            next();
+        }
+        else if(testKeyBool)
+        {
+            if (data.equals("true")) {
+                keyOK=true;
+                testKeyBool=false;
+
+//                next();
+            } else{
+                keyOK=false;
+                testKeyBool=false;
+
+            }
+        }
+    }
+
+    private void makeAPICall(String url, String requestMethod, String dataToSend) {
+        ApiRequestTask apiRequestTask = new ApiRequestTask(url, requestMethod, dataToSend, this);
+        apiRequestTask.execute();
     }
 
     @Override
@@ -84,24 +102,33 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
-            if(czyZalogowano)
-                next();
+//        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
+//        if(czyZalogowano)
+//        {
+//            String key = sharedPreferences.getString("userKey", "brak");
+//            testKeyBool=true;
+//            String url = "https://szajsjem.mooo.com/api/user/testkey?key="+key;
+//            makeAPICall(url, "GET", "");
+//
+//
+//
+////            loginBool=true;
+////            makeAPICall("https://szajsjem.mooo.com/api/user/login", "POST", "{\"login\":\"user1\",\"password\":\"pass1\"}");
+//
+//        }
+//        else {
+//
+//        }
 
         loginButton = findViewById(R.id.login_button);
-        loginButton.setOnClickListener(view -> logIn());
+        loginButton.setOnClickListener(view -> checkPass());
 
         loginEditText = findViewById(R.id.login_edittext);
         passwordEditText = findViewById(R.id.password_edittext);
         errorTextView = findViewById(R.id.error_textView);
 
         TextView registerTextView = findViewById(R.id.registerTextView);
-        registerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegistrationPage();
-            }
-        });
+        registerTextView.setOnClickListener(v -> openRegistrationPage());
 
         loginEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -138,15 +165,12 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
             }
         });
 
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    logIn();
-                    return true;
-                }
-                return false;
+        passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                checkPass();
+                return true;
             }
+            return false;
         });
     }
 
@@ -156,9 +180,7 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
         startActivity(intent);
     }
 
-
-    public void logIn() {
-        String login, password;
+    public void checkPass() {
         login = loginEditText.getText().toString();
         password = passwordEditText.getText().toString();
 
@@ -166,13 +188,9 @@ public class LoginActivity extends AppCompatActivity implements SendJsonTask.Res
             errorTextView.setText("Nie wpisano wszystkich danych");
             return;
         }
-
-        String apiUrl = "https://szajsjem.mooo.com/api/user/testlogin";
-        String jsonData = "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}";
-
-        SendJsonTask sendJsonTask = new SendJsonTask(this);
-
-        sendJsonTask.execute(apiUrl, jsonData);
+        testLoginBool = true;
+        System.out.println("{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}");
+        makeAPICall("https://szajsjem.mooo.com/api/user/testlogin", "POST", "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}");
 
     }
 

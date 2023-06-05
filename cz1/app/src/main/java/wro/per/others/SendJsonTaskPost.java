@@ -13,12 +13,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class SendJsonTask extends AsyncTask<String, Void, String> {
+public class SendJsonTaskPost extends AsyncTask<String, Void, String> {
 
-    private static final String TAG = SendJsonTask.class.getSimpleName();
+    private static final String TAG = SendJsonTaskPost.class.getSimpleName();
     private ResponseListener responseListener;
 
-    public SendJsonTask(ResponseListener responseListener) {
+    public SendJsonTaskPost(ResponseListener responseListener) {
         this.responseListener = responseListener;
     }
 
