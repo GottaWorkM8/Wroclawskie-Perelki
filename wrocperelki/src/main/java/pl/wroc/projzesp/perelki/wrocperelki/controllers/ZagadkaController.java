@@ -155,7 +155,7 @@ public class ZagadkaController {
 
 
 
-    @GetMapping("/api/zagadka/{id}/getRoadLength")
+    //@GetMapping("/api/zagadka/{id}/getRoadLength")
     float odlegloscZagadki(@PathVariable Long id,@RequestParam String gpsPosition) {
         Riddle zagadka = riddleRepository.getReferenceById(id);
         Set<Obiekt> miejscaZagadki = zagadka.getObiekty();
@@ -168,5 +168,13 @@ public class ZagadkaController {
             }
         }
         return minodleglosc;
+    }
+
+    @PostMapping("/api/zagadka/{id}/refreshCount")
+    public void refreshZagadka(Long id) {
+        Riddle zagadka = riddleRepository.getReferenceById(id);
+        zagadka.setObjectCount(countMiejsceZagadki(id).size());
+        riddleRepository.save(zagadka);
+        pl.szajsjem.SimpleLog.log("Odświerzenie object count dla id:"+id.toString());
     }
 }

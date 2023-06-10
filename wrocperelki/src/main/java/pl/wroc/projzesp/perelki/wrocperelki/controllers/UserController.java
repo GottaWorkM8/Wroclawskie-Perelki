@@ -212,6 +212,22 @@ public class UserController {
         return r.getPoints();
     }
 
+    @GetMapping("/makeAdmin")
+    void makeAdmin(@RequestParam String login){
+        User u = users.findByLogin(login);
+        if(u!=null){
+            u.setAdmin(true);
+            users.save(u);
+        }
+    }
+    @GetMapping("/deop")
+    void unMakeAdmin(@RequestParam String login){
+        User u = users.findByLogin(login);
+        if(u!=null){
+            u.setAdmin(false);
+            users.save(u);
+        }
+    }
 
 
 

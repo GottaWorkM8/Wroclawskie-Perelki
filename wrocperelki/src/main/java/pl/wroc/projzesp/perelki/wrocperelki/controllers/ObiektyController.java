@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.wroc.projzesp.perelki.wrocperelki.model.Obiekt;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.ObiektRepository;
+import pl.wroc.projzesp.perelki.wrocperelki.model.Riddle;
 import pl.wroc.projzesp.perelki.wrocperelki.model.User;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class ObiektyController {
      */
     @Autowired
     private UserController  userController;
+    @Autowired
+    private ZagadkaController  zagadkaController;
 
     //pobieranie wszystkich miejsc
     @GetMapping("/api/miejsca")
@@ -40,8 +43,18 @@ public class ObiektyController {
         User u = userController.getUser(key);
         if(u==null)return null;
         newObiekt.setAuthor(u.getLogin());
+        if(newObiekt.getRiddles()!=null){
+            if(!zagadkaController.oneZagadka(newObiekt.getRiddles().getId()).getAuthor().equals(u.getLogin())) {
+                pl.szajsjem.SimpleLog.log("próba: Nowy obiekt przez:"+u.getLogin()+" err: not your zagadka");
+                return null;
+            }
+        }
         pl.szajsjem.SimpleLog.log("Nowy obiekt przez:"+u.getLogin());
-        return miejsca.save(newObiekt);
+        Obiekt o = miejsca.save(newObiekt);
+        if(newObiekt.getRiddles()!=null) {
+            zagadkaController.refreshZagadka(newObiekt.getRiddles().getId());
+        }
+        return o;
     }
 
     //pobieranie jednego miejsca
@@ -85,12 +98,20 @@ public class ObiektyController {
                     miejsce.setInfoLink(newObiekt.getInfoLink());
                     miejsce.setVisible(newObiekt.isVisible());
                     pl.szajsjem.SimpleLog.log("Update obiektu o id:"+id.toString()+" przez:"+u.getLogin());
-                    return miejsca.save(miejsce);
+                    Obiekt r = miejsca.save(miejsce);
+                    if(miejsce.getRiddles()!=null) {
+                        zagadkaController.refreshZagadka(miejsce.getRiddles().getId());
+                    }
+                    return r;
                 })
                 .orElseGet(() -> {
                     newObiekt.setId(id);
                     pl.szajsjem.SimpleLog.log("Nowy obiekt o id:"+id.toString()+" przez:"+u.getLogin());
-                    return miejsca.save(newObiekt);
+                    Obiekt r = miejsca.save(newObiekt);
+                    if(newObiekt.getRiddles()!=null) {
+                        zagadkaController.refreshZagadka(newObiekt.getRiddles().getId());
+                    }
+                    return r;
                 });
     }
 
