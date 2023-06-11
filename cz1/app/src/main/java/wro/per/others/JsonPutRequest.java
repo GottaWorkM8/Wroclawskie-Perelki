@@ -3,9 +3,6 @@ package wro.per.others;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +11,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class JsonPostRequest extends AsyncTask<String, Void, String> {
+public class JsonPutRequest extends AsyncTask<String, Void, String> {
 
-    private static final String TAG = JsonPostRequest.class.getSimpleName();
+    private static final String TAG = JsonPutRequest.class.getSimpleName();
 
     private String json;
     private String url;
 
-    public JsonPostRequest(String json, String url) {
+    public JsonPutRequest(String json, String url) {
         this.json = json;
         this.url = url;
     }

@@ -16,9 +16,7 @@ import android.widget.TextView;
 
 
 import wro.per.R;
-import wro.per.others.APICallAsyncTask;
 import wro.per.others.ApiRequestTask;
-import wro.per.others.SendJsonTaskPost;
 
 public class LoginActivity extends AppCompatActivity implements ApiRequestTask.ApiResponseListener {
 
@@ -80,7 +78,7 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
                 keyOK=true;
                 testKeyBool=false;
 
-//                next();
+                next();
             } else{
                 keyOK=false;
                 testKeyBool=false;
@@ -101,6 +99,11 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+
+        String key = sharedPreferences.getString("userKey", "brak");
+            testKeyBool=true;
+            String url = "https://szajsjem.mooo.com/api/user/testkey?key="+key;
+            makeAPICall(url, "GET", "");
 
 //        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
 //        if(czyZalogowano)

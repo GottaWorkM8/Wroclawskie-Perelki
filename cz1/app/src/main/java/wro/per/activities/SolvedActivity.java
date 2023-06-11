@@ -88,8 +88,6 @@ public class SolvedActivity extends AppCompatActivity {
     }
 
     public void openMainPageActivity() {
-        Intent intent = new Intent(this, MainPageActivity.class);
-        startActivity(intent);
         finish();
     }
 

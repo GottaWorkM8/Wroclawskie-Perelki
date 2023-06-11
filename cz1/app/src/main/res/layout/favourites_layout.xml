@@ -110,8 +110,8 @@
             app:layout_constraintEnd_toStartOf="@+id/ubulioneTextView"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="10dp"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteY="10dp" />
 
         <TextView
             android:id="@+id/ubulioneTextView"
@@ -127,21 +127,18 @@
             app:layout_constraintTop_toTopOf="@+id/t_o_lista_zadagek" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/doneList"
+    <LinearLayout
+        android:id="@+id/favouritesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/listLayout"
-        android:layout_marginTop="0dp"
-        android:background="@color/red_4">
+        android:gravity="center_horizontal"
+        android:background="@color/red_4"
+        android:paddingVertical="20sp"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nic tu jeszcze nie ma"
-            android:textColor="@color/yellow"
-            android:textSize="30dp"
-            tools:ignore="MissingConstraints" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
 
 </RelativeLayout>

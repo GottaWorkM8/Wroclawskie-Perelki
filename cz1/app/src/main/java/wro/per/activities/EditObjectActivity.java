@@ -35,19 +35,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import wro.per.R;
-import wro.per.others.APICallAsyncTask;
-import wro.per.others.ApiRequestTask;
 import wro.per.others.JsonListReceiver;
 import wro.per.others.JsonObjectReceiver;
-import wro.per.others.JsonPostRequest;
+import wro.per.others.JsonPutRequest;
 import wro.per.others.LocationService;
 
-public class EditObjectActivity extends AppCompatActivity implements APICallAsyncTask.OnDataReceivedListener, JsonListReceiver.JsonReceiverListener, JsonObjectReceiver.JsonReceiverListener, ApiRequestTask.ApiResponseListener {
+public class EditObjectActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener, JsonObjectReceiver.JsonReceiverListener {
 
     private Float driftX, driftZ, driftY;
     private Float accelerometerZ;
-    private Float rotationZ=0f;
-    float tiltInDegrees=0;
+    private Float rotationZ = 0f;
+    float tiltInDegrees = 0;
     Bitmap bitmap;
     private EditText tileEditText, detailCoordsEditText, azimuthEditText, coordinates1EditTest, coordinates2EditTest;
     float azimuth, pitch, roll;
@@ -78,23 +76,13 @@ public class EditObjectActivity extends AppCompatActivity implements APICallAsyn
     String userKey;
 
 
-    double objectLatitude=0, objectLongitude=0, observationLatitude=0, observationLongitude=0, latitude, longitude, detailLatitude=0, detailLongitude=0;
-
-    @Override
-    public void onDataReceived(String data) {
-        // Obsłuż otrzymane dane
-    }
-
-    @Override
-    public void onApiResponse(String data) {
-
-    }
+    double objectLatitude = 0, objectLongitude = 0, observationLatitude = 0, observationLongitude = 0, latitude, longitude, detailLatitude = 0, detailLongitude = 0;
 
     private void makeAPICall(String url, String requestMethod, String dataToSend) {
 //        url = "https://szajsjem.mooo.com/api/user/testlogin";
 //        dataToSend = "{\"login\":\"user1\",\"password\":\"pass1\"}";
-        JsonPostRequest jsonPostRequest = new JsonPostRequest(dataToSend, url);
-        jsonPostRequest.execute();
+        JsonPutRequest jsonPutRequest = new JsonPutRequest(dataToSend, url);
+        jsonPutRequest.execute();
 
     }
 
@@ -103,23 +91,23 @@ public class EditObjectActivity extends AppCompatActivity implements APICallAsyn
         if (jsonObject != null) {
             objectData = jsonObject;
             try {
-                if(objectLatitude!=0 && objectLongitude!=0) {
+                if (objectLatitude != 0 && objectLongitude != 0) {
                     System.out.println("zmiana objectPosition");
                     objectData.put("objectPosition", objectLatitude + "," + objectLongitude);
                 }
-                if(observationLatitude!=0 && observationLongitude!=0) {
+                if (observationLatitude != 0 && observationLongitude != 0) {
                     System.out.println("zmiana trackingPosition");
                     objectData.put("trackingPosition", observationLatitude + "," + observationLongitude);
                 }
-                if(detailLatitude!=0 && detailLongitude!=0) {
+                if (detailLatitude != 0 && detailLongitude != 0) {
                     System.out.println("zmiana photoPosition");
                     objectData.put("photoPosition", detailLatitude + "," + detailLongitude);
                 }
-                if(rotationZ!=0f && tiltInDegrees!=0) {
+                if (rotationZ != 0f && tiltInDegrees != 0) {
                     System.out.println("zmiana telephoneOrientation");
                     objectData.put("telephoneOrientation", rotationZ + "," + tiltInDegrees);
                 }
-                String url = "https://szajsjem.mooo.com/api/miejsca/"+chosenObjectId+"?key="+userKey;
+                String url = "https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId + "?key=" + userKey;
                 System.out.println(url);
                 System.out.println(objectData.toString());
                 makeAPICall(url, "POST", objectData.toString());
@@ -257,17 +245,17 @@ public class EditObjectActivity extends AppCompatActivity implements APICallAsyn
         sendToDatabaseButton.setOnClickListener(view -> {
 
             JsonObjectReceiver jsonReceiver = new JsonObjectReceiver(this);
-            jsonReceiver.execute("https://szajsjem.mooo.com/api/miejsca/"+chosenObjectId);
+            jsonReceiver.execute("https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId);
 
             Toast.makeText(this, "Wysłane", Toast.LENGTH_SHORT).show();
             System.out.println("\n\nWybrane i wpisane dane:");
-            System.out.println("Zagadka: "+chosenRiddleId);
-            System.out.println("Obiekt: "+chosenObjectId);
-            System.out.println("Współrzędne obiektu: "+objectLatitude+", "+objectLongitude);
-            System.out.println("Współrzędne obserwacji: "+observationLatitude+", "+observationLongitude);
-            System.out.println("Współrzędne szczegółu: "+detailLatitude+", "+detailLongitude);
-            System.out.println("Kierunek telefonu: "+rotationZ);
-            System.out.println("Nachylenie telefonu: "+tiltInDegrees);
+            System.out.println("Zagadka: " + chosenRiddleId);
+            System.out.println("Obiekt: " + chosenObjectId);
+            System.out.println("Współrzędne obiektu: " + objectLatitude + ", " + objectLongitude);
+            System.out.println("Współrzędne obserwacji: " + observationLatitude + ", " + observationLongitude);
+            System.out.println("Współrzędne szczegółu: " + detailLatitude + ", " + detailLongitude);
+            System.out.println("Kierunek telefonu: " + rotationZ);
+            System.out.println("Nachylenie telefonu: " + tiltInDegrees);
 
         });
     }
@@ -300,8 +288,11 @@ public class EditObjectActivity extends AppCompatActivity implements APICallAsyn
                 JSONObject object = riddlesJsonList.get(i);
                 int id = object.getInt("id");
                 String name = object.getString("name");
-
-                riddlesHashMap.put(name, id);
+                String author = object.getString("author");
+                String login = sharedPreferences.getString("userLogin", "login");
+                if (author.equals(login)) {
+                    riddlesHashMap.put(name, id);
+                }
             }
             // Pobierz klucze z hashmapy
             keys = new ArrayList<>(riddlesHashMap.keySet());

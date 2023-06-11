@@ -75,10 +75,11 @@ public class MainPageActivity extends AppCompatActivity {
         openRiddlesMenuButton = (ImageButton) findViewById(R.id.listButton);
         openRiddlesMenuButton.setOnClickListener(view -> openSolvedActivity());
 
+
         final ImageButton openFavouritesMenuButton;
 
         openFavouritesMenuButton = findViewById(R.id.favouriteButton);
-
+        openFavouritesMenuButton.setOnClickListener(view -> openFavouritesActivity());
 
         final ImageButton openProfileMenuButton;
 
@@ -110,16 +111,9 @@ public class MainPageActivity extends AppCompatActivity {
 
         ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
 
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1079, 17.0385), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1094, 17.0310), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1106, 17.0610), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1049, 17.0244), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1083, 17.0299), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1131, 17.0457), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1062, 17.0453), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1098, 17.0317), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1130, 17.0197), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.1006, 17.0360), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true));
+        wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true));
 
         places.setPlaces(wroclawGeoPoints);
         places.drawPlaces();
@@ -267,7 +261,7 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     public void openFavouritesActivity() {
-        Intent intent = new Intent(this, SensorsActivity.class);
+        Intent intent = new Intent(this, FavouritesActivity.class);
         startActivity(intent);
     }
 
