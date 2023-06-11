@@ -5,10 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,10 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
         if (jsonObjects == null) {
-            Toast.makeText(this, "Nie udało się pobrać danych", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sesja wygasła", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+
         } else {
             try {
                 for(JSONObject object : jsonObjects)
@@ -120,7 +120,7 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
+        Intent intent = new Intent(this, SolvedActivityOld.class);
         startActivity(intent);
         finish();
     }

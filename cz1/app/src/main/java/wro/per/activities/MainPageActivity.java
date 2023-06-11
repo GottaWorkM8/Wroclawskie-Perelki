@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -93,6 +94,8 @@ public class MainPageActivity extends AppCompatActivity {
 
         ImageButton questionMarkButton = findViewById(R.id.questionMarkButton);
         textHint = findViewById(R.id.textHint);
+        textHint.setTextColor(getResources().getColor(R.color.yellow));
+        textHint.setGravity(Gravity.CENTER);
 
         questionMarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,14 +113,14 @@ public class MainPageActivity extends AppCompatActivity {
         places = Places.getInstance();
         places.setMapView(mapView);
 
-        ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
+//        ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
 
         //wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true));
         //wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true));
         //wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true));
 
         //places.setPlaces(wroclawGeoPoints);
-        //places.drawPlaces();
+        places.drawPlaces();
 
         class FetchData extends Thread {
 
@@ -250,13 +253,13 @@ public class MainPageActivity extends AppCompatActivity {
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
                 places.drawRing(mapView, point);
-                textHint.setText("min: " + places.close(point) + " km\n" + "max: " + places.far(point) + " km");
+                textHint.setText("min: " + places.close(point) + " km\n max: " + places.far(point) + " km");
             }
         }
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
+        Intent intent = new Intent(this, NotStartedActivity.class);
         startActivity(intent);
     }
 

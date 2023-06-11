@@ -38,9 +38,10 @@
         <TextView
             android:id="@+id/textHint"
             android:layout_width="wrap_content"
+            android:paddingHorizontal="30dp"
             android:layout_height="68dp"
             android:background="#B72121"
-            android:text="Odległosc 1: 530m Odleglosc 2: 5km"
+            android:textColor="@color/yellow"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textIsSelectable="false"

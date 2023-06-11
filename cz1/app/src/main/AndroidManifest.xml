@@ -28,13 +28,15 @@
         <activity
             android:name=".activities.FavouritesActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ObjectListActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ObjectInfoActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.InfoActivity"
             android:exported="true"
@@ -52,7 +54,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.SolvedActivity"
+            android:name=".activities.NotStartedActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.SolvedActivityOld"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

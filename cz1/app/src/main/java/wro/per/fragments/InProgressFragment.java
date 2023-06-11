@@ -1,11 +1,9 @@
 package wro.per.fragments;
 
 
-
 import static wro.per.activities.MainPageActivity.riddlesArrayList;
 
 import android.os.Bundle;
-
 
 
 import android.view.LayoutInflater;

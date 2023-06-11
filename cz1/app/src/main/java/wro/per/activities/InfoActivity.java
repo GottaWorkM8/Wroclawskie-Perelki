@@ -74,7 +74,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
+        Intent intent = new Intent(this, SolvedActivityOld.class);
         startActivity(intent);
         finish();
     }

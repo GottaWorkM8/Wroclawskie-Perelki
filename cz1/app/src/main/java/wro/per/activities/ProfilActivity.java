@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -81,7 +80,7 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
+        Intent intent = new Intent(this, SolvedActivityOld.class);
         startActivity(intent);
         finish();
     }
