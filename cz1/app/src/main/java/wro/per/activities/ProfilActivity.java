@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import wro.per.R;
+import wro.per.others.Places;
 
 public class ProfilActivity extends AppCompatActivity {
 
@@ -44,6 +45,8 @@ public class ProfilActivity extends AppCompatActivity {
 
         setIds();
         setLogin();
+        Places places = Places.getInstance();
+        System.out.println(places.getPlaces());
     }
 
     private void setLogin() {

@@ -107,16 +107,17 @@ public class MainPageActivity extends AppCompatActivity {
 
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
-        places = new Places(mapView);
+        places = Places.getInstance();
+        places.setMapView(mapView);
 
         ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
 
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true));
-        wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true));
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true));
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true));
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true));
 
-        places.setPlaces(wroclawGeoPoints);
-        places.drawPlaces();
+        //places.setPlaces(wroclawGeoPoints);
+        //places.drawPlaces();
 
         class FetchData extends Thread {
 
@@ -245,12 +246,11 @@ public class MainPageActivity extends AppCompatActivity {
                 double lat = intent.getDoubleExtra("latitude", 0f);
                 double lon = intent.getDoubleExtra("longitude", 0f);
 
-                System.out.println(lat + "    " + lon);
                 GeoPoint point = new GeoPoint(lat, lon);
                 osm.setPoint(point);
                 osm.drawYou(mapView, point);
                 places.drawRing(mapView, point);
-                textHint.setText("min: " + places.close(point) + " km\n" + places.far(point) + " km");
+                textHint.setText("min: " + places.close(point) + " km\n" + "max: " + places.far(point) + " km");
             }
         }
     }

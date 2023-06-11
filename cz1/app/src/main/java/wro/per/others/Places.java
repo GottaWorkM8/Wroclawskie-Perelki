@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Places {
+    private static Places instance;
 
     private ArrayList<Place> places;
 
@@ -17,8 +18,15 @@ public class Places {
 
     private MapView mapView;
 
-    public Places(MapView mapView){
+    public ArrayList<Place> getPlaces() {
+        return places;
+    }
+
+    public void setMapView(MapView mapView) {
         this.mapView = mapView;
+    }
+
+    public Places(){
         places = new ArrayList<Place>();
         drawnPlaces = new ArrayList<PlaceImage>();
     }
@@ -47,7 +55,7 @@ public class Places {
 
     public Place isClose(GeoPoint geoPoint){
         for(Place p : places){
-            if(p.getLocation().distanceToAsDouble(geoPoint) < p.getDistance()){
+            if(p.getLocation().distanceToAsDouble(geoPoint) < p.getRadius()){
                 return p;
             }
         }
@@ -118,5 +126,12 @@ public class Places {
             return decimalFormat.format(max);
         }
         return "-";
+    }
+
+    public static synchronized Places getInstance() {
+        if (instance == null) {
+            instance = new Places();
+        }
+        return instance;
     }
 }
