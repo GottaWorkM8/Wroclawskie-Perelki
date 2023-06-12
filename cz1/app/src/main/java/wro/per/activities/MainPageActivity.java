@@ -259,7 +259,7 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, NotStartedActivity.class);
+        Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
     }
 

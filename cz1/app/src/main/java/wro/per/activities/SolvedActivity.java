@@ -2,7 +2,9 @@ package wro.per.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,33 +22,36 @@ import java.util.List;
 import wro.per.R;
 import wro.per.others.JsonListReceiver;
 
-public class NotStartedActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
+public class SolvedActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
 
     ImageButton profilButton, homeButton, favouritesButton, infoButton;
     Button inProgress, notStarted;
 
-    List<JSONObject> notStartedRiddles = new ArrayList<>();
+    List<JSONObject> solvedRiddles = new ArrayList<>();
 
-    LinearLayout notStartedList;
+    LinearLayout solvedList;
+
+    SharedPreferences sharedPreferences;
+    String userKey;
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
         if (jsonObjects == null) {
             Toast.makeText(this, "Brak rozwiązanych zagadek", Toast.LENGTH_SHORT).show();
         } else {
-            notStartedRiddles.addAll(jsonObjects);
+            solvedRiddles.addAll(jsonObjects);
             showNotStarted();
         }
     }
 
     private void showNotStarted() {
-        for (int i = 0; i < notStartedRiddles.size(); i++) {
+        for (int i = 0; i < solvedRiddles.size(); i++) {
             try {
-                JSONObject object = notStartedRiddles.get(i);
+                JSONObject object = solvedRiddles.get(i);
                 View tile = getLayoutInflater().inflate(R.layout.riddle_tile_fragment, null, false);
                 String riddleName = object.getString("name");
                 TextView name = tile.findViewById(R.id.name);
-                name.setText("nieodblokowane (" + riddleName + ")");
+                name.setText(riddleName);
                 TextView objectCount = tile.findViewById(R.id.objectCount);
                 objectCount.setText(object.getString("objectCount"));
                 int riddleId = object.getInt("id");
@@ -56,7 +61,7 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
                     intent.putExtra("riddleName", riddleName);
                     startActivity(intent);
                 });
-                notStartedList.addView(tile);
+                solvedList.addView(tile);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -68,7 +73,11 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.not_started_layout);
+        setContentView(R.layout.solved_layout);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        userKey = sharedPreferences.getString("userKey", "defaultKey");
 
         profilButton = findViewById(R.id.profileButton);
         profilButton.setOnClickListener(view -> openProfileActivity());
@@ -86,17 +95,17 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
         inProgress.setOnClickListener(view -> openInPorgressActivity());
 
         notStarted = findViewById(R.id.nierozpoczeteButton);
-        notStarted.setOnClickListener(view -> openSolvedActivity());
+        notStarted.setOnClickListener(view -> openNotStartedActivity());
 
-        notStartedList = findViewById(R.id.notStartedList);
+        solvedList = findViewById(R.id.solvedList);
 
-        String apiUrl = "https://szajsjem.mooo.com/api/zagadka";
+        String apiUrl = "https://szajsjem.mooo.com/api/user/znalezioneZagadki?key="+userKey;
         JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
         jsonListReceiver.execute(apiUrl);
     }
 
-    private void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivity.class);
+    private void openNotStartedActivity() {
+        Intent intent = new Intent(this, NotStartedActivity.class);
         startActivity(intent);
         finish();
     }

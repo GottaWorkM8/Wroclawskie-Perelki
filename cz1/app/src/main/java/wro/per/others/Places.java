@@ -80,6 +80,7 @@ public class Places {
             }
 
             cmin = new CircleImage(geoPoint, mapView, (float) min);
+
             cmax = new CircleImage(geoPoint, mapView, (float) max);
             mapView.getOverlays().add(cmax);
             mapView.getOverlays().add(cmin);

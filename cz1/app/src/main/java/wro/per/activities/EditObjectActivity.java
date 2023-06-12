@@ -47,7 +47,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
     private Float rotationZ = 0f;
     float tiltInDegrees = 0;
     Bitmap bitmap;
-    private EditText tileEditText, detailCoordsEditText, azimuthEditText, coordinates1EditTest, coordinates2EditTest;
+    private EditText tileEditText, detailCoordsEditText, azimuthEditText, objectCoordinatesEditText, observeCoordinatesEditText;
     float azimuth, pitch, roll;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -70,9 +70,9 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
 
     JSONObject objectData = null;
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
 
+    SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
     String userKey;
 
 
@@ -92,7 +92,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
             objectData = jsonObject;
             try {
                 if (objectLatitude != 0 && objectLongitude != 0) {
-                    System.out.println("zmiana objectPosition");
+                    System.out.println("zmiana objectPosition na "+objectLatitude+", "+objectLongitude);
                     objectData.put("objectPosition", objectLatitude + "," + objectLongitude);
                 }
                 if (observationLatitude != 0 && observationLongitude != 0) {
@@ -179,8 +179,8 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            coordinates1EditTest = findViewById(R.id.wspolrzedne_obserwacji_edittext);
-            coordinates2EditTest = findViewById(R.id.wspolrzedne_obiektu_edittext);
+            objectCoordinatesEditText = findViewById(R.id.wspolrzedne_obiektu_edittext);
+            observeCoordinatesEditText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
             latitude = intent.getDoubleExtra("latitude", 3);
             longitude = intent.getDoubleExtra("longitude", 3);
         }
@@ -199,14 +199,14 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
 
         Button takePhotoButton;
         Button sendToDatabaseButton;
-        Button getCoordinates1Button;
-        Button getCoordinates2Button;
+        Button getObserveCoordinatesButton;
+        Button getObjectCoordinatesButton;
 
         tileEditText = findViewById(R.id.nachylenieEditText);
         azimuthEditText = findViewById(R.id.kierunekEditText);
         detailCoordsEditText = findViewById(R.id.wspolrzedne_szczegołu_edittext);
-        getCoordinates1Button = findViewById(R.id.wspolrzedne_obserwacji_button);
-        getCoordinates2Button = findViewById(R.id.wspolrzedne_obiektu_button);
+        getObserveCoordinatesButton = findViewById(R.id.wspolrzedne_obserwacji_button);
+        getObjectCoordinatesButton = findViewById(R.id.wspolrzedne_obiektu_button);
         takePhotoButton = findViewById(R.id.zdjecie_szczegolu_button);
         sendToDatabaseButton = findViewById(R.id.wyslij_button);
         spinnerRiddles = findViewById(R.id.zagadki_spinner);
@@ -220,25 +220,25 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         });
 
-        getCoordinates1Button.setOnClickListener(new View.OnClickListener() {
+        getObjectCoordinatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditObjectActivity.this, LocationService.class);
                 startService(intent);
                 objectLatitude = latitude;
                 objectLongitude = longitude;
-                coordinates1EditTest.setText(objectLatitude + ",  " + objectLongitude);
+                objectCoordinatesEditText.setText(objectLatitude + ",  " + objectLongitude);
             }
         });
 
-        getCoordinates2Button.setOnClickListener(new View.OnClickListener() {
+        getObserveCoordinatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditObjectActivity.this, LocationService.class);
                 startService(intent);
                 observationLatitude = latitude;
                 observationLongitude = longitude;
-                coordinates2EditTest.setText(observationLatitude + ",  " + observationLongitude);
+                observeCoordinatesEditText.setText(observationLatitude + ",  " + observationLongitude);
             }
         });
 

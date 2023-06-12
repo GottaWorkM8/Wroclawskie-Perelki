@@ -25,20 +25,48 @@
                 android:textColor="@color/yellow"
                 android:textSize="30dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="10sp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/yellow"
+                android:textSize="20dp"
+                android:text="Zagadka: "/>
             <!--    wybieranie zagadki-->
             <Spinner
                 android:id="@+id/zagadki_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10sp"
-                android:entries="@array/riddles_array" />
 
+                android:entries="@array/riddles_array" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:layout_marginBottom="10sp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:textColor="@color/yellow"
+                android:text="Obiekt: "/>
             <!--    wybieranie obiektu do edycji-->
             <Spinner
                 android:id="@+id/obiekty_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:entries="@array/objects_array" />
+        </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
 import wro.per.R;
+import wro.per.fragments.InProgressFragment;
+import wro.per.fragments.SolvedFragment;
+import wro.per.fragments.UnsolvedFragment;
+import wro.per.others.TabAdapter;
 
 public class SolvedActivityOld extends AppCompatActivity {
 
@@ -47,13 +52,13 @@ public class SolvedActivityOld extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(viewPager);
 
-//        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-//
-//        tabAdapter.addFragment(new SolvedFragment(), "Rozwiązane");
-//        tabAdapter.addFragment(new InProgressFragment(), "W trakcie");
-//        tabAdapter.addFragment(new UnsolvedFragment(), "Nierozwiązane");
-//
-//        viewPager.setAdapter(tabAdapter);
+        TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+
+        tabAdapter.addFragment(new SolvedFragment(), "Rozwiązane");
+        tabAdapter.addFragment(new InProgressFragment(), "W trakcie");
+        tabAdapter.addFragment(new UnsolvedFragment(), "Nierozwiązane");
+
+        viewPager.setAdapter(tabAdapter);
 
     }
 
