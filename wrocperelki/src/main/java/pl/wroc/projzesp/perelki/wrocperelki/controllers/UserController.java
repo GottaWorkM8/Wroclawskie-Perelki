@@ -41,8 +41,10 @@ public class UserController {
         User u = null;
         if(map.containsKey("login"))
             u = users.findByLogin(map.get("login"));
-        else if(map.containsKey("email"))
+        if(map.containsKey("email"))
             u = users.findByEmail(map.get("email"));
+        if(u==null)
+            u = users.findByEmail(map.get("login"));
 
         if(u!=null) {
             map.put("login",u.getLogin());
@@ -54,9 +56,16 @@ public class UserController {
     @PostMapping("/api/user/login")
     String login(@RequestBody Map<String,String> map) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if(testLogin(map)) {
-            User u = users.findByLogin(map.get("login"));
+            User u = null;
+            if(map.containsKey("login"))
+                u = users.findByLogin(map.get("login"));
+            else if(map.containsKey("email"))
+                u = users.findByEmail(map.get("email"));
+            if(u==null)
+                u = users.findByEmail(map.get("login"));
+            if(u==null)return "brakuje login albo email";
             List<LoggedUser> l = loggedUsers.findByUser(u);
-            if(l.size()>0) {
+            if(l.size()>10) {
                 for (LoggedUser lu : l) {
                     loggedUsers.delete(lu);
                 }
@@ -68,7 +77,17 @@ public class UserController {
             loggedUsers.save(new LoggedUser(token,u));
             return token;
         }
-        return null;
+        else{
+            User u = null;
+            if(map.containsKey("login"))
+                u = users.findByLogin(map.get("login"));
+            else if(map.containsKey("email"))
+                u = users.findByEmail(map.get("email"));
+            if(u==null)
+                u = users.findByEmail(map.get("login"));
+            if(u==null)return "zły login albo email";
+            return "złe hasło";
+        }
     }
 
     @GetMapping("/api/user/testkey")
@@ -80,21 +99,21 @@ public class UserController {
     }
 
     @PostMapping("/api/user/register")
-    boolean register(@RequestBody Map<String,String> map) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        if(map.isEmpty())return false;
-        if(!map.containsKey("login"))return false;
-        if(!map.containsKey("password"))return false;
-        if(!map.containsKey("email"))return false;
-        if(users.findByLogin(map.get("login"))!=null)return false;
-        if(users.findByEmail(map.get("email"))!=null)return false;
-        if(map.get("password").length()<3)return false;
-        if(map.get("login").length()<3)return false;
-        if(map.get("email").length()<3)return false;
-        if(!map.get("email").contains("@"))return false;
-        if(!map.get("email").contains("."))return false;
+    String register(@RequestBody Map<String,String> map) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if(map.isEmpty())return "fu";
+        if(!map.containsKey("login"))return "dodaj login w wywołaniu";
+        if(!map.containsKey("password"))return "dodaj haslo w wywołaniu";
+        if(!map.containsKey("email"))return "dodaj email w wywołaniu";
+        if(users.findByLogin(map.get("login"))!=null)return "login jest już zajęty";
+        if(users.findByEmail(map.get("email"))!=null)return "email jest już wykorzystany";
+        if(map.get("password").length()<3)return "hasło jest za krótkie";
+        if(map.get("login").length()<3)return "login jest za krótki";
+        if(map.get("email").length()<3)return "email jest za krótki";
+        if(!map.get("email").contains("@"))return "email bez małpy?";
+        if(!map.get("email").contains("."))return "email bez kropki?";
         pl.szajsjem.SimpleLog.log("Nowy urzytkownik o loginie:"+map.get("login") + " i emailu:"+map.get("email"));
         users.save(new User(0L,map.get("login"),passhash(map.get("password")),map.get("email"),false,0L,new HashSet<>(),new HashSet<>(),new HashSet<>()));
-        return true;
+        return "OK";
     }
 
 
