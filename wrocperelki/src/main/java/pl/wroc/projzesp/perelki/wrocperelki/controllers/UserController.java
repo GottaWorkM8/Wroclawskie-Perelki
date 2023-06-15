@@ -129,10 +129,10 @@ public class UserController {
         if(u==null)throw new Exception("Not logged");
         return u;
     }
-    @GetMapping("/api/user/logout")
+    @DeleteMapping("/api/user/logout")
     void forceLogout(@RequestParam String key) {
         if(loggedUsers.findByToken(key)!=null)
-            loggedUsers.deleteByToken(key);
+            loggedUsers.removeByToken(key);
     }
     @DeleteMapping("/api/user/logoutAll")
     void deleteAll(@RequestParam String key) {

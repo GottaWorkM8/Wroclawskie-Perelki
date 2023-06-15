@@ -7,9 +7,10 @@ import pl.wroc.projzesp.perelki.wrocperelki.model.User;
 import java.util.List;
 
 public interface LoggedUserRepository
-        extends JpaRepository<LoggedUser, Long> {
+        extends JpaRepository<LoggedUser, String> {
     LoggedUser findByToken(String token);
     List<LoggedUser> findByUser(User user);
 
     void deleteByToken(String key);
+    void removeByToken(String key);
 }
