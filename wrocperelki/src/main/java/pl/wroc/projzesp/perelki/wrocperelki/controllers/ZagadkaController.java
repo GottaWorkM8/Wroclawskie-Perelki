@@ -150,7 +150,22 @@ public class ZagadkaController {
         riddleRepository.deleteById(id);
     }
 
-
+    @GetMapping(value={"/api/zagadka/{id}/nieZnalezioneObiekty"})
+    Set<Obiekt> miejscenieZagadki(@PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        Set<Obiekt> nalezaceDoZagadki= countMiejsceZagadki(id);
+        Set<Obiekt> wszystkieZnalezione = u.getZnalezioneMiejsca();
+        return nalezaceDoZagadki.stream().filter(obiekt -> !wszystkieZnalezione.contains(obiekt)).collect(Collectors.toSet());
+    }
+    @GetMapping(value={"/api/zagadka/{id}/znalezioneObiekty"})
+    Set<Obiekt> miejsceZagadki(@PathVariable Long id,@RequestParam String key) throws Exception {
+        User u = userController.getUser(key);
+        if(u==null)return null;
+        Set<Obiekt> nalezaceDoZagadki= countMiejsceZagadki(id);
+        Set<Obiekt> wszystkieZnalezione = u.getZnalezioneMiejsca();
+        return nalezaceDoZagadki.stream().filter(wszystkieZnalezione::contains).collect(Collectors.toSet());
+    }
 
 
 
