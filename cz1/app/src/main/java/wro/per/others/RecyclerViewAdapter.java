@@ -25,7 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new RecyclerViewHolder(LayoutInflater.from(context).inflate(R.layout.riddle_tile_fragment,parent, false));
+        return new RecyclerViewHolder(LayoutInflater.from(context).inflate(R.layout.not_started_tile,parent, false));
     }
 
     @Override

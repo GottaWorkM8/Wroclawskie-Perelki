@@ -34,54 +34,56 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
 
     Boolean keyOK = false;
 
-    Boolean testLoginBool=false, loginBool=false, testKeyBool=false;
+    Boolean testLoginBool = false, loginBool = false, testKeyBool = false;
+    boolean testIfAlreadyLoginBool = false;
 
     @Override
     public void onApiResponse(String data) {
-//        System.out.println("Odebrane dane: "+data);
-        if(testLoginBool) {
+        //sprawdzanie czy aktualny klucz jest aktualny
+        if (testIfAlreadyLoginBool) {
+            testIfAlreadyLoginBool = false;
             if (data.equals("true")) {
+                System.out.println(sharedPreferences.getString("userLogin", "pusto"));
 
-                testLoginBool=false;
-                System.out.println(login);
-                System.out.println(password);
+                next();
+            }
+        }
+        //sprawdzanie wpisanych danych
+        else if (testLoginBool) {
+            if (data.equals("true")) {
+                testLoginBool = false;
+
                 editor.putString("userLogin", login);
                 editor.putString("userPass", password);
                 editor.apply();
 
-                loginBool=true;
+                loginBool = true;
                 makeAPICall("https://szajsjem.mooo.com/api/user/login", "POST", "{\"login\":\"" + login + "\",\"password\":\"" + password + "\"}");
 
-
             } else if (data.equals("false")) {
-                testLoginBool=false;
+                testLoginBool = false;
                 errorTextView.setText("Błędny login lub hasło");
             }
-        }
-        else if(loginBool){
-            if(data.equals("false"))
-            {
+        } else if (loginBool) {
+            if (data.equals("false")) {
                 System.out.println("Klucz się nie wygenerował");
-            }
-            else {
-                System.out.println("Generated key: "+data);
+            } else {
+                System.out.println("Generated key: " + data);
                 editor.putString("userKey", data);
                 editor.apply();
             }
 
-            loginBool=false;
+            loginBool = false;
             next();
-        }
-        else if(testKeyBool)
-        {
+        } else if (testKeyBool) {
             if (data.equals("true")) {
-                keyOK=true;
-                testKeyBool=false;
+                keyOK = true;
+                testKeyBool = false;
 
                 next();
-            } else{
-                keyOK=false;
-                testKeyBool=false;
+            } else {
+                keyOK = false;
+                testKeyBool = false;
 
             }
         }
@@ -99,11 +101,19 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
+        Intent intent = getIntent();
+        Boolean logout = intent.getBooleanExtra("logout", false);
+        if (!logout) {
+            String key = sharedPreferences.getString("userKey", "");
+            String login = sharedPreferences.getString("userLogin", "");
+            String pass = sharedPreferences.getString("userPass", "");
+            if (!key.equals("") && !login.equals("") && !pass.equals("")) {
+                testIfAlreadyLoginBool = true;
+                String url = "https://szajsjem.mooo.com/api/user/testkey?key=" + key;
+                makeAPICall(url, "GET", "");
+            }
+        }
 
-        String key = sharedPreferences.getString("userKey", "brak");
-            testKeyBool=true;
-            String url = "https://szajsjem.mooo.com/api/user/testkey?key="+key;
-            makeAPICall(url, "GET", "");
 
 //        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
 //        if(czyZalogowano)

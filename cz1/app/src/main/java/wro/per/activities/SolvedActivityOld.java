@@ -63,7 +63,7 @@ public class SolvedActivityOld extends AppCompatActivity {
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }

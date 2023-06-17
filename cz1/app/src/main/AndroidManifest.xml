@@ -30,6 +30,14 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.NotStartedActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.InProgressActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.FavouritesActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
@@ -46,7 +54,7 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ProfilActivity"
+            android:name=".activities.ProfileActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
@@ -55,10 +63,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CameraActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.NotStartedActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

@@ -41,7 +41,6 @@ import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
-import wro.per.others.Place;
 import wro.per.others.Places;
 import wro.per.others.Riddles;
 
@@ -54,11 +53,10 @@ public class MainPageActivity extends AppCompatActivity {
     public static ArrayList<Riddles> riddlesArrayList;
     public HashMap<Integer, String> objectHashMap = new HashMap<>();
 
-    public static ArrayList<HashMap<Integer,String>> objectsArrayList = new ArrayList<>();
+    public static ArrayList<HashMap<Integer, String>> objectsArrayList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
 
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
@@ -167,7 +165,7 @@ public class MainPageActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    for(Riddles riddle : riddlesArrayList){
+                    for (Riddles riddle : riddlesArrayList) {
                         URL url = new URL("https://szajsjem.mooo.com/api/zagadka/" + riddle.getId() + "/getMiejsca");
                         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                         InputStream inputStream = httpURLConnection.getInputStream();
@@ -184,7 +182,7 @@ public class MainPageActivity extends AppCompatActivity {
                         System.out.println(objectsArrayList.size());
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            objectsArrayList.get(objectsArrayList.size()-1).put(jsonObject.getInt("id"), jsonObject.getString("objectName"));
+                            objectsArrayList.get(objectsArrayList.size() - 1).put(jsonObject.getInt("id"), jsonObject.getString("objectName"));
                             System.out.println(objectHashMap.get("id"));
                         }
 
@@ -269,7 +267,7 @@ public class MainPageActivity extends AppCompatActivity {
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 

@@ -1,7 +1,5 @@
 package wro.per.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,20 +22,20 @@ import java.util.List;
 import wro.per.R;
 import wro.per.others.JsonListReceiver;
 
-public class SolvedActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
+public class InProgressActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
 
     ImageButton profilButton, homeButton, favouritesButton, infoButton;
-    Button inProgress, notStarted;
+    Button solved, notStarted;
     LinearLayout solvedList;
     SharedPreferences sharedPreferences;
     String userKey;
-    List<Integer> allSolvedIDsList = new ArrayList<>();
-    ArrayList<ArrayList<Integer>> allRiddlesAndObjectsAmount = new ArrayList<>();
-    List<JSONObject> allRiddlesList = new ArrayList<>();
+    TextView errorTextView;
 
+    ArrayList<ArrayList<Integer>> riddlesAndObjectsAmount = new ArrayList<>();
+    List<JSONObject> allRiddlesList = new ArrayList<>();
+    List<Integer> allInProgressIDsList = new ArrayList<>();
     Boolean getAllRiddlesBool = true;
     int checkId = 0;
-    TextView errorTextView;
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
@@ -52,15 +52,15 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
             if (jsonObjects == null || jsonObjects.size() == 0) {
                 System.out.println("Pusta lista lub zero znalezionych");
             } else {
-                if (jsonObjects.size() == allRiddlesAndObjectsAmount.get(checkId).get(1)) {
-
-                    System.out.println("Zostało znalezionych " + jsonObjects.size() + " z " + allRiddlesAndObjectsAmount.get(checkId).get(1) + " obiektów");
-                    allSolvedIDsList.add(allRiddlesAndObjectsAmount.get(checkId).get(0));
-                    System.out.println("rozwiązane zagadki: "+allSolvedIDsList);
+                if (jsonObjects.size() < riddlesAndObjectsAmount.get(checkId).get(1)) {
+                    riddlesAndObjectsAmount.get(checkId).add(jsonObjects.size());
+                    System.out.println("Zostało znalezionych " + jsonObjects.size() + " z " + riddlesAndObjectsAmount.get(checkId).get(1) + " obiektów");
+                    allInProgressIDsList.add(riddlesAndObjectsAmount.get(checkId).get(0));
+                    System.out.println("rozwiązane zagadki: " + allInProgressIDsList);
                 }
             }
             checkId++;
-            if (checkId < allRiddlesAndObjectsAmount.size()) {
+            if (checkId < riddlesAndObjectsAmount.size()) {
                 findAllSolved(checkId);
             } else {
                 showAllSolved();
@@ -69,15 +69,14 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
     }
 
 
-
     private void showAllSolved() {
-        if(allSolvedIDsList.size()==0) {
-            errorTextView.setText("Brak rozwiązanych zagadek");
+        if(allInProgressIDsList.size()==0) {
+            errorTextView.setText("Brak zagadek w trakcie");
             return;
         }
-            errorTextView.setVisibility(View.GONE);
-        for (int i = 0; i < allSolvedIDsList.size(); i++) {
-            JSONObject riddle = findRiddleById(allSolvedIDsList.get(i));
+        errorTextView.setVisibility(View.GONE);
+        for (int i = 0; i < allInProgressIDsList.size(); i++) {
+            JSONObject riddle = findRiddleById(allInProgressIDsList.get(i));
             int riddleId;
             String riddleName;
             int objectCount;
@@ -89,11 +88,18 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
                 throw new RuntimeException(e);
             }
 
-            View tile = getLayoutInflater().inflate(R.layout.solved_tile, null, false);
+            View tile = getLayoutInflater().inflate(R.layout.in_progress_tile, null, false);
             TextView name = tile.findViewById(R.id.name);
             name.setText(riddleName);
             TextView objectCountText = tile.findViewById(R.id.objectsCount);
             objectCountText.setText(String.valueOf(objectCount));
+            int foundCount = 0;
+            for (int j = 0; j < riddlesAndObjectsAmount.size(); j++) {
+                if (riddlesAndObjectsAmount.get(j).get(0) == riddleId)
+                    foundCount = riddlesAndObjectsAmount.get(j).get(2);
+            }
+            TextView foundCountText = tile.findViewById(R.id.FoundCount);
+            foundCountText.setText(String.valueOf(foundCount));
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);
@@ -101,6 +107,7 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
                 startActivity(intent);
             });
             solvedList.addView(tile);
+
         }
     }
 
@@ -125,7 +132,7 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
                 int riddleId = riddle.getInt("id");
                 int objectCount = riddle.getInt("objectCount");
                 System.out.println("Zagadka od id " + riddleId + " ma " + objectCount + " obiektów.");
-                allRiddlesAndObjectsAmount.add(new ArrayList<Integer>() {{
+                riddlesAndObjectsAmount.add(new ArrayList<Integer>() {{
                     add(riddleId);
                     add(objectCount);
                 }});
@@ -133,12 +140,12 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
 
             }
         }
-        if (allRiddlesAndObjectsAmount.size() > 0)
+        if (riddlesAndObjectsAmount.size() > 0)
             findAllSolved(checkId);
     }
 
     private void findAllSolved(int riddleListIndex) {
-        int riddleID = allRiddlesAndObjectsAmount.get(riddleListIndex).get(0);
+        int riddleID = riddlesAndObjectsAmount.get(riddleListIndex).get(0);
         String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleID + "/znalezioneObiekty?key=" + userKey;
         System.out.println(apiUrl);
         JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
@@ -149,7 +156,7 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.solved_layout);
+        setContentView(R.layout.in_progress_layout);
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
@@ -169,13 +176,13 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
         infoButton = findViewById(R.id.settingsButton);
         infoButton.setOnClickListener(view -> openInfoActivity());
 
-        inProgress = findViewById(R.id.wTrakcieButton);
-        inProgress.setOnClickListener(view -> openInProgressActivity());
+        solved = findViewById(R.id.rozwiazaneButton);
+        solved.setOnClickListener(view -> openSolvedActivity());
 
         notStarted = findViewById(R.id.nierozpoczeteButton);
         notStarted.setOnClickListener(view -> openNotStartedActivity());
 
-        solvedList = findViewById(R.id.solvedList);
+        solvedList = findViewById(R.id.inProgressScrollList);
 
         // pobieramy z api listę wszystkich zagadek
         String apiUrl = "https://szajsjem.mooo.com/api/zagadka";
@@ -189,8 +196,8 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
         finish();
     }
 
-    private void openInProgressActivity() {
-        Intent intent = new Intent(this, InProgressActivity.class);
+    private void openSolvedActivity() {
+        Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
         finish();
     }

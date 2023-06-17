@@ -86,46 +86,35 @@
 
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/listLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/red_2"
+        android:minHeight="100dp"
+        android:orientation="horizontal"
         android:layout_below="@id/menuBar">
-
-        <View
-            android:id="@+id/t_o_lista_zadagek"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@drawable/red_2_rectangle_shape"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
 
         <ImageView
             android:id="@+id/ikona_lista_zagadek"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="44dp"
+            android:layout_marginRight="44dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="36dp"
             android:contentDescription="ikona_lista_zagadek"
-            android:src="@drawable/yellow_list_icon"
-            app:layout_constraintEnd_toStartOf="@+id/ubulioneTextView"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="10dp" />
+            android:src="@drawable/yellow_profile_icon" />
 
         <TextView
-            android:id="@+id/ubulioneTextView"
-
+            android:text="Profil"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="124dp"
-            android:text="@string/profile_string"
+            android:layout_gravity="center"
             android:textColor="@color/yellow"
-            android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/t_o_lista_zadagek" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="36sp" />
+
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/favouritesList"
@@ -176,29 +165,10 @@
                         android:layout_marginTop="7dp"
                         android:text="nickname (login)"
                         android:textColor="@color/white"
+                        android:layout_marginBottom="10dp"
                         android:textSize="36sp" />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="10dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Aktywny od: "
-                            android:textColor="@color/yellow"
-                            android:textSize="23dp" />
-
-                        <TextView
-                            android:id="@+id/activity_date_textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="03.03.2023"
-                            android:textColor="@color/white"
-                            android:textSize="23dp" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -206,6 +176,7 @@
                     android:layout_width="340dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:paddingVertical="10dp"
                     android:background="@drawable/red_profile_tile_background"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
@@ -277,6 +248,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom">
@@ -301,6 +273,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_marginBottom="15dp"
                         android:layout_height="wrap_content">

@@ -20,13 +20,13 @@
     <string name="medium_string">Średnie</string>
     <string name="hard_string">Trudne</string>
 
-    <string name="locked_string">Nieodblokowane</string>
+    <string name="locked_string">Niespodzianka</string>
     <string name="murale_title_string">Murale</string>
     <string name="kampus_title_string">Kampus PWR</string>
     <string name="ostrow_title_string">Magiczny Ostrów Tumski</string>
     <string name="wieze_title_string">Wieże ciśnień</string>
 
-    <string name="number_of_objects_string">Ilość obiektów:&#160;</string>
+    <string name="number_of_objects_string">Liczba obiektów:&#160;</string>
     <string name="number_5_string"> 5</string>
     <string name="number_7_string"> 7</string>
     <string name="number_8_string"> 8</string>
@@ -73,5 +73,6 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="info_string">Informacje</string>
+    <string name="found_object_number_string">Znalezionych obiektów: </string>
 
 </resources>

@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.hardware.SensorManager;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,9 +48,11 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
     private Float rotationZ = 0f;
     float tiltInDegrees = 0;
     Bitmap bitmap;
-    private EditText tileEditText, detailCoordsEditText, azimuthEditText, objectCoordinatesEditText, observeCoordinatesEditText;
+    private EditText tiltEditText, detailCoordsEditText, azimuthEditText, objectCoordinatesEditText, observeCoordinatesEditText;
     float azimuth, pitch, roll;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    JsonObjectReceiver jsonReceiver;
 
     private Spinner spinnerRiddles, spinnerObjects;
 
@@ -69,6 +72,8 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
     List<String> keys = null;
 
     JSONObject objectData = null;
+    JSONObject object;
+    boolean getDataToShow = true;
 
 
     SharedPreferences.Editor editor;
@@ -83,6 +88,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
 //        dataToSend = "{\"login\":\"user1\",\"password\":\"pass1\"}";
         JsonPutRequest jsonPutRequest = new JsonPutRequest(dataToSend, url);
         jsonPutRequest.execute();
+        getDataToShow=true;
 
     }
 
@@ -90,30 +96,73 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
     public void onJsonReceived(JSONObject jsonObject) {
         if (jsonObject != null) {
             objectData = jsonObject;
-            try {
-                if (objectLatitude != 0 && objectLongitude != 0) {
-                    System.out.println("zmiana objectPosition na "+objectLatitude+", "+objectLongitude);
-                    objectData.put("objectPosition", objectLatitude + "," + objectLongitude);
+            if (getDataToShow) {
+
+
+                try {
+                    System.out.println("czyszczenie danych w polach");
+                        tiltEditText.setText("");
+                        azimuthEditText.setText("");
+                        objectCoordinatesEditText.setText("");
+                        observeCoordinatesEditText.setText("");
+                        detailCoordsEditText.setText("");
+
+                    if (objectData.getString("telephoneOrientation") != null)
+                    {
+                        String[] data = objectData.getString("telephoneOrientation").split(",");
+                        tiltEditText.setText(data[1]);
+                        azimuthEditText.setText(data[0]);
+                    }
+                    if (objectData.getString("objectPosition") != null)
+                    {
+                        String[] data = objectData.getString("objectPosition").split(",");
+                        if(data[0].length()>=11) data[0] = data[0].substring(0,10);
+                        if(data[1].length()>=11) data[1] = data[1].substring(0,10);
+                        objectCoordinatesEditText.setText(data[0]+","+data[1]);
+                    }
+                    if (objectData.getString("trackingPosition")!= null)
+                    {
+                        String[] data = objectData.getString("trackingPosition").split(",");
+                        if(data[0].length()>=11) data[0] = data[0].substring(0,10);
+                        if(data[1].length()>=11) data[1] = data[1].substring(0,10);
+                        observeCoordinatesEditText.setText(data[0]+","+data[1]);
+                    }
+                    if (objectData.getString("photoPosition") != null)
+                    {
+                        String[] data = objectData.getString("photoPosition").split(",");
+                        if(data[0].length()>=11) data[0] = data[0].substring(0,10);
+                        if(data[1].length()>=11) data[1] = data[1].substring(0,10);
+                        detailCoordsEditText.setText(data[0]+","+data[1]);
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-                if (observationLatitude != 0 && observationLongitude != 0) {
-                    System.out.println("zmiana trackingPosition");
-                    objectData.put("trackingPosition", observationLatitude + "," + observationLongitude);
+            } else
+                try {
+                    if (objectLatitude != 0 && objectLongitude != 0) {
+                        System.out.println("zmiana objectPosition na " + objectLatitude + ", " + objectLongitude);
+                        objectData.put("objectPosition", objectLatitude + "," + objectLongitude);
+                    }
+                    if (observationLatitude != 0 && observationLongitude != 0) {
+                        System.out.println("zmiana trackingPosition");
+                        objectData.put("trackingPosition", observationLatitude + "," + observationLongitude);
+                    }
+                    if (detailLatitude != 0 && detailLongitude != 0) {
+                        System.out.println("zmiana photoPosition");
+                        objectData.put("photoPosition", detailLatitude + "," + detailLongitude);
+                    }
+                    if (rotationZ != 0 && tiltInDegrees != 0) {
+                        System.out.println("zmiana telephoneOrientation");
+                        objectData.put("telephoneOrientation", rotationZ + "," + tiltInDegrees);
+                    }
+                    String url = "https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId + "?key=" + userKey;
+                    System.out.println(url);
+                    System.out.println(objectData.toString());
+                    makeAPICall(url, "POST", objectData.toString());
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-                if (detailLatitude != 0 && detailLongitude != 0) {
-                    System.out.println("zmiana photoPosition");
-                    objectData.put("photoPosition", detailLatitude + "," + detailLongitude);
-                }
-                if (rotationZ != 0f && tiltInDegrees != 0) {
-                    System.out.println("zmiana telephoneOrientation");
-                    objectData.put("telephoneOrientation", rotationZ + "," + tiltInDegrees);
-                }
-                String url = "https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId + "?key=" + userKey;
-                System.out.println(url);
-                System.out.println(objectData.toString());
-                makeAPICall(url, "POST", objectData.toString());
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
         } else {
             // Błąd w pobieraniu danych JSON lub brak danych
         }
@@ -156,7 +205,8 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 String selectedKey = keys.get(position);
                                 chosenObjectId = objectsHashMap.get(selectedKey);
-                                pokaTosta2();
+                                clearJsonReceiver();
+                                jsonReceiver.execute("https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId);
                             }
 
                             @Override
@@ -174,13 +224,17 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
         }
     }
 
+    private void clearJsonReceiver() {
+        jsonReceiver = null;
+        jsonReceiver = new JsonObjectReceiver(this);
+    }
+
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            objectCoordinatesEditText = findViewById(R.id.wspolrzedne_obiektu_edittext);
-            observeCoordinatesEditText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
+
             latitude = intent.getDoubleExtra("latitude", 3);
             longitude = intent.getDoubleExtra("longitude", 3);
         }
@@ -202,7 +256,12 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
         Button getObserveCoordinatesButton;
         Button getObjectCoordinatesButton;
 
-        tileEditText = findViewById(R.id.nachylenieEditText);
+        jsonReceiver = new JsonObjectReceiver(this);
+
+        objectCoordinatesEditText = findViewById(R.id.wspolrzedne_obiektu_edittext);
+        observeCoordinatesEditText = findViewById(R.id.wspolrzedne_obserwacji_edittext);
+
+        tiltEditText = findViewById(R.id.nachylenieEditText);
         azimuthEditText = findViewById(R.id.kierunekEditText);
         detailCoordsEditText = findViewById(R.id.wspolrzedne_szczegołu_edittext);
         getObserveCoordinatesButton = findViewById(R.id.wspolrzedne_obserwacji_button);
@@ -211,6 +270,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
         sendToDatabaseButton = findViewById(R.id.wyslij_button);
         spinnerRiddles = findViewById(R.id.zagadki_spinner);
         spinnerObjects = findViewById(R.id.obiekty_spinner);
+
 
         getRiddlesFromApi();
 
@@ -243,7 +303,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
         });
 
         sendToDatabaseButton.setOnClickListener(view -> {
-
+            getDataToShow = false;
             JsonObjectReceiver jsonReceiver = new JsonObjectReceiver(this);
             jsonReceiver.execute("https://szajsjem.mooo.com/api/miejsca/" + chosenObjectId);
 
@@ -258,6 +318,8 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
             System.out.println("Nachylenie telefonu: " + tiltInDegrees);
 
         });
+
+
     }
 
 
@@ -285,7 +347,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
                 return;
             }
             for (int i = 0; i < riddlesJsonList.size(); i++) {
-                JSONObject object = riddlesJsonList.get(i);
+                object = riddlesJsonList.get(i);
                 int id = object.getInt("id");
                 String name = object.getString("name");
                 String author = object.getString("author");
@@ -308,7 +370,6 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String selectedKey = keys.get(position);
                     chosenRiddleId = riddlesHashMap.get(selectedKey);
-                    pokaTosta();
                     getObjectsFromApi(riddlesHashMap.get(selectedKey));
                 }
 
@@ -324,13 +385,6 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
         }
     }
 
-    public void pokaTosta() {
-        Toast.makeText(this, "wybrana zagadka id: " + chosenRiddleId, Toast.LENGTH_SHORT).show();
-    }
-
-    public void pokaTosta2() {
-        Toast.makeText(this, "wybrany obiekt id: " + chosenObjectId, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -345,7 +399,7 @@ public class EditObjectActivity extends AppCompatActivity implements JsonListRec
             rotationZ = data.getFloatExtra("rotationZ", 0);
             tiltInDegrees = (float) Math.toDegrees(Math.acos(accelerometerZ / SensorManager.GRAVITY_EARTH));
 
-            tileEditText.setText(Float.toString(tiltInDegrees));
+            tiltEditText.setText(Float.toString(tiltInDegrees));
             azimuthEditText.setText(Float.toString(rotationZ));
 
             detailLatitude = data.getDoubleExtra("lat", 1);

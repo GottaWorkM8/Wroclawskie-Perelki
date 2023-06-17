@@ -30,14 +30,11 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
     int riddleId;
 
     SharedPreferences sharedPreferences;
-
+    TextView errorTextView;
     LinearLayout foundLinearLayout;
     String userKey;
 
-    Boolean allObjects = true;
-
-    ArrayList<JSONObject> all = new ArrayList<>();
-    ArrayList<JSONObject> found = new ArrayList<>();
+    Boolean foundObjectsBool = true;
 
     ArrayList<JSONObject> foundObjects = new ArrayList<>();
     ArrayList<JSONObject> notFoundObjects = new ArrayList<>();
@@ -46,126 +43,89 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
-        if (allObjects) {
-            all.addAll(jsonObjects);
-            allObjects = false;
-            String apiUrl = "https://szajsjem.mooo.com/api/user/znalezioneMiejsca?key=" + userKey;
+        if (foundObjectsBool) {
+            foundObjects.addAll(jsonObjects);
+            foundObjectsBool = false;
+            String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/nieZnalezioneObiekty?key=" + userKey;
             JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
             jsonListReceiver.execute(apiUrl);
-        }
-        else {
-            found.addAll(jsonObjects);
-            searchForNotFound();
+        } else {
+            notFoundObjects.addAll(jsonObjects);
+            showFound();
         }
     }
 
-    private void searchForNotFound() {
-
-        // pobieramy ze znalezionych tylko te, które są z danej zagadki
-        for (int i = 0; i < found.size(); i++) {
-            try {
-            JSONObject object = found.get(i);
-
-                JSONObject riddle = object.getJSONObject("riddles");
-                if(riddleId == riddle.getInt("id"))
-                {
-                    foundObjects.add(object);
-                }
-
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-
-        // pobieramy te jeszcze nie znalezione
-        for(int i=0;i<all.size();i++)
+    private void showFound() {
+        if(foundObjects.size()==0)
         {
-            JSONObject object = all.get(i);
-            Boolean isInAll = false;
-            try {
-                for(int j=0;j<foundObjects.size();j++)
-                {
-                    if(foundObjects.get(j).getInt("id") == object.getInt("id"))
-                    {
-                        isInAll = true;
-                    }
+            errorTextView.setText("Brak znalezionych obiektów");
+
+        }
+        else {
+            errorTextView.setVisibility(View.GONE);
+            for (int i = 0; i < foundObjects.size(); i++) {
+                try {
+                    JSONObject object = foundObjects.get(i);
+                    View tile = getLayoutInflater().inflate(R.layout.object_tile, null, false);
+                    String riddleName = object.getString("objectName");
+                    TextView name = tile.findViewById(R.id.objectName);
+                    name.setText(riddleName);
+                    tile.setOnClickListener(view -> {
+                        Intent intent = new Intent(this, ObjectInfoActivity.class);
+                        try {
+                            intent.putExtra("infoURL", object.getString("infoLink"));
+                            intent.putExtra("objectName", object.getString("objectName"));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        startActivity(intent);
+                        finish();
+                    });
+
+                    foundLinearLayout.addView(tile);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (JSONException e1) {
-                throw new RuntimeException(e1);
-            }
-            if(!isInAll)
-            {
-                notFoundObjects.add(all.get(i));
             }
         }
-
-        // wyświetlamy znalezione
-        for(int i=0;i<foundObjects.size();i++)
-        {
-            try {
-                JSONObject object = foundObjects.get(i);
-                View tile = getLayoutInflater().inflate(R.layout.riddle_tile_fragment, null, false);
-                String riddleName = object.getString("objectName");
-                TextView name = tile.findViewById(R.id.name);
-                name.setText(riddleName);
-                tile.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, ObjectInfoActivity.class);
-                    try {
-                        intent.putExtra("infoURL", object.getString("infoLink"));
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
-                    startActivity(intent);
-                });
-
-                foundLinearLayout.addView(tile);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         showOnMap();
 
     }
 
     private void showOnMap() {
         Places places = Places.getInstance();
-//        List<Object> objectList = places.getObjectList();
 
         ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
 
-        for(int i=0;i<notFoundObjects.size();i++)
-        {
+        for (int i = 0; i < notFoundObjects.size(); i++) {
             try {
                 JSONObject object = notFoundObjects.get(i);
                 String observeCoords = object.getString("trackingPosition");
                 String[] coords = observeCoords.split(",");
                 float lati = Float.parseFloat(coords[0]);
                 float longi = Float.parseFloat(coords[1]);
-                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi ), false));
-                System.out.println("Nieznaleziony obiekt: "+object.getString("objectName"));
+                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), false));
+                System.out.println("Nieznaleziony obiekt: " + object.getString("objectName"));
 
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        for(int i=0;i<foundObjects.size();i++)
-        {
+        for (int i = 0; i < foundObjects.size(); i++) {
             try {
                 JSONObject object = foundObjects.get(i);
                 String observeCoords = object.getString("trackingPosition");
                 String[] coords = observeCoords.split(",");
                 Float lati = Float.parseFloat(coords[0]);
                 Float longi = Float.parseFloat(coords[1]);
-                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi ), true));
-                System.out.println("Znaleziony obiekt: "+object.getString("objectName"));
+                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), true));
+                System.out.println("Znaleziony obiekt: " + object.getString("objectName"));
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
         }
-        
+
         places.deletePlaces();
         places.setPlaces(wroclawGeoPoints);
         places.drawPlaces();
@@ -176,6 +136,8 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.object_list_layout);
+
+        errorTextView = findViewById(R.id.errorTextView);
 
         profilButton = findViewById(R.id.profileButton);
         profilButton.setOnClickListener(view -> openProfileActivity());
@@ -190,29 +152,31 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
         infoButton.setOnClickListener(view -> openInfoActivity());
 
         Intent intent = getIntent();
-        String riddleName = intent.getStringExtra("riddleName");
+
         riddleId = intent.getIntExtra("riddleID", 0);
-        riddleNameTextView = findViewById(R.id.riddleName);
-        riddleNameTextView.setText(riddleName);
+        if (intent.getBooleanExtra("showRiddleName", true)) {
+            String riddleName = intent.getStringExtra("riddleName");
+            riddleNameTextView = findViewById(R.id.riddleName);
+            riddleNameTextView.setText(riddleName);
+        }
 
         foundLinearLayout = findViewById(R.id.found);
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userKey = sharedPreferences.getString("userKey", "defaultKey");
 
-        String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/getMiejsca";
+        String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/znalezioneObiekty?key=" + userKey;
         JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
         jsonListReceiver.execute(apiUrl);
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
 
     public void openMainPageActivity() {
-
         Intent intent = new Intent(this, MainPageActivity.class);
         startActivity(intent);
         finish();

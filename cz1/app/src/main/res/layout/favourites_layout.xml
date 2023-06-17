@@ -86,59 +86,62 @@
 
     </RelativeLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/listLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/red_2"
+        android:minHeight="100dp"
+        android:orientation="horizontal"
         android:layout_below="@id/menuBar">
-
-        <View
-            android:id="@+id/t_o_lista_zadagek"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@drawable/red_2_rectangle_shape"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
 
         <ImageView
             android:id="@+id/ikona_lista_zagadek"
             android:layout_width="wrap_content"
+            android:layout_marginRight="36dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="36dp"
             android:contentDescription="ikona_lista_zagadek"
-            android:src="@drawable/yellow_list_icon"
-            app:layout_constraintEnd_toStartOf="@+id/ubulioneTextView"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="10dp" />
+            android:src="@drawable/yellow_list_icon" />
 
         <TextView
-            android:id="@+id/ubulioneTextView"
-
+            android:text="Ulubione"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="124dp"
-            android:text="@string/favourites_string"
+            android:layout_gravity="center"
             android:textColor="@color/yellow"
-            android:textSize="36sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/t_o_lista_zadagek" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/favouritesList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/listLayout"
-        android:gravity="center_horizontal"
-        android:background="@color/red_4"
-        android:paddingVertical="20sp"
-        android:orientation="vertical">
-
+            android:textSize="36sp" />
 
 
     </LinearLayout>
+
+    <ScrollView
+        android:layout_below="@+id/listLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/red_4">
+
+        <LinearLayout
+            android:id="@+id/favouritesList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/listLayout"
+            android:background="@color/red_4"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingVertical="20sp">
+
+            <TextView
+                android:id="@+id/errorTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ładowanie..."
+                android:textSize="20dp"
+                android:gravity="center"
+                android:textColor="@color/yellow"/>
+
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

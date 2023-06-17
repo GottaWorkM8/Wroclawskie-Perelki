@@ -254,7 +254,7 @@
                         android:layout_height="156dp"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:background="@drawable/white_not_finished_bg_shape"
+                        android:background="@drawable/white_not_started_bg_shape"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.493"
@@ -342,7 +342,7 @@
                         android:id="@+id/quest3"
                         android:layout_width="336dp"
                         android:layout_height="156dp"
-                        android:background="@drawable/white_not_finished_bg_shape"
+                        android:background="@drawable/white_not_started_bg_shape"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

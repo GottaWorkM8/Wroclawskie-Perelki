@@ -26,6 +26,7 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
 
     ImageButton profilButton, homeButton, solvedButton, infoButton;
     LinearLayout favouritesList;
+    TextView errorTextView;
     SharedPreferences sharedPreferences;
     String userKey;
 
@@ -64,10 +65,12 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
 
         favouritesList = findViewById(R.id.favouritesList);
 
+        errorTextView = findViewById(R.id.errorTextView);
+
         profilButton = findViewById(R.id.profileButton);
         profilButton.setOnClickListener(view -> openProfileActivity());
 
-        solvedButton = findViewById(R.id.favouriteButton);
+        solvedButton = findViewById(R.id.listButton);
         solvedButton.setOnClickListener(view -> openSolvedActivity());
 
         homeButton = findViewById(R.id.homeButton);
@@ -86,6 +89,12 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
 
     public void showFavourites()
     {
+        if(favouritesObjects.size()==0)
+        {
+            errorTextView.setText("Brak ulubionych obiektów");
+            return;
+        }
+        errorTextView.setVisibility(View.GONE);
         for (int i = 0; i < favouritesObjects.size(); i++) {
             View tile = getLayoutInflater().inflate(R.layout.favourite_tile, null, false);
             TextView name = tile.findViewById(R.id.favouriteName);
@@ -94,8 +103,9 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectInfoActivity.class);
                 intent.putExtra("infoURL", favouritesObjects.get(finalI).get(3));
-                System.out.println("Link do strony: "+favouritesObjects.get(finalI).get(3));
+                intent.putExtra("objectName", favouritesObjects.get(finalI).get(1));
                 startActivity(intent);
+                finish();
             });
 
             ImageView starIcon = tile.findViewById(R.id.starIcon);
@@ -110,7 +120,7 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
@@ -120,7 +130,7 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivityOld.class);
+        Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
         finish();
     }

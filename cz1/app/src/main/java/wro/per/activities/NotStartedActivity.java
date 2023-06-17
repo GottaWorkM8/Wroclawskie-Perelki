@@ -1,8 +1,8 @@
 package wro.per.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,52 +25,145 @@ import wro.per.others.JsonListReceiver;
 public class NotStartedActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
 
     ImageButton profilButton, homeButton, favouritesButton, infoButton;
-    Button inProgress, notStarted;
+    Button inProgress, solved;
+    LinearLayout solvedList;
+    SharedPreferences sharedPreferences;
+    String userKey;
 
-    List<JSONObject> notStartedRiddles = new ArrayList<>();
-
-    LinearLayout notStartedList;
+    ArrayList<ArrayList<Integer>> AllRiddlesAndObjectsAmount = new ArrayList<>();
+    List<JSONObject> allRiddlesList = new ArrayList<>();
+    List<Integer> allNotStartedIDsList = new ArrayList<>();
+    Boolean getAllRiddlesBool = true;
+    int checkId = 0;
+    TextView errorTextView;
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
-        if (jsonObjects == null) {
-            Toast.makeText(this, "Brak rozwiązanych zagadek", Toast.LENGTH_SHORT).show();
+
+        if (getAllRiddlesBool) {
+            if (jsonObjects == null) {
+                Toast.makeText(this, "Brak zagadek", Toast.LENGTH_SHORT).show();
+            } else {
+                getAllRiddlesBool = false;
+                for(int i=0;i<jsonObjects.size();i++)
+                {
+                    int objectCount;
+                    try {
+                        objectCount = jsonObjects.get(i).getInt("objectCount");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if(objectCount>0)
+                        allRiddlesList.add(jsonObjects.get(i));
+                }
+                getIdsAndAmount();
+            }
         } else {
-            notStartedRiddles.addAll(jsonObjects);
-            showNotStarted();
+            if (jsonObjects == null || jsonObjects.size() == 0) {
+                System.out.println("Zostało znalezionych " + jsonObjects.size() + " z " + AllRiddlesAndObjectsAmount.get(checkId).get(1) + " obiektów");
+                allNotStartedIDsList.add(AllRiddlesAndObjectsAmount.get(checkId).get(0));
+                System.out.println("rozwiązane zagadki: "+ allNotStartedIDsList);
+
+            } else {
+                System.out.println("Jakieś już znaleziono");
+            }
+            checkId++;
+            if (checkId < AllRiddlesAndObjectsAmount.size()) {
+                findAllSolved(checkId);
+            } else {
+                showNotStarted();
+            }
         }
     }
-
     private void showNotStarted() {
-        for (int i = 0; i < notStartedRiddles.size(); i++) {
+        if(allNotStartedIDsList.size()==0)
+        {
+            errorTextView.setText("Brak nierozpoczętych zagadek");
+            return;
+        }
+        errorTextView.setVisibility(View.GONE);
+        for (int i = 0; i < allNotStartedIDsList.size(); i++) {
+            JSONObject riddle = findRiddleById(allNotStartedIDsList.get(i));
+            int riddleId;
+            String riddleName;
+            int objectCount;
             try {
-                JSONObject object = notStartedRiddles.get(i);
-                View tile = getLayoutInflater().inflate(R.layout.riddle_tile_fragment, null, false);
-                String riddleName = object.getString("name");
-                TextView name = tile.findViewById(R.id.name);
-                name.setText("nieodblokowane (" + riddleName + ")");
-                TextView objectCount = tile.findViewById(R.id.objectCount);
-                objectCount.setText(object.getString("objectCount"));
-                int riddleId = object.getInt("id");
-                tile.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, ObjectListActivity.class);
-                    intent.putExtra("riddleID", riddleId);
-                    intent.putExtra("riddleName", riddleName);
-                    startActivity(intent);
-                });
-                notStartedList.addView(tile);
+                riddleId = riddle.getInt("id");
+                riddleName = riddle.getString("name");
+                objectCount = riddle.getInt("objectCount");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-        }
 
+            View tile = getLayoutInflater().inflate(R.layout.not_started_tile, null, false);
+//            TextView name = tile.findViewById(R.id.name);
+//            name.setText(riddleName);
+            TextView objectCountText = tile.findViewById(R.id.objectsCount);
+            objectCountText.setText(String.valueOf(objectCount));
+            tile.setOnClickListener(view -> {
+                Intent intent = new Intent(this, ObjectListActivity.class);
+                intent.putExtra("riddleID", riddleId);
+                intent.putExtra("riddleName", riddleName);
+                intent.putExtra("showRiddleName", false);
+                startActivity(intent);
+            });
+            solvedList.addView(tile);
+
+        }
     }
 
+    private JSONObject findRiddleById(Integer id) {
+        for (int i = 0; i < allRiddlesList.size(); i++) {
+            int riddleID = 0;
+            try {
+                riddleID = allRiddlesList.get(i).getInt("id");
+            } catch (JSONException ignored) {
+
+            }
+            if (riddleID == id)
+                return allRiddlesList.get(i);
+        }
+        return null;
+    }
+
+    private void getIdsAndAmount() {
+        for (int i = 0; i < allRiddlesList.size(); i++) {
+            JSONObject riddle = allRiddlesList.get(i);
+            try {
+                int riddleId = riddle.getInt("id");
+                int objectCount = riddle.getInt("objectCount");
+                System.out.println("Zagadka od id " + riddleId + " ma " + objectCount + " obiektów.");
+                AllRiddlesAndObjectsAmount.add(new ArrayList<Integer>() {{
+                    add(riddleId);
+                    add(objectCount);
+                }});
+            } catch (JSONException ignored) {
+
+            }
+        }
+        if (AllRiddlesAndObjectsAmount.size() > 0)
+            findAllSolved(checkId);
+    }
+
+    private void findAllSolved(int riddleListIndex) {
+        int riddleID = AllRiddlesAndObjectsAmount.get(riddleListIndex).get(0);
+        String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleID + "/znalezioneObiekty?key=" + userKey;
+        System.out.println(apiUrl);
+        JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
+        jsonListReceiver.execute(apiUrl);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.not_started_layout);
+
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        userKey = sharedPreferences.getString("userKey", "defaultKey");
+
+        errorTextView = findViewById(R.id.errorTextView);
 
         profilButton = findViewById(R.id.profileButton);
         profilButton.setOnClickListener(view -> openProfileActivity());
@@ -83,13 +178,14 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
         infoButton.setOnClickListener(view -> openInfoActivity());
 
         inProgress = findViewById(R.id.wTrakcieButton);
-        inProgress.setOnClickListener(view -> openInPorgressActivity());
+        inProgress.setOnClickListener(view -> openInProgressActivity());
 
-        notStarted = findViewById(R.id.nierozpoczeteButton);
-        notStarted.setOnClickListener(view -> openSolvedActivity());
+        solved = findViewById(R.id.rozwiazaneButton);
+        solved.setOnClickListener(view -> openSolvedActivity());
 
-        notStartedList = findViewById(R.id.notStartedList);
+        solvedList = findViewById(R.id.notStartedList);
 
+        // pobieramy z api listę wszystkich zagadek
         String apiUrl = "https://szajsjem.mooo.com/api/zagadka";
         JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
         jsonListReceiver.execute(apiUrl);
@@ -101,12 +197,14 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
         finish();
     }
 
-    private void openInPorgressActivity() {
-        Toast.makeText(this, "Jeszcze nie działa", Toast.LENGTH_SHORT).show();
+    private void openInProgressActivity() {
+        Intent intent = new Intent(this, InProgressActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
@@ -126,6 +224,4 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
         startActivity(intent);
         finish();
     }
-
-
 }

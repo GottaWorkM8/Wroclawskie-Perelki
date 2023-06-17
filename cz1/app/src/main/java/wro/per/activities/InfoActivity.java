@@ -64,7 +64,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void openProfileActivity() {
-        Intent intent = new Intent(this, ProfilActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
     }
@@ -74,7 +74,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     public void openSolvedActivity() {
-        Intent intent = new Intent(this, SolvedActivityOld.class);
+        Intent intent = new Intent(this, SolvedActivity.class);
         startActivity(intent);
         finish();
     }

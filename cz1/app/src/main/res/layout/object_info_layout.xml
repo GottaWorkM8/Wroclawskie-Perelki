@@ -1,22 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red_1"
+    android:background="@drawable/map"
     android:orientation="vertical">
 
-    <TextView
+
+    <RelativeLayout
+        android:id="@+id/menuBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginVertical="10dp"
-        android:gravity="center"
-        android:text="Informacje o miejscu"
-        android:textColor="@color/yellow"
-        android:textSize="36sp" />
+        android:layout_height="91dp"
+        android:layout_gravity="top"
+        android:animateLayoutChanges="false">
+
+        <View
+            android:id="@+id/redMenuView"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/red_1_menu_bg_shape" />
+
+        <ImageButton
+            android:id="@+id/profileButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@id/listButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Profile"
+            android:scaleType="centerInside"
+            tools:src="@drawable/black_profile_icon" />
+
+        <ImageButton
+            android:id="@+id/homeButton"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/yellow_home_icon_bg_shape"
+            android:contentDescription="Home"
+            android:src="@drawable/black_home_icon"
+            android:visibility="visible"
+            tools:src="@drawable/black_home_icon" />
+
+        <ImageButton
+            android:id="@+id/listButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="25dp"
+            android:layout_toStartOf="@id/homeButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="List"
+            android:src="@drawable/black_list_icon"
+            tools:src="@drawable/black_list_icon" />
+
+        <ImageButton
+            android:id="@+id/favouriteButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_toEndOf="@id/homeButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Favourite"
+            android:src="@drawable/black_star_icon"
+            app:srcCompat="@drawable/black_star_icon"
+            tools:src="@drawable/black_star_icon" />
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="32dp"
+            android:layout_toEndOf="@id/favouriteButton"
+            android:background="@drawable/yellow_icon_bg_shape"
+            android:contentDescription="Settings"
+            android:src="@drawable/black_settings_icon"
+            app:srcCompat="@drawable/black_settings_icon"
+            tools:src="@drawable/black_settings_icon" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/listLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red_2"
+        android:minHeight="100dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/menuBar">
+
+        <ImageView
+            android:id="@+id/ikona_lista_zagadek"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="36dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="36dp"
+            android:contentDescription="ikona_lista_zagadek"
+            android:src="@drawable/yellow_list_icon" />
+
+        <TextView
+            android:id="@+id/object_name"
+            android:text="Nazwa obiektu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/yellow"
+            android:textSize="36sp" />
+
+
+    </LinearLayout>
 
     <WebView
+        android:layout_below="@+id/listLayout"
         android:id="@+id/infoWebView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+</RelativeLayout>
+
+
+
