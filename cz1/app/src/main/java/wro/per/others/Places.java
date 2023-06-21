@@ -54,7 +54,9 @@ public class Places {
     }
 
     public Place isClose(GeoPoint geoPoint){
+
         for(Place p : places){
+            System.out.println(p.getLocation().distanceToAsDouble(geoPoint) + "   " +  p.getRadius());
             if(p.getLocation().distanceToAsDouble(geoPoint) < p.getRadius()){
                 return p;
             }

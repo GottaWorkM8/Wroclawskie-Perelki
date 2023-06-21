@@ -12,7 +12,7 @@ public class Place {
     private GeoPoint location;
     private GeoPoint detail;
     private GeoPoint observe;
-    private double radius;
+    private double radius = 30;
     private boolean found;
     private String name;
     private String imageLink;

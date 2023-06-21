@@ -26,6 +26,9 @@
         android:screenOrientation="portrait"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activities.FoundObjectActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.SolvedActivity"
             android:exported="true"
             android:screenOrientation="portrait" />

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/red_1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/foundTextView"
+        android:text="Jesteś na miejscu!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/yellow"
+        android:layout_marginTop="70dp"
+        android:textSize="36sp" />
+
+    <TextureView
+        android:id="@+id/foundTextureView"
+        android:layout_margin="30dp"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_below="@id/foundTextView"
+        android:layout_centerInParent="true"
+        />
+
+    <Button
+        android:id="@+id/found_button"
+        android:layout_margin="30dp"
+        android:background="@drawable/yellow_button_bg_shape"
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Znalezione"
+        android:paddingHorizontal="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/foundTextureView"/>
+
+</RelativeLayout>

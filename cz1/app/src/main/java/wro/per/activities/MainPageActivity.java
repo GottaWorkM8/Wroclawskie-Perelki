@@ -41,6 +41,7 @@ import wro.per.BuildConfig;
 import wro.per.others.LocationService;
 import wro.per.others.OSM;
 import wro.per.R;
+import wro.per.others.Place;
 import wro.per.others.Places;
 import wro.per.others.Riddles;
 
@@ -58,6 +59,8 @@ public class MainPageActivity extends AppCompatActivity {
     public HashMap<Integer, String> objectHashMap = new HashMap<>();
 
     public static ArrayList<HashMap<Integer, String>> objectsArrayList = new ArrayList<>();
+
+    private boolean isActivityStarted = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,6 +224,31 @@ public class MainPageActivity extends AppCompatActivity {
 
         FetchDataObject fetchDataObject = new FetchDataObject();
         fetchDataObject.start(); // uruchamia wątek i wywołuje metodę run()
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                        checkDistance();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+    }
+
+    private void checkDistance(){
+        Place nearbyPlace = places.isClose(showLocation());
+
+        if(nearbyPlace != null && !isActivityStarted)
+        {
+            isActivityStarted = true;
+            openFoundObjectActivity();
+        }
     }
 
     void startService() {
@@ -290,6 +318,11 @@ public class MainPageActivity extends AppCompatActivity {
 
     public void openInfoActivity() {
         Intent intent = new Intent(this, InfoActivity.class);
+        startActivity(intent);
+    }
+
+    public void openFoundObjectActivity() {
+        Intent intent = new Intent(this, FoundObjectActivity.class);
         startActivity(intent);
     }
 }
