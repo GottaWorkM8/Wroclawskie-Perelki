@@ -50,6 +50,10 @@ public class MainPageActivity extends AppCompatActivity {
     private Places places;
     private MapView mapView;
     private OSM osm;
+
+    private double latitude;
+
+    private double longitude;
     public static ArrayList<Riddles> riddlesArrayList;
     public HashMap<Integer, String> objectHashMap = new HashMap<>();
 
@@ -89,6 +93,9 @@ public class MainPageActivity extends AppCompatActivity {
 
         openInfoMenuButton = (ImageButton) findViewById(R.id.settingsButton);
         openInfoMenuButton.setOnClickListener(view -> openInfoActivity());
+
+        ImageButton locateButton = findViewById(R.id.locateMeButton);
+        locateButton.setOnClickListener(view -> osm.setPoint(showLocation()));
 
         ImageButton questionMarkButton = findViewById(R.id.questionMarkButton);
         textHint = findViewById(R.id.textHint);
@@ -238,22 +245,32 @@ public class MainPageActivity extends AppCompatActivity {
 
     public class LocationBroadcastReciever extends BroadcastReceiver {
 
+        private boolean isPointSet = false;
+
         @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, @NonNull Intent intent) {
             osm.deleteYou(mapView);
             places.deleteRing(mapView);
             if (intent.getAction().equals("ACT_LOC")) {
-                double lat = intent.getDoubleExtra("latitude", 0f);
-                double lon = intent.getDoubleExtra("longitude", 0f);
+                latitude = intent.getDoubleExtra("latitude", 0f);
+                longitude = intent.getDoubleExtra("longitude", 0f);
 
-                GeoPoint point = new GeoPoint(lat, lon);
-                osm.setPoint(point);
+                GeoPoint point = new GeoPoint(latitude, longitude);
+                if (!isPointSet) {
+                    osm.setPoint(point);
+                    isPointSet = true;
+                }
+
                 osm.drawYou(mapView, point);
                 places.drawRing(mapView, point);
                 textHint.setText("min: " + places.close(point) + " km\n max: " + places.far(point) + " km");
             }
         }
+    }
+
+    private GeoPoint showLocation() {
+        return new GeoPoint(latitude,longitude);
     }
 
     public void openSolvedActivity() {
