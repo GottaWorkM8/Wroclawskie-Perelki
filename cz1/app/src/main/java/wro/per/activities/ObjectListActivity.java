@@ -104,7 +104,7 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
                 String[] coords = observeCoords.split(",");
                 float lati = Float.parseFloat(coords[0]);
                 float longi = Float.parseFloat(coords[1]);
-                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), false));
+                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), false, object));
                 System.out.println("Nieznaleziony obiekt: " + object.getString("objectName"));
 
             } catch (JSONException e) {
@@ -119,7 +119,7 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
                 String[] coords = observeCoords.split(",");
                 Float lati = Float.parseFloat(coords[0]);
                 Float longi = Float.parseFloat(coords[1]);
-                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), true));
+                wroclawGeoPoints.add(new Place(new GeoPoint(lati, longi), true, object));
                 System.out.println("Znaleziony obiekt: " + object.getString("objectName"));
             } catch (JSONException e) {
                 throw new RuntimeException(e);

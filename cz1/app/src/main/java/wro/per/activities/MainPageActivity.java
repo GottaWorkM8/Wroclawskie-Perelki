@@ -55,10 +55,6 @@ public class MainPageActivity extends AppCompatActivity {
     private double latitude;
 
     private double longitude;
-    public static ArrayList<Riddles> riddlesArrayList;
-    public HashMap<Integer, String> objectHashMap = new HashMap<>();
-
-    public static ArrayList<HashMap<Integer, String>> objectsArrayList = new ArrayList<>();
 
     private boolean isActivityStarted = false;
 
@@ -129,102 +125,6 @@ public class MainPageActivity extends AppCompatActivity {
 
         //places.setPlaces(wroclawGeoPoints);
         places.drawPlaces();
-
-        class FetchData extends Thread {
-
-            public ArrayList<Riddles> riddlesArrList = new ArrayList<>();
-
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL("https://szajsjem.mooo.com/api/zagadka");
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                    String line;
-
-                    StringBuilder data = new StringBuilder();
-                    while ((line = bufferedReader.readLine()) != null) {
-                        data.append(line);
-                    }
-
-                    JSONArray jsonArray = new JSONArray(data.toString());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        Riddles riddle = new Riddles();
-                        riddle.setId(jsonObject.getInt("id"));
-                        riddle.setDifficulty(jsonObject.getString("difficulty"));
-                        riddle.setName(jsonObject.getString("name"));
-                        riddle.setObjectCount(jsonObject.isNull("objectCount") ? null : jsonObject.getInt("objectCount"));
-                        riddle.setInfoLink(jsonObject.getString("infolink"));
-                        riddle.setAuthor(jsonObject.getString("author"));
-                        riddle.setPoints(jsonObject.isNull("points") ? null : jsonObject.getInt("points"));
-                        riddlesArrList.add(riddle);
-                    }
-                    bufferedReader.close();
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-        class FetchDataObject extends Thread {
-            @Override
-            public void run() {
-                try {
-                    for (Riddles riddle : riddlesArrayList) {
-                        URL url = new URL("https://szajsjem.mooo.com/api/zagadka/" + riddle.getId() + "/getMiejsca");
-                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                        InputStream inputStream = httpURLConnection.getInputStream();
-                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                        String line;
-
-                        StringBuilder data = new StringBuilder();
-                        while ((line = bufferedReader.readLine()) != null) {
-                            data.append(line);
-                        }
-
-                        JSONArray jsonArray = new JSONArray(data.toString());
-                        objectsArrayList.add(new HashMap<>());
-                        System.out.println(objectsArrayList.size());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            objectsArrayList.get(objectsArrayList.size() - 1).put(jsonObject.getInt("id"), jsonObject.getString("objectName"));
-                            System.out.println(objectHashMap.get("id"));
-                        }
-
-                        bufferedReader.close();
-                    }
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-
-        FetchData fetchData = new FetchData();
-        fetchData.start(); // uruchamia wątek i wywołuje metodę run()
-
-        while (fetchData.isAlive()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        riddlesArrayList = fetchData.riddlesArrList;
-
-        FetchDataObject fetchDataObject = new FetchDataObject();
-        fetchDataObject.start(); // uruchamia wątek i wywołuje metodę run()
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -239,15 +139,19 @@ public class MainPageActivity extends AppCompatActivity {
             }
         }).start();
 
-    }
+        }
+
 
     private void checkDistance(){
         Place nearbyPlace = places.isClose(showLocation());
 
-        if(nearbyPlace != null && !isActivityStarted)
+        if(nearbyPlace != null && !isActivityStarted &&  nearbyPlace.isFound() == false)
         {
             isActivityStarted = true;
-            openFoundObjectActivity();
+            Intent intent = new Intent(this, FoundObjectActivity.class);
+            intent.putExtra("nearbyPlace", nearbyPlace.getObject().toString());  // Przekazanie miejsca do Intent jako dodatkowe dane
+            startActivity(intent);
+            nearbyPlace.setFound(true);
         }
     }
 
@@ -292,7 +196,7 @@ public class MainPageActivity extends AppCompatActivity {
 
                 osm.drawYou(mapView, point);
                 places.drawRing(mapView, point);
-                textHint.setText("min: " + places.close(point) + " km\n max: " + places.far(point) + " km");
+                textHint.setText("min: " + places.close(point) + " m\n max: " + places.far(point) + " m");
             }
         }
     }

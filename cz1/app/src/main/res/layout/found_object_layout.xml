@@ -17,14 +17,16 @@
         android:layout_marginTop="70dp"
         android:textSize="36sp" />
 
-    <TextureView
+    <ImageView
         android:id="@+id/foundTextureView"
-        android:layout_margin="30dp"
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:layout_below="@id/foundTextView"
         android:layout_centerInParent="true"
-        />
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp" />
 
     <Button
         android:id="@+id/found_button"

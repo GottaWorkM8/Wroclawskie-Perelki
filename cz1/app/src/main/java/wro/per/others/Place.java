@@ -1,12 +1,14 @@
 package wro.per.others;
 
+import org.json.JSONObject;
 import org.osmdroid.util.GeoPoint;
 
 public class Place {
 
-    public Place(GeoPoint location, boolean b){
+    public Place(GeoPoint location, boolean b, JSONObject Object){
         this.location = location;
         this.found = b;
+        this.Object = Object;
     }
 
     private GeoPoint location;
@@ -14,8 +16,10 @@ public class Place {
     private GeoPoint observe;
     private double radius = 30;
     private boolean found;
+    private JSONObject Object;
     private String name;
     private String imageLink;
+
     private float azimuth;
     private float tilt;
 
@@ -25,6 +29,10 @@ public class Place {
 
     public GeoPoint getObserve() {
         return observe;
+    }
+
+    public JSONObject getObject() {
+        return Object;
     }
 
     public String getName() {
@@ -37,6 +45,10 @@ public class Place {
 
     public float getAzimuth() {
         return azimuth;
+    }
+
+    public void setFound(boolean found) {
+        this.found = found;
     }
 
     public float getTilt() {
@@ -54,4 +66,6 @@ public class Place {
     public double getRadius() {
         return radius;
     }
+
+
 }

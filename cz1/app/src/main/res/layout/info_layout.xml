@@ -161,11 +161,11 @@
                 <Button
                     android:id="@+id/edycja_obiektu_button"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="eEdycja obiektu"
-                    android:paddingHorizontal="10dp"
                     android:background="@drawable/yellow_button_bg_shape"
-                    android:layout_height="wrap_content" />
+                    android:paddingHorizontal="10dp"
+                    android:text="Edycja obiektu" />
 
             </LinearLayout>
         </ScrollView>
