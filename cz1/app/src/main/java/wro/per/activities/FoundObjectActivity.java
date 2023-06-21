@@ -22,6 +22,7 @@ public class FoundObjectActivity extends AppCompatActivity {
     private ImageView imageView;
     private Button buttonFind;
     private boolean found = false;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class FoundObjectActivity extends AppCompatActivity {
         buttonFind.setOnClickListener(view ->
         {
             Intent intent = new Intent(this, CameraActivity.class);
+            intent.putExtra("search",  id);
             startActivity(intent);
             finish();
         });
@@ -42,8 +44,8 @@ public class FoundObjectActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 String imageUrl = jsonObject.getString("photoObjectLink");
-                Log.d("LINKaaaaaaa","imageUrl");
-                Log.d("LINKaaaaaaa",imageUrl);
+                id = jsonObject.getInt("id");
+
                 Picasso.get().load(imageUrl).into(imageView);
             } catch (JSONException e) {
                 e.printStackTrace();

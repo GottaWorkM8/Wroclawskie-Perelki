@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -50,10 +51,11 @@ import java.util.List;
 import java.util.UUID;
 
 import wro.per.R;
+import wro.per.others.ApiRequestTask;
 import wro.per.others.LocationService;
 import wro.per.others.SensorDataCollector;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements ApiRequestTask.ApiResponseListener {
     private Button captureButton;
     private SensorDataCollector sensorDataCollector;
 
@@ -94,6 +96,8 @@ public class CameraActivity extends AppCompatActivity {
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
+    private int id;
+
 //    private float[] accelerometerValues = new float [3];
 
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
@@ -122,6 +126,9 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.camera_layout);
         sensorDataCollector = new SensorDataCollector(this);
         textureView = (TextureView)findViewById(R.id.textureView);
+        Intent intent = getIntent();
+
+        id = intent.getIntExtra("search", 0);
 
         // Uzyskanie rozmiarów ekranu
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -270,7 +277,20 @@ public class CameraActivity extends AppCompatActivity {
 
     private void backToProfile(String path)
     {
+        if (id != 0)
+        {
+            SharedPreferences sharedPreferences;
+            String userKey;
+
+            sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            userKey = sharedPreferences.getString("userKey", "defaultKey");
+            ApiRequestTask apiRequestTask = new ApiRequestTask("https://szajsjem.mooo.com/api/user/znalezioneMiejsca?key=" + userKey,
+                    "POST", "{\"id\":" + id + "}", this);
+            apiRequestTask.execute();
+        }
+
         Intent intent = new Intent();
+
         //tu powinno dać się przekazać odczyt sensorów do ProfilActivity tak jak zdjęcie
         intent.putExtra("imagePath", path);
         intent.putExtra("azimuth", getSensorValues(1));
@@ -439,5 +459,10 @@ public class CameraActivity extends AppCompatActivity {
             default:
                 return 0;
         }
+    }
+
+    @Override
+    public void onApiResponse(String response) {
+
     }
 }
