@@ -81,10 +81,12 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
             int riddleId;
             String riddleName;
             int objectCount;
+            String difficulty;
             try {
                 riddleId = riddle.getInt("id");
                 riddleName = riddle.getString("name");
                 objectCount = riddle.getInt("objectCount");
+                difficulty = riddle.getString("difficulty");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -94,6 +96,8 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
             name.setText(riddleName);
             TextView objectCountText = tile.findViewById(R.id.objectsCount);
             objectCountText.setText(String.valueOf(objectCount));
+            TextView difficultyText = tile.findViewById(R.id.difficulty);
+            difficultyText.setText(difficulty);
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);

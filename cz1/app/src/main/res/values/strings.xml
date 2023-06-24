@@ -74,5 +74,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="info_string">Informacje</string>
     <string name="found_object_number_string">Znalezionych obiektów: </string>
+    <string name="poziom_trudnosci">Poziom trudności:&#160;</string>
+    <string name="autor">Autor:&#160;</string>
 
 </resources>

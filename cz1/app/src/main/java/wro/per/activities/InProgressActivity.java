@@ -80,10 +80,12 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
             int riddleId;
             String riddleName;
             int objectCount;
+            String difficulty;
             try {
                 riddleId = riddle.getInt("id");
                 riddleName = riddle.getString("name");
                 objectCount = riddle.getInt("objectCount");
+                difficulty = riddle.getString("difficulty");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -100,6 +102,8 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
             }
             TextView foundCountText = tile.findViewById(R.id.FoundCount);
             foundCountText.setText(String.valueOf(foundCount));
+            TextView difficultyText = tile.findViewById(R.id.difficulty);
+            difficultyText.setText(difficulty);
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);

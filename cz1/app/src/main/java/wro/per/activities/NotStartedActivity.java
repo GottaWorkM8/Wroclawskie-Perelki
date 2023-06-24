@@ -87,10 +87,14 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
             int riddleId;
             String riddleName;
             int objectCount;
+            String difficulty;
+            String author;
             try {
                 riddleId = riddle.getInt("id");
                 riddleName = riddle.getString("name");
                 objectCount = riddle.getInt("objectCount");
+                difficulty = riddle.getString("difficulty");
+                author = riddle.getString("author");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -100,6 +104,10 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
 //            name.setText(riddleName);
             TextView objectCountText = tile.findViewById(R.id.objectsCount);
             objectCountText.setText(String.valueOf(objectCount));
+            TextView difficultyText = tile.findViewById(R.id.difficulty);
+            difficultyText.setText(difficulty);
+            TextView authorText = tile.findViewById(R.id.author);
+            authorText.setText(author);
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);
@@ -184,6 +192,8 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
         solved.setOnClickListener(view -> openSolvedActivity());
 
         solvedList = findViewById(R.id.notStartedList);
+
+
 
         // pobieramy z api listę wszystkich zagadek
         String apiUrl = "https://szajsjem.mooo.com/api/zagadka";
