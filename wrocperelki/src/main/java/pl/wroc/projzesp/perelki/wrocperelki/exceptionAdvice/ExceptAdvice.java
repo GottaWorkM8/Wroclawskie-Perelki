@@ -12,7 +12,7 @@ public class ExceptAdvice {
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     String employeeNotFoundHandler(Exception ex) {
         pl.szajsjem.SimpleLog.log("Wyjątek przetwarzania:"+ex.toString());
         System.out.println(ex.getMessage());

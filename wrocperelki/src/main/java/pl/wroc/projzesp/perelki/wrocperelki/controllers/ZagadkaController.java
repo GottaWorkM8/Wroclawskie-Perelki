@@ -17,30 +17,8 @@ import java.util.stream.Collectors;
 public class ZagadkaController {
     @Autowired
     private RiddleRepository riddleRepository;
-    /*
-    private Long id;
-    private String difficulty;
-    private String name;
-    private int objectCount;
-    private String infolink;
-    private String author;
-    private int points;
-     */
     @Autowired
     private ObiektRepository miejsca;
-    /*
-    private Long id ;
-    private String objectName ;
-    private String objectPosition ;
-    private String trackingPosition ;
-    private String photoPosition ;
-    private String photoShowRadius ;
-    private String telephoneOrientation ;
-    private String photoObjectLink  ;
-    private String photoLink  ;
-    private String infoLink  ;
-    private boolean visible ;
-     */
     
     @Autowired
     private UserController  userController;
@@ -156,7 +134,11 @@ public class ZagadkaController {
         if(u==null)return null;
         Set<Obiekt> nalezaceDoZagadki= countMiejsceZagadki(id);
         Set<Obiekt> wszystkieZnalezione = u.getZnalezioneMiejsca();
-        return nalezaceDoZagadki.stream().filter(obiekt -> !wszystkieZnalezione.contains(obiekt)).collect(Collectors.toSet());
+        var t = nalezaceDoZagadki.stream().filter(obiekt -> !wszystkieZnalezione.contains(obiekt)).collect(Collectors.toSet());
+        if(t.isEmpty())
+            if(!nalezaceDoZagadki.isEmpty())
+                userController.fastAddZnalezionaZagadka(nalezaceDoZagadki.iterator().next().getRiddles(),u);
+        return t;
     }
     @GetMapping(value={"/api/zagadka/{id}/znalezioneObiekty"})
     Set<Obiekt> miejsceZagadki(@PathVariable Long id,@RequestParam String key) throws Exception {
@@ -190,6 +172,6 @@ public class ZagadkaController {
         Riddle zagadka = riddleRepository.getReferenceById(id);
         zagadka.setObjectCount(countMiejsceZagadki(id).size());
         riddleRepository.save(zagadka);
-        pl.szajsjem.SimpleLog.log("Odświerzenie object count dla id:"+id.toString());
+        pl.szajsjem.SimpleLog.log("Odświerzenie object count dla id:"+id);
     }
 }

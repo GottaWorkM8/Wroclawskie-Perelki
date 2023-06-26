@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.wroc.projzesp.perelki.wrocperelki.model.Obiekt;
 import pl.wroc.projzesp.perelki.wrocperelki.interfaces.ObiektRepository;
-import pl.wroc.projzesp.perelki.wrocperelki.model.Riddle;
 import pl.wroc.projzesp.perelki.wrocperelki.model.User;
 
 import java.util.List;
@@ -13,31 +12,16 @@ import java.util.List;
 public class ObiektyController {
     @Autowired
     private ObiektRepository miejsca;
-    /*
-    private Long id ;
-    private String objectName ;
-    private String objectPosition ;
-    private String trackingPosition ;
-    private String photoPosition ;
-    private String photoShowRadius ;
-    private String telephoneOrientation ;
-    private String photoObjectLink  ;
-    private String photoLink  ;
-    private String infoLink  ;
-    private boolean visible ;
-     */
     @Autowired
     private UserController  userController;
     @Autowired
     private ZagadkaController  zagadkaController;
 
-    //pobieranie wszystkich miejsc
     @GetMapping("/api/miejsca")
     public List<Obiekt> getMiejsca() {
         return miejsca.findAll();
     }
 
-    //wkładanie nowego miejsca
     @PostMapping("/api/miejsca")
     Obiekt newMiejsce(@RequestBody Obiekt newObiekt,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);
@@ -57,21 +41,18 @@ public class ObiektyController {
         return o;
     }
 
-    //pobieranie jednego miejsca
     @GetMapping("/api/miejsca/{id}")
     public Obiekt getMiejsce(@PathVariable Long id) throws Exception {
         return miejsca.findById(id)
                 .orElseThrow(() -> new Exception(String.valueOf(id)));
     }
 
-    //pobieranie ile jest miejsc
     @GetMapping("/api/miejsca/getCount")
     int countMiejsce() {
         //todo not count invisible
         return miejsca.findAll().size();
     }
 
-    //edycja miejsca
     @PutMapping("/api/miejsca/{id}")
     Obiekt replaceMiejsce(@RequestBody Obiekt newObiekt, @PathVariable Long id,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);
@@ -97,7 +78,7 @@ public class ObiektyController {
                     miejsce.setPhotoLink(newObiekt.getPhotoLink());
                     miejsce.setInfoLink(newObiekt.getInfoLink());
                     miejsce.setVisible(newObiekt.isVisible());
-                    pl.szajsjem.SimpleLog.log("Update obiektu o id:"+id.toString()+" przez:"+u.getLogin());
+                    pl.szajsjem.SimpleLog.log("Update obiektu o id:"+id+" przez:"+u.getLogin());
                     Obiekt r = miejsca.save(miejsce);
                     if(miejsce.getRiddles()!=null) {
                         zagadkaController.refreshZagadka(miejsce.getRiddles().getId());
@@ -106,7 +87,7 @@ public class ObiektyController {
                 })
                 .orElseGet(() -> {
                     newObiekt.setId(id);
-                    pl.szajsjem.SimpleLog.log("Nowy obiekt o id:"+id.toString()+" przez:"+u.getLogin());
+                    pl.szajsjem.SimpleLog.log("Nowy obiekt o id:"+id+" przez:"+u.getLogin());
                     Obiekt r = miejsca.save(newObiekt);
                     if(newObiekt.getRiddles()!=null) {
                         zagadkaController.refreshZagadka(newObiekt.getRiddles().getId());
@@ -116,7 +97,6 @@ public class ObiektyController {
     }
 
 
-    //Usówanie raczej nie, lepiej zmienić widoczność
     @DeleteMapping("/api/miejsca/{id}")
     void deleteEmployee(@PathVariable Long id,@RequestParam String key) throws Exception {
         User u = userController.getUser(key);

@@ -17,8 +17,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.*;
-
-import static java.util.Objects.hash;
+import java.util.HashMap;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
@@ -92,10 +92,7 @@ public class UserController {
 
     @GetMapping("/api/user/testkey")
     boolean testkey(@RequestParam String key) {
-        if(loggedUsers.findByToken(key)!=null) {
-            return true;
-        }
-        return false;
+        return loggedUsers.findByToken(key) != null;
     }
 
     @PostMapping("/api/user/register")
@@ -129,6 +126,7 @@ public class UserController {
         if(u==null)throw new Exception("Not logged");
         return u;
     }
+
     @DeleteMapping("/api/user/logout")
     void forceLogout(@RequestParam String key) {
         if(loggedUsers.findByToken(key)!=null)
@@ -148,7 +146,7 @@ public class UserController {
         if(Objects.equals(u.getUserId(), id)) {
             loggedUsers.deleteByToken(key);
             users.deleteById(id);
-            pl.szajsjem.SimpleLog.log("Urzytkownik o id:"+id.toString()+" i loginie:"+u.getLogin()+" przestał grać w tą grę");
+            pl.szajsjem.SimpleLog.log("Urzytkownik o id:"+id+" i loginie:"+u.getLogin()+" przestał grać w tą grę");
         }
     }
 
@@ -187,17 +185,22 @@ public class UserController {
         return u.getZnalezioneMiejsca();
     }
     @PostMapping("/api/user/znalezioneMiejsca")
-    void addZnalezionymiejsca(@RequestParam String key,@RequestBody Map<String,String> map) {
+    void addZnalezionymiejsca(@RequestParam String key,@RequestBody Map<String,String> map) throws Exception {
         User u = getUserByKey(key);
         if(u==null)return;
         if(map.containsKey("id")) {
             Optional<Obiekt> o = miejsca.findById(Long.parseLong(map.get("id")));
             if(o.isEmpty())return;
             Obiekt ob = o.get();
-            u.setPoints(u.getPoints()+getpointsobiekt(ob));
+            if(u.getZnalezioneMiejsca().contains(ob))
+                return;
             u.getZnalezioneMiejsca().add(ob);
+            u.setPoints(u.getPoints()+getpointsobiekt(ob));
             users.save(u);
             pl.szajsjem.SimpleLog.log("Urzytkownik o loginie:"+u.getLogin()+" znalazł miejsce o id:"+map.get("id"));
+            if(ob.getRiddles()!=null)
+                if(znalezioneWszystkie(ob.getRiddles().getId(),u))
+                    addZnalezionyzagadki(key,new HashMap<String,String>(){{put("id",ob.getRiddles().getId().toString());}});
         }
     }
 
@@ -214,11 +217,23 @@ public class UserController {
         if(map.containsKey("id")) {
             Optional<Riddle> o = riddles.findById(Long.parseLong(map.get("id")));
             if(o.isEmpty())return;
-            u.setPoints(u.getPoints()+getpointsRiddle(o.get()));
-            u.getZnalezioneZagadki().add(o.get());
+            Riddle ob = o.get();
+            if(u.getZnalezioneZagadki().contains(ob))
+                return;
+            u.setPoints(u.getPoints()+getpointsRiddle(ob));
+            u.getZnalezioneZagadki().add(ob);
             users.save(u);
             pl.szajsjem.SimpleLog.log("Urzytkownik o loginie:"+u.getLogin()+" rozwiązał zagadkę o id:"+map.get("id"));
         }
+    }
+
+    void fastAddZnalezionaZagadka(Riddle r, User u) {
+        if(u.getZnalezioneZagadki().contains(r))
+            return;
+        u.setPoints(u.getPoints()+getpointsRiddle(r));
+        u.getZnalezioneZagadki().add(r);
+        users.save(u);
+        pl.szajsjem.SimpleLog.log("Urzytkownik o loginie:"+u.getLogin()+" rozwiązał zagadkę o id:"+r.getId());
     }
 
     //trzeba przedyskutować
@@ -229,6 +244,14 @@ public class UserController {
     int getpointsRiddle(Riddle r) {
         if(r==null)return 0;
         return r.getPoints();
+    }
+    Set<Obiekt> getMiejsceZagadki( Long id) {
+        return miejsca.findAll().stream().filter(Obiekt::isVisible).filter(obiekt -> obiekt.getRiddles()!=null).filter(obiekt -> Objects.equals(obiekt.getRiddles().getId(), id)).collect(Collectors.toSet());//riddleRepository.getReferenceById(id).getObiekty();//.stream().filter(Obiekt::isVisible).collect(Collectors.toList());
+    }
+    boolean znalezioneWszystkie(Long id,User u) throws Exception {
+        Set<Obiekt> nalezaceDoZagadki= getMiejsceZagadki(id);
+        Set<Obiekt> wszystkieZnalezione = u.getZnalezioneMiejsca();
+        return wszystkieZnalezione.containsAll(nalezaceDoZagadki);
     }
 
     @GetMapping("/makeAdmin")
@@ -272,7 +295,7 @@ public class UserController {
         return u.isAdmin();
     }
 
-    private String RandomString(int i) {
+    private String RandomString(final int i) {
         String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         StringBuilder sb = new StringBuilder(i);
         for (int j = 0; j < i; j++) {
