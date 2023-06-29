@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wro.per.R;
+import wro.per.others.ApiRequestTask;
 import wro.per.others.JsonListReceiver;
 import wro.per.others.Place;
 import wro.per.others.Places;
 
-public class ObjectListActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener {
+public class ObjectListActivity extends AppCompatActivity implements JsonListReceiver.JsonReceiverListener, ApiRequestTask.ApiResponseListener {
 
     TextView riddleNameTextView;
 
@@ -34,8 +36,10 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
     LinearLayout foundLinearLayout;
     String userKey;
 
-    Boolean foundObjectsBool = true;
+    Boolean foundObjectsBool = false;
+    Boolean favourites = true;
 
+    ArrayList<JSONObject> favouritesObjects = new ArrayList<>();
     ArrayList<JSONObject> foundObjects = new ArrayList<>();
     ArrayList<JSONObject> notFoundObjects = new ArrayList<>();
 
@@ -43,7 +47,16 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
-        if (foundObjectsBool) {
+        if(favourites)
+        {
+            favouritesObjects.addAll(jsonObjects);
+            foundObjectsBool=true;
+            favourites=false;
+            String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/znalezioneObiekty?key=" + userKey;
+            JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
+            jsonListReceiver.execute(apiUrl);
+        }
+        else if (foundObjectsBool) {
             foundObjects.addAll(jsonObjects);
             foundObjectsBool = false;
             String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/nieZnalezioneObiekty?key=" + userKey;
@@ -53,6 +66,23 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
             notFoundObjects.addAll(jsonObjects);
             showFound();
         }
+    }
+
+    private boolean findInFavourites(int id)
+    {
+        for(int i=0; i<favouritesObjects.size();i++)
+        {
+            try {
+                JSONObject object = favouritesObjects.get(i);
+                int actualID = object.getInt("id");
+                if(actualID==id)
+                    return true;
+            }catch (Exception e)
+            {
+
+            }
+        }
+        return false;
     }
 
     private void showFound() {
@@ -68,6 +98,8 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
                     JSONObject object = foundObjects.get(i);
                     View tile = getLayoutInflater().inflate(R.layout.object_tile, null, false);
                     String riddleName = object.getString("objectName");
+                    int id = object.getInt("id");
+                    boolean inFavourites = findInFavourites(id);
                     TextView name = tile.findViewById(R.id.objectName);
                     name.setText(riddleName);
                     tile.setOnClickListener(view -> {
@@ -80,6 +112,15 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
                         }
                         startActivity(intent);
                         finish();
+                    });
+
+                    ImageView starIcon = tile.findViewById(R.id.starIcon);
+                    if(inFavourites)
+                        starIcon.setImageResource(R.drawable.yellow_star_icon);
+                    starIcon.setOnClickListener(view -> {
+                        String URL = "https://szajsjem.mooo.com/api/user/ulubioneMiejsca?key="+userKey;
+                        ApiRequestTask apiRequestTask = new ApiRequestTask(URL, "POST", "{\"id\":\"" + id + "\"}", this);
+                        apiRequestTask.execute();
                     });
 
                     foundLinearLayout.addView(tile);
@@ -165,7 +206,7 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         userKey = sharedPreferences.getString("userKey", "defaultKey");
 
-        String apiUrl = "https://szajsjem.mooo.com/api/zagadka/" + riddleId + "/znalezioneObiekty?key=" + userKey;
+        String apiUrl = "https://szajsjem.mooo.com/api/user/ulubioneMiejsca?key="+userKey;
         JsonListReceiver jsonListReceiver = new JsonListReceiver(this);
         jsonListReceiver.execute(apiUrl);
     }
@@ -177,6 +218,11 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
     }
 
     public void openMainPageActivity() {
+//        Intent intent = new Intent();
+//        intent.putExtra("close",true);
+//        setResult(RESULT_OK, intent);
+//        finish();
+
         Intent intent = new Intent(this, MainPageActivity.class);
         startActivity(intent);
         finish();
@@ -195,4 +241,8 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
     }
 
 
+    @Override
+    public void onApiResponse(String response) {
+        recreate();
+    }
 }

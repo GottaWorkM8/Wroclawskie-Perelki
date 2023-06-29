@@ -150,10 +150,23 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
 
     }
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if(data.getBooleanExtra("close", false))
+//        {
+//            System.out.println("Zamykanie");
+//            finish();
+//        }
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.solved_layout);
+
+
 
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 

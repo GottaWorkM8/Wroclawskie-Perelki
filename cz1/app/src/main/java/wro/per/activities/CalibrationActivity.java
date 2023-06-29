@@ -89,21 +89,21 @@ public class CalibrationActivity extends Activity implements SensorEventListener
             String nowMonth = dateNow.substring(5, 7);
             String nowDay = dateNow.substring(8, 10);
 
-            System.out.println("Pobrana data fragmenty: "+collectedYear+" "+collecterMonth+" "+collectedDay);
-            System.out.println("Aktualna data fragmenty: "+nowYear+" "+nowMonth+" "+nowDay);
+//            System.out.println("Pobrana data fragmenty: "+collectedYear+" "+collecterMonth+" "+collectedDay);
+//            System.out.println("Aktualna data fragmenty: "+nowYear+" "+nowMonth+" "+nowDay);
 
             if (collectedYear.equals(nowYear) && collecterMonth.equals(nowMonth) && collectedDay.equals(nowDay)) {
-                System.out.println("Daty są te same");
+//                System.out.println("Daty są te same");
                 Intent intent = new Intent(CalibrationActivity.this, MainPageActivity.class);
                 startActivity(intent);
                 finish();
             } else {
-                System.out.println("Daty nie są te same");
+//                System.out.println("Daty nie są te same");
                 writeDate();
             }
         } else
         {
-            System.out.println("Pobrana data jest pusta");
+//            System.out.println("Pobrana data jest pusta");
             writeDate();
         }
 
@@ -118,11 +118,11 @@ public class CalibrationActivity extends Activity implements SensorEventListener
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateString = dateFormat.format(date);
-        System.out.println("Zapisuje datę: "+dateString);
+//        System.out.println("Zapisuje datę: "+dateString);
 
         editor.putString("Last_calibration", dateString);
         editor.apply();
-        System.out.println("Zapisano date");
+//        System.out.println("Zapisano date");
 
     }
 
@@ -136,26 +136,26 @@ public class CalibrationActivity extends Activity implements SensorEventListener
         switch (currentMeasurement) {
             case 1:
                 avgDriftZ = 9.81f - z;
-                resultsTextView.setText("Odczytany drift: " + avgDriftZ);
+//                resultsTextView.setText("Odczytany drift: " + avgDriftZ);
                 positionImageView.setImageResource(R.drawable.black_on_bottom_icon);
                 currentMeasurement++;
                 break;
             case 2:
                 driftY1 = 9.81f - y;
-                resultsTextView.setText("Odczytany drift: " + driftY1);
+//                resultsTextView.setText("Odczytany drift: " + driftY1);
                 positionImageView.setImageResource(R.drawable.black_on_right_icon);
                 currentMeasurement++;
                 break;
             case 3:
                 driftX1 = 9.81f - abs(x);
-                resultsTextView.setText("Odczytany drift: " + driftX1);
+//                resultsTextView.setText("Odczytany drift: " + driftX1);
                 positionImageView.setImageResource(R.drawable.black_on_top_icon);
                 currentMeasurement++;
                 break;
             case 4:
                 driftY2 = 9.81f - abs(y);
                 avgDriftY = (driftY1 + driftY2) / 2;
-                resultsTextView.setText("Odczytany drift: " + avgDriftY);
+//                resultsTextView.setText("Odczytany drift: " + avgDriftY);
                 positionImageView.setImageResource(R.drawable.black_on_left_icon);
                 currentMeasurement++;
                 break;
@@ -170,7 +170,7 @@ public class CalibrationActivity extends Activity implements SensorEventListener
                 editor.putString("driftZ", String.valueOf(avgDriftZ));
                 editor.apply();
 
-                resultsTextView.setText("Wyniki pomiarów:\nPrzesunięcie X: " + avgDriftX + "\nPrzesunięcie Y: " + avgDriftY + "\nPrzesunięcie Z: " + avgDriftZ);
+//                resultsTextView.setText("Wyniki pomiarów:\nPrzesunięcie X: " + avgDriftX + "\nPrzesunięcie Y: " + avgDriftY + "\nPrzesunięcie Z: " + avgDriftZ);
                 currentMeasurement++;
                 TextView prompt = findViewById(R.id.promptTextView);
                 prompt.setText("Kalibracja zakończona");

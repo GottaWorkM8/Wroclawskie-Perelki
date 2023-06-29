@@ -9,9 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 
@@ -36,6 +38,9 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
 
     Boolean testLoginBool = false, loginBool = false, testKeyBool = false;
     boolean testIfAlreadyLoginBool = false;
+
+    FrameLayout frameLayout;
+    TextView loadingTextView;
 
     @Override
     public void onApiResponse(String data) {
@@ -99,6 +104,20 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
+
+        loadingTextView = findViewById(R.id.ladowanie);
+        frameLayout = (FrameLayout) findViewById(R.id.content);
+
+        loginButton = findViewById(R.id.login_button);
+        loginButton.setOnClickListener(view -> checkPass());
+
+        loginEditText = findViewById(R.id.login_edittext);
+        passwordEditText = findViewById(R.id.password_edittext);
+        errorTextView = findViewById(R.id.error_textView);
+
+        TextView registerTextView = findViewById(R.id.registerTextView);
+        registerTextView.setOnClickListener(v -> openRegistrationPage());
+
         sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         Intent intent = getIntent();
@@ -112,7 +131,12 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
                 String url = "https://szajsjem.mooo.com/api/user/testkey?key=" + key;
                 makeAPICall(url, "GET", "");
             }
+            else {
+                loadingTextView.setVisibility(View.GONE);
+                frameLayout.setVisibility(View.VISIBLE);
+            }
         }
+
 
 
 //        Boolean czyZalogowano = sharedPreferences.getBoolean("zalogowano", false);
@@ -133,15 +157,7 @@ public class LoginActivity extends AppCompatActivity implements ApiRequestTask.A
 //
 //        }
 
-        loginButton = findViewById(R.id.login_button);
-        loginButton.setOnClickListener(view -> checkPass());
 
-        loginEditText = findViewById(R.id.login_edittext);
-        passwordEditText = findViewById(R.id.password_edittext);
-        errorTextView = findViewById(R.id.error_textView);
-
-        TextView registerTextView = findViewById(R.id.registerTextView);
-        registerTextView.setOnClickListener(v -> openRegistrationPage());
 
         loginEditText.addTextChangedListener(new TextWatcher() {
             @Override
