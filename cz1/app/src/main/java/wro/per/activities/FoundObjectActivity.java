@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,6 +21,7 @@ import wro.per.R;
 public class FoundObjectActivity extends AppCompatActivity {
 
     private ImageView imageView;
+    private TextView textObject;
     private Button buttonFind;
     private boolean found = false;
     private int id;
@@ -41,12 +43,15 @@ public class FoundObjectActivity extends AppCompatActivity {
         imageView = findViewById(R.id.foundTextureView);
         Intent intent = getIntent();
 
+        textObject = findViewById(R.id.objectTextView);
+
+
         jsonString = intent.getStringExtra("nearbyPlace");
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             String imageUrl = jsonObject.getString("photoLink");
             id = jsonObject.getInt("id");
-
+            textObject.setText(jsonObject.getString("objectName"));
             Picasso.get().load(imageUrl).into(imageView);
         } catch (JSONException e) {
             e.printStackTrace();

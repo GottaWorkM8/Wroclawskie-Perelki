@@ -20,7 +20,7 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_layout);
 
-        sensorsButton = findViewById(R.id.sensory_button);
+
         calibrationButton = findViewById(R.id.kalibracja_botton);
         editButton = findViewById(R.id.edycja_obiektu_button);
 
