@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -12,6 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -99,6 +105,26 @@ public class FavouritesActivity extends AppCompatActivity implements JsonListRec
             View tile = getLayoutInflater().inflate(R.layout.favourite_tile, null, false);
             TextView name = tile.findViewById(R.id.favouriteName);
             name.setText(favouritesObjects.get(i).get(1));
+            String photoLink = favouritesObjects.get(i).get(2);
+            TextView backgroundImage = tile.findViewById(R.id.info_text);
+            Picasso.get()
+                    .load(photoLink)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            backgroundImage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            // Obsługa błędu ładowania obrazka
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            // Przygotowanie do ładowania obrazka
+                        }
+                    });
             int finalI = i;
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectInfoActivity.class);

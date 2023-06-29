@@ -5,30 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/object"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/quest"
+        android:layout_width="336dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="40dp"
+        app:cardCornerRadius="40dp">
 
-        <View
-            android:id="@+id/quest"
-            android:layout_width="336dp"
-            android:layout_height="156dp"
-            android:background="@drawable/white_solved_bg_shape"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/wroc_not_started_bg"
+            android:backgroundTint="#BFFFFFFF"
+            android:backgroundTintMode="src_over"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center"
+            android:layout_gravity="top|center"
             android:layout_marginStart="92dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="92dp"
@@ -44,14 +43,12 @@
             android:id="@+id/objectsCountName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="80dp"
             android:text="@string/number_of_objects_string"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@+id/quest"
-            app:layout_constraintTop_toTopOf="@+id/quest"
-            tools:ignore="MissingConstraints" />
+             />
 
         <TextView
             android:id="@+id/objectsCount"
@@ -59,22 +56,20 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/objectsCountName"
-            app:layout_constraintTop_toTopOf="@+id/objectsCountName"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginStart="180dp"
+            android:layout_marginTop="80dp"
+            />
 
         <TextView
             android:id="@+id/difficultyText"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:text="@string/poziom_trudnosci"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@+id/quest"
-            app:layout_constraintTop_toBottomOf="@+id/objectsCountName"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="110dp"  />
 
         <TextView
             android:id="@+id/difficulty"
@@ -83,12 +78,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@+id/difficultyText"
-            app:layout_constraintTop_toBottomOf="@+id/objectsCountName"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginStart="180dp"
+            android:layout_marginTop="110dp"  />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

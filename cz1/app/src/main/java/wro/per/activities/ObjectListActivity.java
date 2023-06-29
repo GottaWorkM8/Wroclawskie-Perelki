@@ -5,12 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,9 +105,30 @@ public class ObjectListActivity extends AppCompatActivity implements JsonListRec
                     View tile = getLayoutInflater().inflate(R.layout.object_tile, null, false);
                     String riddleName = object.getString("objectName");
                     int id = object.getInt("id");
+                    String photoLink = object.getString("photoObjectLink");
                     boolean inFavourites = findInFavourites(id);
                     TextView name = tile.findViewById(R.id.objectName);
                     name.setText(riddleName);
+                    TextView backgroundImage = tile.findViewById(R.id.info_text);
+                    Picasso.get()
+                            .load(photoLink)
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    backgroundImage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    // Obsługa błędu ładowania obrazka
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                    // Przygotowanie do ładowania obrazka
+                                }
+                            });
+
                     tile.setOnClickListener(view -> {
                         Intent intent = new Intent(this, ObjectInfoActivity.class);
                         try {

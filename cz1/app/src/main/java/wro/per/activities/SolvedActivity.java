@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,9 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +43,7 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
     Boolean getAllRiddlesBool = true;
     int checkId = 0;
     TextView errorTextView;
+    private ArrayList<String> firstObject = new ArrayList<>();
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
@@ -57,7 +65,14 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
                     System.out.println("Zostało znalezionych " + jsonObjects.size() + " z " + allRiddlesAndObjectsAmount.get(checkId).get(1) + " obiektów");
                     allSolvedIDsList.add(allRiddlesAndObjectsAmount.get(checkId).get(0));
                     System.out.println("rozwiązane zagadki: "+allSolvedIDsList);
+
+                    try {
+                        firstObject.add(jsonObjects.get(0).getString("photoObjectLink"));
+                    } catch (JSONException e) {
+                        firstObject.add("null");
+                    }
                 }
+
             }
             checkId++;
             if (checkId < allRiddlesAndObjectsAmount.size()) {
@@ -82,11 +97,13 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
             String riddleName;
             int objectCount;
             String difficulty;
+            String photoLink;
             try {
                 riddleId = riddle.getInt("id");
                 riddleName = riddle.getString("name");
                 objectCount = riddle.getInt("objectCount");
                 difficulty = riddle.getString("difficulty");
+                photoLink = firstObject.get(i);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -98,6 +115,28 @@ public class SolvedActivity extends AppCompatActivity implements JsonListReceive
             objectCountText.setText(String.valueOf(objectCount));
             TextView difficultyText = tile.findViewById(R.id.difficulty);
             difficultyText.setText(difficulty);
+
+            TextView backgroundImage = tile.findViewById(R.id.info_text);
+            System.out.println(photoLink);
+            Picasso.get()
+                    .load(photoLink)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            backgroundImage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            // Obsługa błędu ładowania obrazka
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            // Przygotowanie do ładowania obrazka
+                        }
+                    });
+
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);

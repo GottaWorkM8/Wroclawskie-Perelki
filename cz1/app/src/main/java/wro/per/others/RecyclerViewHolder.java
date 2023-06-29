@@ -24,7 +24,6 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         objectCountNameTextView = itemView.findViewById(R.id.objectsCountName);
         objectCountTextView = itemView.findViewById(R.id.objectsCount);
         questView = itemView.findViewById(R.id.quest);
-        objectConstraintLayout = itemView.findViewById(R.id.object);
     }
 
 

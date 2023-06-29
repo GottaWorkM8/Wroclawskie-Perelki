@@ -65,7 +65,7 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
                     allInProgressIDsList.add(riddlesAndObjectsAmount.get(checkId).get(0));
                     System.out.println("rozwiązane zagadki: " + allInProgressIDsList);
                     try {
-                        firstObject.add(jsonObjects.get(0).getString("photoLink"));
+                        firstObject.add(jsonObjects.get(0).getString("photoObjectLink"));
                     } catch (JSONException e) {
                         firstObject.add("null");
                     }
