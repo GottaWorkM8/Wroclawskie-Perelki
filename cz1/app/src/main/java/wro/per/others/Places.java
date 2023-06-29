@@ -47,6 +47,8 @@ public class Places {
         for (PlaceImage p : drawnPlaces){
             mapView.getOverlays().remove(p);
         }
+        places.clear();
+        drawnPlaces.clear();
     }
 
     public void setPlaces(ArrayList<Place> places) {

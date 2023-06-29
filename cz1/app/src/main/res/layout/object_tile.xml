@@ -11,8 +11,9 @@
     <FrameLayout
         android:id="@+id/tile"
         android:layout_width="336dp"
+        android:layout_marginTop="20sp"
         android:background="@drawable/white_favourite_bg_shape"
-        android:layout_height="150sp">
+        android:layout_height="170sp">
 
         <TextView
             android:id="@+id/objectName"

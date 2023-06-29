@@ -2,6 +2,7 @@ package wro.per.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 
@@ -11,7 +12,7 @@ import wro.per.R;
 
 public class InfoActivity extends AppCompatActivity {
 
-    Button sensorsButton, calibrationButton, editButton;
+    Button calibrationButton, editButton;
 
     ImageButton profilButton, homeButton, solvedButton, favouritesButton;
 
@@ -20,6 +21,8 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.info_layout);
 
+        WebView webView = findViewById(R.id.webView);
+        webView.loadUrl("https://wrocperelki.mooo.com/informacje_jak_grac.html");
 
         calibrationButton = findViewById(R.id.kalibracja_botton);
         editButton = findViewById(R.id.edycja_obiektu_button);
@@ -40,12 +43,6 @@ public class InfoActivity extends AppCompatActivity {
         editButton.setOnClickListener(view -> openEdit());
     }
 
-    private void openSensors()
-    {
-        Intent intent = new Intent(this, SensorsActivity.class);
-        startActivity(intent);
-        finish();
-    }
 
     private void openCalibration()
     {

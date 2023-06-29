@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:gravity="center"
-    android:layout_height="150sp"
+    android:layout_height="170sp"
     android:scaleType="fitEnd"
     android:layout_gravity="center_horizontal"
     android:layout_marginTop="40sp"
@@ -10,6 +10,7 @@
 
     <FrameLayout
         android:id="@+id/tile"
+        android:layout_marginTop="20sp"
         android:layout_width="336dp"
         android:background="@drawable/white_favourite_bg_shape"
         android:layout_height="150sp"

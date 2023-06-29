@@ -104,7 +104,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="36dp"
             android:contentDescription="ikona_lista_zagadek"
-            android:src="@drawable/black_settings_icon" />
+            android:src="@drawable/yellow_settings_icon" />
 
         <TextView
             android:text="Informacje"
@@ -134,7 +134,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
                 tools:ignore="MissingConstraints"
@@ -158,6 +158,11 @@
                     android:background="@drawable/yellow_button_bg_shape"
                     android:paddingHorizontal="10dp"
                     android:text="Edycja obiektu" />
+
+                <WebView
+                    android:id="@+id/webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
             </LinearLayout>
         </ScrollView>

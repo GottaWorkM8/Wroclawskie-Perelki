@@ -5,15 +5,16 @@ import org.osmdroid.util.GeoPoint;
 
 public class Place {
 
-    public Place(GeoPoint location, boolean b, JSONObject Object){
+    public Place(GeoPoint location, boolean b, JSONObject Object, int radius){
         this.location = location;
         this.found = b;
         this.Object = Object;
+        this.radius = radius;
     }
     private GeoPoint location;
     private GeoPoint detail;
     private GeoPoint observe;
-    private double radius = 30;
+    private double radius;
     private boolean found;
     private JSONObject Object;
     private String name;
