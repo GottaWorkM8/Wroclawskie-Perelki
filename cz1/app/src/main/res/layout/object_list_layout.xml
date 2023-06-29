@@ -33,6 +33,7 @@
             android:background="@drawable/yellow_icon_bg_shape"
             android:contentDescription="Profile"
             android:scaleType="centerInside"
+            android:src="@drawable/black_profile_icon"
             tools:src="@drawable/black_profile_icon" />
 
         <ImageButton

@@ -23,6 +23,7 @@ public class FoundObjectActivity extends AppCompatActivity {
     private Button buttonFind;
     private boolean found = false;
     private int id;
+    private String jsonString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,27 +33,23 @@ public class FoundObjectActivity extends AppCompatActivity {
         buttonFind.setOnClickListener(view ->
         {
             Intent intent = new Intent(this, CameraActivity.class);
-            intent.putExtra("search",  id);
+            intent.putExtra("search", id);
+            intent.putExtra("nearbyPlace", jsonString);
             startActivity(intent);
             finish();
         });
         imageView = findViewById(R.id.foundTextureView);
         Intent intent = getIntent();
 
-        if (intent.hasExtra("nearbyPlace")) {
-            String jsonString = intent.getStringExtra("nearbyPlace");
-            try {
-                JSONObject jsonObject = new JSONObject(jsonString);
-                String imageUrl = jsonObject.getString("photoObjectLink");
-                id = jsonObject.getInt("id");
+        jsonString = intent.getStringExtra("nearbyPlace");
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            String imageUrl = jsonObject.getString("photoLink");
+            id = jsonObject.getInt("id");
 
-                Picasso.get().load(imageUrl).into(imageView);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            Picasso.get().load(imageUrl).into(imageView);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
     }
-
-
 }

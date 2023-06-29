@@ -53,6 +53,7 @@ import java.util.UUID;
 import wro.per.R;
 import wro.per.others.ApiRequestTask;
 import wro.per.others.LocationService;
+import wro.per.others.Places;
 import wro.per.others.SensorDataCollector;
 
 public class CameraActivity extends AppCompatActivity implements ApiRequestTask.ApiResponseListener {
