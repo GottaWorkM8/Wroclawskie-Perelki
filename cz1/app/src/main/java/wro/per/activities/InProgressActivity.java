@@ -3,6 +3,9 @@ package wro.per.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +42,7 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
     List<Integer> allInProgressIDsList = new ArrayList<>();
     Boolean getAllRiddlesBool = true;
     int checkId = 0;
+    private ArrayList<String> firstObject = new ArrayList<>();
 
     @Override
     public void onJsonReceived(List<JSONObject> jsonObjects) {
@@ -57,6 +64,11 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
                     System.out.println("Zostało znalezionych " + jsonObjects.size() + " z " + riddlesAndObjectsAmount.get(checkId).get(1) + " obiektów");
                     allInProgressIDsList.add(riddlesAndObjectsAmount.get(checkId).get(0));
                     System.out.println("rozwiązane zagadki: " + allInProgressIDsList);
+                    try {
+                        firstObject.add(jsonObjects.get(0).getString("photoLink"));
+                    } catch (JSONException e) {
+                        firstObject.add("null");
+                    }
                 }
             }
             checkId++;
@@ -81,11 +93,15 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
             String riddleName;
             int objectCount;
             String difficulty;
+            String photoLink;
+            String author;
             try {
                 riddleId = riddle.getInt("id");
                 riddleName = riddle.getString("name");
                 objectCount = riddle.getInt("objectCount");
                 difficulty = riddle.getString("difficulty");
+                photoLink = firstObject.get(i);
+                author = riddle.getString("author");
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
@@ -104,6 +120,29 @@ public class InProgressActivity extends AppCompatActivity implements JsonListRec
             foundCountText.setText(String.valueOf(foundCount));
             TextView difficultyText = tile.findViewById(R.id.difficulty);
             difficultyText.setText(difficulty);
+            TextView authorText = tile.findViewById(R.id.author);
+            authorText.setText(author);
+            TextView backgroundImage = tile.findViewById(R.id.info_text);
+            System.out.println(photoLink);
+            Picasso.get()
+                    .load(photoLink)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            backgroundImage.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                            // Obsługa błędu ładowania obrazka
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            // Przygotowanie do ładowania obrazka
+                        }
+                    });
+
             tile.setOnClickListener(view -> {
                 Intent intent = new Intent(this, ObjectListActivity.class);
                 intent.putExtra("riddleID", riddleId);

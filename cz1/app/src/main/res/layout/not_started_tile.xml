@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/wroc_not_started_bg"
-            android:backgroundTint="#80FFFFFF"
+            android:backgroundTint="#BFFFFFFF"
             android:backgroundTintMode="src_over"
             android:gravity="center" />
 

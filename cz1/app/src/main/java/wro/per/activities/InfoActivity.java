@@ -36,7 +36,6 @@ public class InfoActivity extends AppCompatActivity {
         favouritesButton = findViewById(R.id.favouriteButton);
         favouritesButton.setOnClickListener(view-> openFavouritesActivity());
 
-        sensorsButton.setOnClickListener(view -> openSensors());
         calibrationButton.setOnClickListener(view -> openCalibration());
         editButton.setOnClickListener(view -> openEdit());
     }
