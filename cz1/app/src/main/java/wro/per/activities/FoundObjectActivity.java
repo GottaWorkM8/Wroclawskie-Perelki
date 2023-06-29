@@ -19,7 +19,6 @@ import org.json.JSONObject;
 import wro.per.R;
 
 public class FoundObjectActivity extends AppCompatActivity {
-
     private ImageView imageView;
     private TextView textObject;
     private Button buttonFind;

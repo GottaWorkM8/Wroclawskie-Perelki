@@ -54,8 +54,12 @@ public class OSM {
     }
 
     public void drawYou(MapView mapView, GeoPoint geoPoint) {
-        userLocation = new UserLocationImage(geoPoint);
-        mapView.getOverlays().add(userLocation);
+        if(geoPoint != null){
+            deleteYou(mapView);
+            userLocation = new UserLocationImage(geoPoint);
+            mapView.getOverlays().add(userLocation);
+        }
+
     }
 
 

@@ -233,6 +233,9 @@ public class NotStartedActivity extends AppCompatActivity implements JsonListRec
     }
 
     public void openMainPageActivity() {
+        Intent intent = new Intent(this, MainPageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         finish();
     }
 

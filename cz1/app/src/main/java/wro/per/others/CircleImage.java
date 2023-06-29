@@ -19,7 +19,6 @@ public class CircleImage extends Overlay {
     private boolean rotation;
     private float radius;
     private float width;
-    private Point center;
 
     @SuppressLint("ClickableViewAccessibility")
     public CircleImage(GeoPoint geoPoint, MapView mapView, float r) {
@@ -38,16 +37,14 @@ public class CircleImage extends Overlay {
                 // Calculate the initial circle radius based on the current zoom level
                 radius = mapView.getProjection().metersToPixels(width, geoPoint.getLatitude(), mapView.getZoomLevelDouble());
                 // Calculate the center point of the circle on the screen
-                center = getScreenCoordinates(mapView, geoPoint);
-                mapView.invalidate();
+
             }
         });
 
         mapView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 radius = mapView.getProjection().metersToPixels(width, geoPoint.getLatitude(), mapView.getZoomLevelDouble());
-                center = getScreenCoordinates(mapView, geoPoint);
-                mapView.invalidate();
+
             }
             return false;
         });
@@ -56,9 +53,12 @@ public class CircleImage extends Overlay {
     @Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
         super.draw(canvas, mapView, shadow);
-
+        mapView.requestLayout();
+        Projection projection = mapView.getProjection();
+        Point point = new Point();
+        projection.toPixels(geoPoint, point);
         if (!shadow) {
-            canvas.drawCircle(center.x, center.y, radius, paint);
+            canvas.drawCircle(point.x, point.y, radius, paint);
         }
     }
 

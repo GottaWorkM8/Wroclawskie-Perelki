@@ -49,7 +49,7 @@ public class MainPageActivity extends AppCompatActivity {
 
     private TextView textHint;
     private Places places;
-    private MapView mapView;
+    private static MapView mapView;
     private OSM osm;
 
     private double latitude;
@@ -112,19 +112,18 @@ public class MainPageActivity extends AppCompatActivity {
             }
         });
 
+
         mapView = findViewById(R.id.map);
         osm = new OSM(mapView);
         places = Places.getInstance();
         places.setMapView(mapView);
 
-//        ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
-
-        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true));
-        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true));
-        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true));
-
+        //ArrayList<Place> wroclawGeoPoints = new ArrayList<>();
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10884908275765, 17.060501791763073), true, null));
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10912762329181, 17.05943358599828), true, null));
+        //wroclawGeoPoints.add(new Place(new GeoPoint(51.10462007876176, 16.944762273337567), true, null));
         //places.setPlaces(wroclawGeoPoints);
-        places.drawPlaces();
+        //places.drawPlaces();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -139,8 +138,7 @@ public class MainPageActivity extends AppCompatActivity {
             }
         }).start();
 
-        }
-
+    }
 
     private void checkDistance(){
         Place nearbyPlace = places.isClose(showLocation());
@@ -182,8 +180,7 @@ public class MainPageActivity extends AppCompatActivity {
         @SuppressLint("SetTextI18n")
         @Override
         public void onReceive(Context context, @NonNull Intent intent) {
-            osm.deleteYou(mapView);
-            places.deleteRing(mapView);
+            places.setMapView(mapView);
             if (intent.getAction().equals("ACT_LOC")) {
                 latitude = intent.getDoubleExtra("latitude", 0f);
                 longitude = intent.getDoubleExtra("longitude", 0f);

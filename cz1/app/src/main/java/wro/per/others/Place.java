@@ -10,7 +10,6 @@ public class Place {
         this.found = b;
         this.Object = Object;
     }
-
     private GeoPoint location;
     private GeoPoint detail;
     private GeoPoint observe;

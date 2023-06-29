@@ -65,6 +65,7 @@ public class Places {
     }
 
     public void drawRing(MapView mapView, GeoPoint geoPoint){
+        deleteRing(mapView);
         if(!places.isEmpty()){
             double min = Double.MAX_VALUE;
             double max = Double.MIN_VALUE;
